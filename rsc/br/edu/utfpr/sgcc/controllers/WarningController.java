@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.utfpr.sgcc.config.DataBaseConfig;
 import br.edu.utfpr.sgcc.config.Encryptor;
@@ -47,7 +48,7 @@ public class WarningController {
 	}
 
 	@PostMapping("/user/condominium/warning/new")
-	public ModelAndView addResidentForm(@ModelAttribute @Valid Warning warning, BindingResult result) {
+	public ModelAndView addResidentForm(@ModelAttribute @Valid Warning warning, BindingResult result, final RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/user/dashboard");
 		WarningService service = new WarningService();
 		
@@ -55,9 +56,9 @@ public class WarningController {
 			return new ModelAndView("user/condominium/warning/new");
 		}
 		if (service.insert(warning)) {
-			modelAndView.addObject("result", new Result("Reserva realizada com sucesso", "success"));
+			redirectAttributes.addFlashAttribute("result", new Result("Reserva realizada com sucesso", "success"));
 		} else {
-			modelAndView.addObject("result", new Result("Falha ao realizar reserva", "error"));
+			redirectAttributes.addFlashAttribute("result", new Result("Falha ao realizar reserva", "error"));
 		}
 		return modelAndView;
 	}

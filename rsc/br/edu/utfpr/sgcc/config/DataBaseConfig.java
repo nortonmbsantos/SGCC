@@ -19,7 +19,6 @@ public class DataBaseConfig {
 		dataSource.setUsername("root");
 		dataSource.setPassword("");
 		
-
 		return dataSource;
 	}
 

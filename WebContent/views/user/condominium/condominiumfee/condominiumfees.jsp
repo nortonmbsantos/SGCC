@@ -1,8 +1,8 @@
-<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,7 +34,7 @@
 					<thead class="thead-dark">
 						<tr>
 							<th scope="col">Visualizar</th>
-							<th scope="col">Data vigente</th>
+							<th scope="col">Data fechamento</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -48,7 +48,7 @@
 									href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${fee.id}&id_fee=0"><i
 										class="fas fa-folder-plus" title="Adicionar taxa neste período"></i></a>
 										</td>
-								<td>${format.format(fee.closingDate.time)}</td>
+								<td><fmt:formatDate value="${fee.closingDate}" pattern="dd/MM/yyyy"/></td>
 								
 							</tr>
 						</c:forEach>

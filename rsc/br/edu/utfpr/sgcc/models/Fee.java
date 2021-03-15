@@ -31,7 +31,6 @@ public class Fee {
 	@NotNull(message = "Data inválida")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dueDate;
-	@NotNull(message = "Data inválida")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date payDate;
 	@NotNull(message = "Parcela inválida")
@@ -42,6 +41,7 @@ public class Fee {
 	@NotNull
 	@Size(min = 3, message = "Descrição inválida")
 	private String description;
+	@NotNull(message="Preencha com tipo de taxa válido")
 	private int idFeeType;
 
 	public int getId() {
@@ -130,6 +130,14 @@ public class Fee {
 
 	public void setFather(int father) {
 		this.father = father;
+	}
+
+	@Override
+	public String toString() {
+		return "Fee [id=" + id + ", idCondominiumFee=" + idCondominiumFee + ", value=" + value + ", dueDate=" + dueDate
+				+ ", payDate=" + payDate + ", installments=" + installments + ", currentInstallment="
+				+ currentInstallment + ", father=" + father + ", monthly=" + monthly + ", description=" + description
+				+ ", idFeeType=" + idFeeType + "]";
 	}
 	
 

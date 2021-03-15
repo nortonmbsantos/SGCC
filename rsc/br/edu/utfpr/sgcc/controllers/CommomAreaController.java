@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.utfpr.sgcc.models.Admin;
 import br.edu.utfpr.sgcc.models.CommomArea;
@@ -83,22 +84,23 @@ public class CommomAreaController {
 	}
 
 	@PostMapping("/user/condominium/commomarea/add")
-	public ModelAndView addCondominiumForm(@ModelAttribute @Valid CommomArea commomArea, BindingResult result) {
+	public ModelAndView addCondominiumForm(@ModelAttribute @Valid CommomArea commomArea, BindingResult result, final RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView = new ModelAndView("user/condominium/commomarea/new");
 		CommomAreaService service = new CommomAreaService();
 		CondominiumService condominiumService = new CondominiumService();
 		Condominium condominium = condominiumService.returnById(commomArea.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (result.hasErrors()) {
+ 			redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar área comum", "error"));
+			return new ModelAndView("user/condominium/commomarea/new");
+		}
 
 		if (condominium.getIdUser() == user.getId()) {
 			if (service.insert(commomArea)) {
-				modelAndView.addObject("result", new Result("Área comum cadastrada com sucesso", "success"));
+				redirectAttributes.addFlashAttribute("result", new Result("Área comum cadastrada com sucesso", "success"));
 			} else {
-				modelAndView.addObject("result", new Result("Falha ao cadastrar área comum", "error"));
+				redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar área comum", "error"));
 			}
-		}
-		if (result.hasErrors()) {
-			return new ModelAndView("user/condominium/commomarea/new");
 		}
 		return modelAndView;
 	}

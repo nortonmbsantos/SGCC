@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.utfpr.sgcc.models.Admin;
 import br.edu.utfpr.sgcc.models.Booking;
@@ -58,7 +59,7 @@ public class BookingController {
 	}
 
 	@PostMapping("/resident/condominium/booking/add")
-	public ModelAndView formAddCondominium(@ModelAttribute @Valid Booking booking, BindingResult result) {
+	public ModelAndView formAddCondominium(@ModelAttribute @Valid Booking booking, BindingResult result, final RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/resident/dashboard");
 		BookingService service = new BookingService();
 		CommomAreaService commomAreaService = new CommomAreaService();
@@ -72,57 +73,62 @@ public class BookingController {
 				return new ModelAndView("resident/newbooking");
 			}
 			if (service.insert(booking)) {
-				modelAndView.addObject("result", new Result("Reserva realizada com sucesso", "success"));
+				redirectAttributes.addFlashAttribute("result", new Result("Reserva realizada com sucesso", "success"));
 			} else {
-				modelAndView.addObject("result", new Result("Falha ao realizar reserva", "error"));
+				redirectAttributes.addFlashAttribute("result", new Result("Falha ao realizar reserva", "error"));
 			}
 		} else {
-			modelAndView.addObject("result", new Result("Usuário não tem permissão para esta ação", "error"));
+			redirectAttributes.addFlashAttribute("result", new Result("Usuário não tem permissão para esta ação", "error"));
 		}
 
 		return modelAndView;
 	}
 
 	@PostMapping("/user/condominium/commomarea/booking/accept")
-	public ModelAndView formBookingAccept(@RequestParam int id) {
-		ModelAndView modelAndView = new ModelAndView("user/condominium/booking");
+	public ModelAndView formBookingAccept(@RequestParam int id, final RedirectAttributes redirectAttributes) {
+		ModelAndView modelAndView = new ModelAndView("redirect:/user/dashboard");
 		BookingService bookingService = new BookingService();
 		Booking bookingValidation = bookingService.returnById(id);
 		CommomArea commomAreaValidation = new CommomAreaService().returnById(bookingValidation.getId_commom_area());
 		Condominium condominiumValidation = new CondominiumService()
 				.returnById(commomAreaValidation.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+		
+		Result result;
 		if (condominiumValidation.getIdUser() == user.getId()) {
 			if (bookingService.accept(id)) {
-				modelAndView.addObject("result", new Result("Reserva aceita com sucesso", "success"));
+				result = new Result("Reserva aceita com sucesso", "success");
 			} else {
-				modelAndView.addObject("result", new Result("Falha ao aceitar reserva", "error"));
+				result = new Result("Falha ao aceitar reserva", "error");
 			}
 		} else {
-			modelAndView.addObject("result", new Result("Você não possui acesso à esta reserva", "error"));
+			result = new Result("Você não possui acesso à esta reserva", "error");
 		}
+        redirectAttributes.addFlashAttribute("result", result);
 		return modelAndView;
 	}
 
 	@PostMapping("/user/condominium/commomarea/booking/refuse")
-	public ModelAndView formBookingRefuse(@RequestParam int id) {
-		ModelAndView modelAndView = new ModelAndView("user/condominium/booking");
+	public ModelAndView formBookingRefuse(@RequestParam int id, final RedirectAttributes redirectAttributes) {
+		ModelAndView modelAndView = new ModelAndView("redirect:/user/dashboard");
 		BookingService bookingService = new BookingService();
 		Booking bookingValidation = bookingService.returnById(id);
 		CommomArea commomAreaValidation = new CommomAreaService().returnById(bookingValidation.getId_commom_area());
 		Condominium condominiumValidation = new CondominiumService()
 				.returnById(commomAreaValidation.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Result result;
 		if (condominiumValidation.getIdUser() == user.getId()) {
 			if (bookingService.refuse(id)) {
-				modelAndView.addObject("result", new Result("Reserva recusar com sucesso", "success"));
+				result = new Result("Reserva recusada com sucesso", "success");
 			} else {
-				modelAndView.addObject("result", new Result("Falha ao recusar reserva", "error"));
+				result = new Result("Falha ao recusar reserva", "error");
 			}
 		} else {
-			modelAndView.addObject("result", new Result("Você não possui acesso à esta reserva", "error"));
+			result = new Result("Você não possui acesso à esta reserva", "error");
 		}
+        redirectAttributes.addFlashAttribute("result", result);
 		return modelAndView;
 	}
 

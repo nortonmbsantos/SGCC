@@ -29,6 +29,10 @@
 						<h1 class="display-4">${condominium.name}</h1>
 						<p class="lead">Fechamento: <fmt:formatDate value="${condominiumFee.closingDate}" pattern="dd/MM/yyyy"/></p>
 						<hr class="my-4">
+						<a class="btn btn-primary"
+						href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${condominiumFee.id}&id_fee=0">Nova taxa</a>
+						<a class="btn btn-primary"
+						href="${pageContext.request.contextPath}/user/condominium/condominiumfee/closing?id_condominium_fee=${condominiumFee.id}">Fechar período</a>
 					</div>
 				</div>
 				<table class="table">

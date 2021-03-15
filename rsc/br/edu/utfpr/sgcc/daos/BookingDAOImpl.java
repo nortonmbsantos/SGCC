@@ -74,7 +74,7 @@ public class BookingDAOImpl {
 			}
 		}
 	}
-	
+
 	public boolean acceptBooking(int id) {
 		Session session = null;
 		try {
@@ -96,7 +96,7 @@ public class BookingDAOImpl {
 			}
 		}
 	}
-	
+
 	public boolean refuseBooking(int id) {
 		Session session = null;
 		try {
@@ -161,7 +161,8 @@ public class BookingDAOImpl {
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Query query = session.createQuery("FROM booking b inner join commom_area c ON c.id = b.id_commom_area WHERE c.idCondominium = :idCondominium");
+			Query query = session.createQuery(
+					"FROM booking b inner join commom_area c ON c.id = b.id_commom_area WHERE c.idCondominium = :idCondominium and status_date is null");
 			query.setParameter("idCondominium", id_condominium);
 			List<Booking> bookings = (List<Booking>) query.getResultList();
 
@@ -181,14 +182,15 @@ public class BookingDAOImpl {
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Query query = session.createQuery("FROM booking b WHERE b.id_commom_area = :idCommomArea ");
+			Query query = session
+					.createQuery("FROM booking b WHERE b.id_commom_area = :idCommomArea and status_date is null");
 			query.setParameter("idCommomArea", id_commom_area);
 			List<Booking> bookings = (List<Booking>) query.getResultList();
 			UserService userService = new UserService();
-			for(Booking b : bookings) {
+			for (Booking b : bookings) {
 				b.setResident_name(userService.returnById(b.getId_resident()).getFirstName());
 			}
-			
+
 			return bookings;
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
@@ -205,14 +207,15 @@ public class BookingDAOImpl {
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Query query = session.createQuery("FROM booking b WHERE b.id_resident = :idResident AND b.booking_date >= date(now()) order by b.booking_date desc");
+			Query query = session.createQuery(
+					"FROM booking b WHERE b.id_resident = :idResident AND b.booking_date >= date(now()) order by b.booking_date desc");
 			query.setParameter("idResident", id_resident);
 			List<Booking> bookings = (List<Booking>) query.getResultList();
 			UserService userService = new UserService();
-			for(Booking b : bookings) {
+			for (Booking b : bookings) {
 				b.setResident_name(userService.returnById(b.getId_resident()).getFirstName());
 			}
-			
+
 			return bookings;
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
@@ -223,20 +226,25 @@ public class BookingDAOImpl {
 			}
 		}
 	}
-	
+
 	public List<Report> countPendingBookings(int id_condominium) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Query query = session.createSQLQuery("SELECT b.id as title, count(b.id) as value FROM booking b inner join commom_area c ON c.id = b.id_commom_area WHERE c.idCondominium = :idCondominium");
+			Query query = session.createSQLQuery(
+					"SELECT c.id as title, count(b.id) as value FROM booking b inner join commom_area c ON c.id = b.id_commom_area WHERE c.idCondominium = :idCondominium and b.status_date is null");
 			query.setParameter("idCondominium", id_condominium);
 			List<Object[]> report = query.getResultList();
 			List<Report> reports = new ArrayList<Report>();
 
 			for (Object[] obj : report) {
 				Report r = new Report();
-				r.setTitle( String.valueOf(obj[0]));
+				if (obj[0] == null) {
+					r.setTitle("0");
+				} else {
+					r.setTitle(String.valueOf(obj[0]));
+				}
 				r.setValue(Double.valueOf(String.valueOf(obj[1])));
 				reports.add(r);
 			}
@@ -250,7 +258,5 @@ public class BookingDAOImpl {
 			}
 		}
 	}
-
-	
 
 }

@@ -25,9 +25,10 @@ public class CondominiumFee {
 	@Id
 	private int id;
 	private int id_condominium;
-	@NotNull(message="Data inválida")
+	@NotNull(message = "Data inválida")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date closingDate;
+	private boolean finished;
 
 	public int getId() {
 		return id;
@@ -51,6 +52,14 @@ public class CondominiumFee {
 
 	public void setClosingDate(Date closingDate) {
 		this.closingDate = closingDate;
+	}
+
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
 	}
 
 }

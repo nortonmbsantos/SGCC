@@ -38,16 +38,38 @@ public class FeeService {
 		return dao.returnFathers(id_condominium);
 	}
 
+	public Fee returnLastByFather(int id_father) {
+		return dao.returnLastByFather(id_father);
+	}
+
 	public boolean insert(Fee fee) {
 		return dao.insert(fee);
 	}
 
+	public boolean saveOrUpdate(Fee fee) {
+		return dao.saveOrUpdate(fee);
+	}
+
 	public boolean save(Fee fee) {
-		return dao.save(fee);
+		fee = dao.save(fee);
+		if(fee != null) {
+			if(fee.getFather() == 0) {
+				this.updateFather(fee);
+			}
+			
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 
 	public boolean update(Fee fee) {
 		return dao.update(fee);
+	}
+
+	public boolean updateFather(Fee fee) {
+		return dao.updateFather(fee);
 	}
 
 }

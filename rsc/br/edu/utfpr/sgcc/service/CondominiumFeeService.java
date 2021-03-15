@@ -31,6 +31,10 @@ public class CondominiumFeeService {
 		return dao.returnById(id);
 	}
 
+	public boolean closeCondominiumFee(CondominiumFee condominiumFee) {
+		return dao.closeCondominiumFee(condominiumFee);
+	}
+
 	public CondominiumFee returnLastIdByIdCondominium(int id) {
 		return dao.returnById(id);
 	}

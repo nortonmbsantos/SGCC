@@ -23,25 +23,15 @@
 						<h1 class="display-4">Formulário de cadastro de taxa para o
 							condomínio ${condominium.name }</h1>
 						<p class="lead">Preencha o formulário com os dados</p>
-						<a href="${pageContext.request.contextPath}/user/condominium/fee/forminstalment?id_condominium_fee=${fee.idCondominiumFee }&id_fee=${fee.id}" class="btn btn-link">Cadastrar parcela de taxa já cadastrada? Clique aqui</a>
 						<hr class="my-4">
 						<p>Campos marcados com * são considerados obrigatórios</p>
-						<form:form action="form" modelAttribute="fee">
+						<form:form action="forminstalment" modelAttribute="fee">
 							<form:hidden path="idCondominiumFee" cssClass="form-control"
 								value="${fee.idCondominiumFee}" />
+							<form:hidden path="description" cssClass="form-control"
+								value="Nova parcela" />
 							<form:hidden path="id" value="${fee.id}" />
-							<form:hidden path="father" value="0" />
-							<div class="form-group">
-								<label for="description">Descrição*</label>
-								<form:input path="description" cssClass="form-control"
-									id="description" />
-								<form:errors path="description" cssStyle="color: #ff0000;" />
-							</div>
-							<div class="form-group">
-								<label for="value">Valor*</label>
-								<form:input path="value" cssClass="form-control" id="value" />
-								<form:errors path="value" cssStyle="color: #ff0000;" />
-							</div>
+							<form:hidden path="idFeeType" value="0" />
 							<div class="form-group">
 								<label for="payDate">Data de pagamento*</label>
 								<form:input type="date" path="payDate" cssClass="form-control"
@@ -52,19 +42,12 @@
 								<form:input type="date" path="dueDate" cssClass="form-control"
 									id="dueDate" />
 							</div>
-							
 							<div class="form-group">
-								<label for="installments">Total de parcelas*</label>
-								<form:input path="installments" cssClass="form-control"
-									id="installments" />
-								<form:errors path="installments" cssStyle="color: #ff0000;" />
-							</div>
-							<div class="form-group">
-								<label for="feeType">Tipo de taxa*</label>
-								<form:select cssClass="form-control" path="idFeeType"
-									id="feeType">
-									<c:forEach items="${feeTypes}" var="feeType">
-										<form:option value="${feeType.id}">${feeType.description}</form:option>
+								<label for="father">Taxa referente*</label>
+								<form:select cssClass="form-control" path="father" 
+									id="father">
+									<c:forEach items="${fathers}" var="father">
+										<form:option value="${father.father}">${father.description}</form:option>
 									</c:forEach>
 								</form:select>
 							</div>
@@ -76,4 +59,4 @@
 		</div>
 	</div>
 </body>
-</html>
+</html>ml>

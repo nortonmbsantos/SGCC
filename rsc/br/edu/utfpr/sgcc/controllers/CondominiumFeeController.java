@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.utfpr.sgcc.models.Admin;
 import br.edu.utfpr.sgcc.models.Condominium;
@@ -59,6 +60,51 @@ public class CondominiumFeeController {
 			modelAndView.addObject("format", new SimpleDateFormat("dd/MM/yyyy"));
 			modelAndView.addObject("condominiumFees", fees);
 			modelAndView.addObject("condominium", condominium);
+		} else {
+			modelAndView = new ModelAndView("errors/accessdenied");
+		}
+		return modelAndView;
+	}
+
+	@GetMapping("/user/condominium/condominiumfee/closing")
+	public ModelAndView confirmClosing(@RequestParam int id_condominium_fee) {
+		ModelAndView modelAndView = new ModelAndView("user/condominium/condominiumfee/confirmfinishing");
+
+		CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
+		CondominiumFee condominiumFee = condominiumFeeService.returnById(id_condominium_fee);
+		CondominiumService condominiumService = new CondominiumService();
+		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (condominium.getIdUser() == user.getId()) {
+			modelAndView.addObject("condominiumFee", condominiumFee);
+			modelAndView.addObject("condominium", condominium);
+		} else {
+			modelAndView = new ModelAndView("errors/accessdenied");
+		}
+		return modelAndView;
+	}
+
+	@PostMapping("/user/condominium/condominiumfee/closing")
+	public ModelAndView formConfirmClosing(@RequestParam int id_condominium_fee, final RedirectAttributes redirectAttributes) {
+		ModelAndView modelAndView = new ModelAndView("user/condominium/condominiumfee/confirmfinishing");
+
+		CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
+		CondominiumFee condominiumFee = condominiumFeeService.returnById(id_condominium_fee);
+
+		if (condominiumFee != null) {
+			CondominiumService condominiumService = new CondominiumService();
+			Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+			MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (condominium.getIdUser() == user.getId()) {
+				if(condominiumFeeService.closeCondominiumFee(condominiumFee)) {
+					redirectAttributes.addFlashAttribute("result",new Result("Período fechado com sucesso","success"));
+				} else {
+					redirectAttributes.addFlashAttribute("result",new Result("Falha ao fechar período","error"));					
+				}
+			} else {
+				modelAndView = new ModelAndView("errors/accessdenied");
+			}
 		} else {
 			modelAndView = new ModelAndView("errors/accessdenied");
 		}
@@ -114,11 +160,11 @@ public class CondominiumFeeController {
 		ModelAndView modelAndView = new ModelAndView("resident/viewCondominiumFee");
 		CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
 		CondominiumFee condominiumFee = condominiumFeeService.returnById(idCondominiumFee);
-		
+
 		CondominiumService condominiumService = new CondominiumService();
 		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
 		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
+
 		CondominiumResident condominiumResident = new CondominiumResidentService()
 				.returnByResidentAndCondominium(resident.getId(), condominium.getId());
 
@@ -158,7 +204,8 @@ public class CondominiumFeeController {
 	}
 
 	@PostMapping("/user/condominium/condominiumfee/form")
-	public ModelAndView addFeeForm(@ModelAttribute @Valid CondominiumFee condominiumFee, BindingResult result) {
+	public ModelAndView addFeeForm(@ModelAttribute @Valid CondominiumFee condominiumFee, BindingResult result,
+			final RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView;
 		CondominiumService condominiumService = new CondominiumService();
 		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
@@ -170,19 +217,22 @@ public class CondominiumFeeController {
 					condominium.getId())) {
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(condominiumFee.getClosingDate());
-
-				System.out.println(calendar.get(Calendar.MONTH));
+				
+				condominiumFee.setFinished(false);
 				boolean bolresult = condominiumFeeService.insert(condominiumFee);
-				modelAndView = new ModelAndView("user/dashboard");
+				modelAndView = new ModelAndView("redirect:/user/dashboard");
 				if (bolresult) {
-					modelAndView.addObject("result", new Result("Taxa cadastrada com sucesso", "success"));
+					redirectAttributes.addFlashAttribute("result",
+							new Result("Taxa cadastrada com sucesso", "success"));
 				} else {
-					modelAndView.addObject("result", new Result("Falha ao cadastrar taxa", "error"));
+					redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar taxa", "error"));
 				}
 			} else {
-				modelAndView = new ModelAndView("user/dashboard");// TODO não deveria voltar ao dashboard quando da
-																	// errado
-				modelAndView.addObject("result", new Result("Data de fechamento já cadastrada no condomínio", "error"));
+				modelAndView = new ModelAndView("redirect:/user/dashboard");// TODO não deveria voltar ao dashboard
+																			// quando da
+				// errado
+				redirectAttributes.addFlashAttribute("result",
+						new Result("Data de fechamento já cadastrada no condomínio", "error"));
 			}
 		} else {
 			modelAndView = new ModelAndView("errors/accessdenied");

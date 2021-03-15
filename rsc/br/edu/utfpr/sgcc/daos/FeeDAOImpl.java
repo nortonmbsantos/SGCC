@@ -108,12 +108,11 @@ public class FeeDAOImpl {
 		}
 	}
 
-	
 	public List<Fee> returnFathers(int id_condominium) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
-			
+
 			session.beginTransaction();
 			Query query = session.createSQLQuery(
 					"select  id, idCondominiumFee, value, dueDate, payDate, installments, currentInstallment, description, idFeeType, father "
@@ -121,7 +120,7 @@ public class FeeDAOImpl {
 			query.setParameter("idCondominium", id_condominium);
 			List<Object[]> objects = query.getResultList();
 			List<Fee> fees = new ArrayList<>();
-			
+
 			for (Object[] o : objects) {
 				Fee f = new Fee();
 				f.setId((int) o[0]);
@@ -134,10 +133,10 @@ public class FeeDAOImpl {
 				f.setDescription((String) o[7]);
 				f.setIdFeeType((int) o[8]);
 				f.setFather((int) o[9]);
-				
+
 				fees.add(f);
 			}
-			
+
 			return fees;
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
@@ -148,14 +147,8 @@ public class FeeDAOImpl {
 			}
 		}
 	}
-	
-	public static void main(String[] args) {
-		FeeService service = new FeeService();
-		List<Fee> fees = service.returnUnfinishedInstalments(1);
-		for (Fee f : fees) {
-			System.out.println(f.getDescription());
-		}
-	}
+
+
 
 	public List<Fee> reportByFeeType(int id) {
 		Session session = null;
@@ -187,18 +180,59 @@ public class FeeDAOImpl {
 		}
 	}
 
-	public boolean save(Fee fee) {
+	public boolean saveOrUpdate(Fee fee) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
 			session.saveOrUpdate(fee);
 			session.getTransaction().commit();
+
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
 			return false;
 		}
+	}
+
+	public Fee save(Fee fee) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			int idFee = (Integer) session.save(fee);
+			session.getTransaction().commit();
+			fee.setId(idFee);
+			return fee;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+	
+
+	public boolean updateFather(Fee fee) {
+		Session session = null;
+		try {
+			fee.setFather(fee.getId());
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			session.update(fee);
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return false;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+
 	}
 
 	public boolean update(Fee fee) {
@@ -212,6 +246,7 @@ public class FeeDAOImpl {
 			feeValidation.setInstallments(fee.getInstallments());
 			feeValidation.setPayDate(fee.getPayDate());
 			feeValidation.setValue(fee.getValue());
+			feeValidation.setFather(fee.getFather());
 			session = factory.getCurrentSession();
 			session.beginTransaction();
 			session.update(feeValidation);
@@ -220,7 +255,42 @@ public class FeeDAOImpl {
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
 			return false;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
 		}
+	}
+
+	public Fee returnLastByFather(int id_father) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery("from fee f where f.father = :father order by f.id desc ");
+			query.setMaxResults(1);
+			query.setParameter("father", id_father);
+			Fee fee = (Fee) query.getSingleResult();
+
+			return fee;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		FeeService service = new FeeService();
+		System.out.println(service.returnLastByFather(10).toString());
+		
+		//		List<Fee> fees = service.returnUnfinishedInstalments(1);
+//		for (Fee f : fees) {
+//			System.out.println(f.getDescription());
+//		}
 	}
 
 }

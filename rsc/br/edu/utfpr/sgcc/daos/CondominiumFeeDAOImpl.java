@@ -58,8 +58,8 @@ public class CondominiumFeeDAOImpl {
 	public CondominiumFee returnLastIdByIdCondominium(int id_condominium) {
 		Session session = factory.getCurrentSession();
 		session.beginTransaction();
-		Query query = session
-				.createQuery("from condominium_fee f where f.id_condominium = :idCondominium order by f.id desc limit 1");
+		Query query = session.createQuery(
+				"from condominium_fee f where f.id_condominium = :idCondominium order by f.id desc limit 1");
 		query.setParameter("idCondominium", id_condominium);
 
 		return (CondominiumFee) query.getSingleResult();
@@ -221,13 +221,32 @@ public class CondominiumFeeDAOImpl {
 			}
 		}
 	}
-	
+
 	public boolean save(CondominiumFee fee) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
 			session.saveOrUpdate(fee);
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return false;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
+	public boolean closeCondominiumFee(CondominiumFee condominiumFee) {
+		Session session = null;
+		try {
+			condominiumFee.setFinished(true);
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			session.saveOrUpdate(condominiumFee);
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
