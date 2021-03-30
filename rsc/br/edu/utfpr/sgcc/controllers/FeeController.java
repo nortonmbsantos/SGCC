@@ -148,7 +148,8 @@ public class FeeController {
 				}
 
 			} else {
-				return new ModelAndView("user/condominium/fee/forminstalment").addObject("result", new Result("Não foi possível realizar ação: Taxa de condomínio fechada", "error"));
+				return new ModelAndView("user/condominium/fee/forminstalment").addObject("result",
+						new Result("Não foi possível realizar ação: Taxa de condomínio fechada", "error"));
 			}
 		} else {
 			return new ModelAndView("errors/accessdenied");
@@ -167,24 +168,28 @@ public class FeeController {
 
 		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
 		if (condominium.getIdUser() == user.getId()) {
-			modelAndView.addObject("condominium", condominium);
-			modelAndView.addObject("idCondominiumFee", id_condominium_fee);
-			Fee fee;
-			FeeService feeService = new FeeService();
-			if (id_fee <= 0) {
-				fee = new Fee();
-				fee.setIdCondominiumFee(id_condominium_fee);
-				fee.setCurrentInstallment(1);
-				fee.setInstallments(1);
-			} else {
-				fee = feeService.returnById(id_fee);
-			}
-			modelAndView.addObject("fee", fee);
-			FeeTypeService feeTypeService = new FeeTypeService();
-			modelAndView.addObject("feeTypes", feeTypeService.list());
-			modelAndView.addObject("fathers", feeService.returnFathers(condominium.getId()));
+			if (!condominiumFee.isFinished()) {
+				modelAndView.addObject("condominium", condominium);
+				modelAndView.addObject("idCondominiumFee", id_condominium_fee);
+				Fee fee;
+				FeeService feeService = new FeeService();
+				if (id_fee <= 0) {
+					fee = new Fee();
+					fee.setIdCondominiumFee(id_condominium_fee);
+					fee.setCurrentInstallment(1);
+					fee.setInstallments(1);
+				} else {
+					fee = feeService.returnById(id_fee);
+				}
+				modelAndView.addObject("fee", fee);
+				FeeTypeService feeTypeService = new FeeTypeService();
+				modelAndView.addObject("feeTypes", feeTypeService.list());
+				modelAndView.addObject("fathers", feeService.returnFathers(condominium.getId()));
 
-			return modelAndView;
+				return modelAndView;
+			} else {
+				return new ModelAndView("user/condominium/condominiumfee/condominiumfeeclosed");
+			}
 		} else {
 			return new ModelAndView("errors/accessdenied");
 		}
@@ -209,22 +214,28 @@ public class FeeController {
 		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
 
 		if (condominium.getIdUser() == user.getId()) {
-			if (fee.getId() <= 0) {
-				fee.setCurrentInstallment(1);
-				boolean bolresult = feeService.save(fee);
-				if (bolresult) {
-					redirectAttributes.addFlashAttribute("result",
-							new Result("Taxa cadastrada com sucesso", "success"));
+			if (!condominiumFee.isFinished()) {
+
+				if (fee.getId() <= 0) {
+					fee.setCurrentInstallment(1);
+					boolean bolresult = feeService.save(fee);
+					if (bolresult) {
+						redirectAttributes.addFlashAttribute("result",
+								new Result("Taxa cadastrada com sucesso", "success"));
+					} else {
+						redirectAttributes.addFlashAttribute("result", new Result("Falhar ao cadastrar taxa", "error"));
+					}
 				} else {
-					redirectAttributes.addFlashAttribute("result", new Result("Falhar ao cadastrar taxa", "error"));
+					boolean bolresult = feeService.saveOrUpdate(fee);
+					if (bolresult) {
+						redirectAttributes.addFlashAttribute("result",
+								new Result("Taxa alterada com sucesso", "success"));
+					} else {
+						redirectAttributes.addFlashAttribute("result", new Result("Falhar ao alterar taxa", "error"));
+					}
 				}
 			} else {
-				boolean bolresult = feeService.saveOrUpdate(fee);
-				if (bolresult) {
-					redirectAttributes.addFlashAttribute("result", new Result("Taxa alterada com sucesso", "success"));
-				} else {
-					redirectAttributes.addFlashAttribute("result", new Result("Falhar ao alterar taxa", "error"));
-				}
+				return new ModelAndView("user/condominium/condominiumfee/condominiumfeeclosed");
 			}
 		} else {
 			return new ModelAndView("errors/accessdenied");

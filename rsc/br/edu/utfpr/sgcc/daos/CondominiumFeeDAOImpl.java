@@ -1,5 +1,6 @@
 package br.edu.utfpr.sgcc.daos;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -25,6 +26,7 @@ import br.edu.utfpr.sgcc.models.Condominium;
 import br.edu.utfpr.sgcc.models.CondominiumFee;
 import br.edu.utfpr.sgcc.models.Fee;
 import br.edu.utfpr.sgcc.models.Report;
+import br.edu.utfpr.sgcc.service.CondominiumFeeService;
 
 public class CondominiumFeeDAOImpl {
 
@@ -65,7 +67,7 @@ public class CondominiumFeeDAOImpl {
 		return (CondominiumFee) query.getSingleResult();
 	}
 
-	public List<CondominiumFee> returnByCondominiumId(int id) {
+	public List<CondominiumFee> returnByCondominiumId(int id, int page, int results) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
@@ -74,6 +76,8 @@ public class CondominiumFeeDAOImpl {
 			Query query = session.createQuery(
 					"from condominium_fee f where f.id_condominium = :idCondominium order by f.closingDate desc");
 			query.setParameter("idCondominium", id);
+			query.setFirstResult((page - 1) * results);
+			query.setMaxResults(results);
 			List<CondominiumFee> fees = (List<CondominiumFee>) query.getResultList();
 
 			return fees;
@@ -87,6 +91,54 @@ public class CondominiumFeeDAOImpl {
 		}
 	}
 
+	public List<CondominiumFee> returnActives(int idCondominium){
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+
+			session.beginTransaction();
+			Query query = session.createQuery(
+					"from condominium_fee f where f.id_condominium = :idCondominium and f.finished = 0 order by f.closingDate desc");
+			query.setParameter("idCondominium", idCondominium);
+			List<CondominiumFee> fees = (List<CondominiumFee>) query.getResultList();
+
+			return fees;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+		
+	}
+	
+	public int returnCount(int id) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+
+			session.beginTransaction();
+			Query query = session.createSQLQuery(
+					"SELECT count(id) as total FROM condominium_fee WHERE id_condominium = :idCondominium");
+			query.setParameter("idCondominium", id);
+
+			int count =  Integer.valueOf(String.valueOf(query.getSingleResult()));
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return 0;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+public static void main(String[] args) {
+	System.out.println(new CondominiumFeeService().returnCount(1)); 
+	
+}
 	public List<Report> reportByClosingDate(int id) {
 		Session session = null;
 		try {

@@ -27,12 +27,23 @@
 
 					<div class="jumbotron">
 						<h1 class="display-4">${condominium.name}</h1>
-						<p class="lead">Fechamento: <fmt:formatDate value="${condominiumFee.closingDate}" pattern="dd/MM/yyyy"/></p>
+						<p class="lead">
+							Fechamento:
+							<fmt:formatDate value="${condominiumFee.closingDate}"
+								pattern="dd/MM/yyyy" />
+						</p>
 						<hr class="my-4">
-						<a class="btn btn-primary"
-						href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${condominiumFee.id}&id_fee=0">Nova taxa</a>
-						<a class="btn btn-primary"
-						href="${pageContext.request.contextPath}/user/condominium/condominiumfee/closing?id_condominium_fee=${condominiumFee.id}">Fechar período</a>
+						<c:choose>
+						<c:when test="${!condominiumFee.finished }">
+							<a class="btn btn-primary"
+								href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${condominiumFee.id}&id_fee=0">Nova
+								taxa</a>
+							<a class="btn btn-primary"
+								href="${pageContext.request.contextPath}/user/condominium/condominiumfee/closing?id_condominium_fee=${condominiumFee.id}">Fechar
+								período</a>
+						</c:when>
+						<c:otherwise><span class="badge badge-info">Período fechado</span></c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 				<table class="table">
@@ -49,22 +60,21 @@
 					<tbody>
 						<c:forEach items="${fees}" var="fee">
 							<tr>
-								<td>
-								<a class="btn btn-light"
+								<td><a class="btn btn-light"
 									href="${pageContext.request.contextPath}/user/condominium/fee?id_fee=${fee.id}"><i
-										class="fas fa-eye"></i></a>
-										
-								<a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${fee.idCondominiumFee}&id_fee=${fee.id}"><i
-										class="fas fa-edit"></i></a>
-										
-										</td>
+										class="fas fa-eye"></i></a> <c:if
+										test="${!condominiumFee.finished }">
+										<a class="btn btn-light"
+											href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${fee.idCondominiumFee}&id_fee=${fee.id}"><i
+											class="fas fa-edit"></i></a>
+									</c:if></td>
 								<td>${fee.description }</td>
-								<td><fmt:formatNumber value="${fee.value }" type="currency"/></td>
-								<td><fmt:formatDate value="${fee.dueDate}" pattern="dd/MM/yyyy"/></td>
+								<td><fmt:formatNumber value="${fee.value }" type="currency" /></td>
+								<td><fmt:formatDate value="${fee.dueDate}"
+										pattern="dd/MM/yyyy" /></td>
 								<td><c:choose>
 										<c:when test="${null != fee.payDate}">
-										<fmt:formatDate value="${fee.payDate}" pattern="dd/MM/yyyy"/>
+											<fmt:formatDate value="${fee.payDate}" pattern="dd/MM/yyyy" />
 										</c:when>
 										<c:otherwise>Falta pagamento</c:otherwise>
 									</c:choose></td>

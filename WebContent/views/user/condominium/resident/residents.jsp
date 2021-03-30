@@ -37,39 +37,37 @@
 						<tr>
 							<th scope="col">Visualizar</th>
 							<th scope="col">Nome</th>
-							<th scope="col">Descrição</th>
-							<th scope="col">Email</th>
-							<th scope="col">Telefone</th>
+
 							<th scope="col">Ativo</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${residents}" var="resident">
 							<tr>
-								<td>
-								<a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/resident?id_resident=${resident.id}"
-									title="Visualizar Morador"><i class="fas fa-eye"></i></a> 
-										
-									<a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/warnings?id_resident=${resident.id}"
-									title="Multas do morador"><i class="fas fa-list"></i></a> 
-									
-									<a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/warning/new?id_resident=${resident.id}"
-									title="Multar morador"><i class="fas fa-angry"></i></a> 
-								
-									
-									<a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/resident/block?id_resident=${resident.id}"
-									title="Bloquear morador"><i class="fas fa-minus-circle"></i></a>
-								</td>
-								<td>${resident.name }</td>
-								<td>${resident.description }</td>
-								<td>${resident.email }</td>
-								<td>${resident.phoneNumber }</td>
-								<td><c:choose>
+								<td><a class="btn btn-light"
+									href="${pageContext.request.contextPath}/user/condominium/resident?id_resident=${resident.idResident}"
+									title="Visualizar Morador"><i class="fas fa-eye"></i></a> <a
+									class="btn btn-light"
+									href="${pageContext.request.contextPath}/user/condominium/warnings?id_resident=${resident.idResident}"
+									title="Multas do morador"><i class="fas fa-list"></i></a> <a
+									class="btn btn-light"
+									href="${pageContext.request.contextPath}/user/condominium/warning/new?id_resident=${resident.idResident}&id_condominium=${condominium.id}"
+									title="Multar morador"><i class="fas fa-angry"></i></a> <c:choose>
 										<c:when test="${resident.active == true}">
+
+											<a class="btn btn-light"
+												href="${pageContext.request.contextPath}/user/condominium/resident/block?id_resident=${resident.idResident}&id_condominium=${resident.idCondominium}"
+												title="Bloquear morador"><i class="fas fa-minus-circle"></i></a>
+										</c:when>
+										<c:otherwise>
+											<a class="btn btn-light"
+												href="${pageContext.request.contextPath}/user/condominium/resident/unblock?id_resident=${resident.idResident}&id_condominium=${resident.idCondominium}"
+												title="Desbloquear morador"><i class="fas fa-plus-circle"></i></a>
+										</c:otherwise>
+									</c:choose></td>
+								<td>${resident.resident.firstName }</td>
+								<td><c:choose>
+										<c:when test="${resident.active}">
 											<span class="badge badge-success">Ativo</span>
 										</c:when>
 										<c:otherwise>
@@ -85,5 +83,6 @@
 			</main>
 		</div>
 	</div>
+	<jsp:include page="../../../result.jsp"></jsp:include>
 </body>
 </html>

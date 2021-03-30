@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
@@ -43,6 +44,15 @@
 								<label for="value">Valor* (Pode ser zero, caso seja
 									apenas um aviso)</label>
 								<form:input path="value" cssClass="form-control" id="value" />
+							</div>
+							<div class="form-group">
+								<label for="feeType">Período*</label>
+								<form:select cssClass="form-control" path="idCondominiumFee"
+									id="feeType">
+									<c:forEach items="${condominiumFees}" var="fee">
+										<form:option value="${fee.id}"><fmt:formatDate value="${fee.closingDate}" pattern="dd/MM/yyyy" /></form:option>
+									</c:forEach>
+								</form:select>
 							</div>
 							<button type="submit" class="btn btn-primary">Cadastrar</button>
 						</form:form>

@@ -20,20 +20,22 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
 import br.edu.utfpr.sgcc.models.Condominium;
+import br.edu.utfpr.sgcc.models.CondominiumEntryRequest;
 import br.edu.utfpr.sgcc.models.CondominiumResident;
 import br.edu.utfpr.sgcc.models.Fee;
+import br.edu.utfpr.sgcc.models.User;
+import br.edu.utfpr.sgcc.service.UserService;
 
 public class CondominiumResidentDAOImpl {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(CondominiumResident.class)
-			.buildSessionFactory();
+	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
+			.addAnnotatedClass(CondominiumResident.class).buildSessionFactory();
 
 	private DataSource dataSource;
 
 	public CondominiumResidentDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-
 
 	public boolean save(CondominiumResident resident) {
 		Session session = null;
@@ -66,7 +68,7 @@ public class CondominiumResidentDAOImpl {
 				c.setId((int) o[0]);
 				c.setName((String) o[1]);
 				c.setDescription((String) o[2]);
-				
+
 				condominiuns.add(c);
 			}
 
@@ -81,13 +83,13 @@ public class CondominiumResidentDAOImpl {
 		}
 	}
 
-
 	public CondominiumResident returnByResidentAndCondominium(int id_resident, int id_condominium) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Query query = session.createQuery("from condominium_resident cr where cr.idCondominium = :idCondominium and cr.idResident = :idResident ");
+			Query query = session.createQuery(
+					"from condominium_resident cr where cr.idCondominium = :idCondominium and cr.idResident = :idResident ");
 			query.setParameter("idCondominium", id_condominium);
 			query.setParameter("idResident", id_resident);
 			CondominiumResident resident = (CondominiumResident) query.getSingleResult();
@@ -96,9 +98,81 @@ public class CondominiumResidentDAOImpl {
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
 			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
 		}
 	}
 
-	
+	public List<CondominiumResident> returnUserByCondominium(int id) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery("from condominium_resident u where u.idCondominium = :idCondominium");
+			query.setParameter("idCondominium", id);
+			List<CondominiumResident> residents = (List<CondominiumResident>) query.getResultList();
+
+			UserService userService = new UserService();
+
+			for (CondominiumResident r : residents) {
+				r.setResident(userService.returnById(r.getIdResident()));
+			}
+
+			return residents;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
+	public boolean block(int id_resident, int id_condominium) {
+		Session session = null;
+		try {
+			CondominiumResident condominiumResident = returnByResidentAndCondominium(id_resident, id_condominium);
+			condominiumResident.setActive(false);
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			session.update(condominiumResident);
+			session.getTransaction().commit();
+
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+
+		return false;
+	}
+
+	public boolean unblock(int id_resident, int id_condominium) {
+		Session session = null;
+		try {
+			CondominiumResident condominiumResident = returnByResidentAndCondominium(id_resident, id_condominium);
+			condominiumResident.setActive(true);
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			session.update(condominiumResident);
+			session.getTransaction().commit();
+
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+		return false;
+
+	}
 
 }

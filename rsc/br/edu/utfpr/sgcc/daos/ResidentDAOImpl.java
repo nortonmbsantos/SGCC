@@ -19,6 +19,7 @@ import org.hibernate.criterion.Restrictions;
 
 import br.edu.utfpr.sgcc.config.Encryptor;
 import br.edu.utfpr.sgcc.models.Admin;
+import br.edu.utfpr.sgcc.models.CondominiumResident;
 import br.edu.utfpr.sgcc.models.Fee;
 import br.edu.utfpr.sgcc.models.Resident;
 
@@ -85,6 +86,7 @@ public class ResidentDAOImpl implements ResidentDAO {
 		}
 	}
 
+	
 	public Resident login(Resident resident) {
 		Session session = null;
 		try {

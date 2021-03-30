@@ -32,6 +32,10 @@ public class WarningService {
 		return dao.returnByResident(id_resident);
 	}
 
+	public List<Warning> returnByCondominiumFee(int id_resident, int id_condominium_fee) {
+		return dao.returnByCondominiumFee(id_resident, id_condominium_fee);
+	}
+
 
 	public boolean insert(Warning warning) {
 		return dao.insert(warning);

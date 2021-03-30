@@ -72,6 +72,27 @@ public class WarningDAOImpl implements WarningDAO {
 		}
 	}
 
+	public List<Warning> returnByCondominiumFee(int id_resident, int id_condominium_fee) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery("from warning w where w.idResident = :idResident and w.idCondominiumFee = :idCondominiumFee");
+			query.setParameter("idResident", id_resident);
+			query.setParameter("idCondominiumFee", id_condominium_fee);
+			List<Warning> warnings = (List<Warning>) query.getResultList();
+			
+			return warnings;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
 	public boolean insert(Warning warning) {
 		Session session = null;
 		try {

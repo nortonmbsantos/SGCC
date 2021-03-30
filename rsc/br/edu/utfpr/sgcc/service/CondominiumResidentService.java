@@ -34,9 +34,31 @@ public class CondominiumResidentService {
 		return dao.returnByResidentAndCondominium(id_resident, id_condominium);
 	}
 	
+	public CondominiumResident returnByResidentAndCondominium(CondominiumResident condominiumResident) {
+		return returnByResidentAndCondominium(condominiumResident.getIdResident(), condominiumResident.getIdCondominium());
+	}
+	
 
 	public boolean save(CondominiumResident resident) {
 		return dao.save(resident);
 	}
 
+
+	public List<CondominiumResident> returnUserByCondominium(int id) {
+		return dao.returnUserByCondominium(id);
+	}
+
+	public boolean block(int id_resident, int id_condominium) {
+		return dao.block(id_resident, id_condominium);
+	}
+	
+	public boolean unblock(int id_resident, int id_condominium) {
+		return dao.unblock(id_resident, id_condominium);
+	}
+	
+	public static void main(String[] args) {
+		CondominiumResidentService service = new CondominiumResidentService();
+		service.returnUserByCondominium(1);
+	}
+	
 }

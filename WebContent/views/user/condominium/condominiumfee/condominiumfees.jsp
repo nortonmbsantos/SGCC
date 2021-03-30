@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<jsp:useBean id="paginacao" class="br.edu.utfpr.sgcc.config.Paginacao"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +28,7 @@
 						<h1 class="display-4">Taxas do condomínio ${condominium.name}</h1>
 						<hr class="my-4">
 						<a class="btn btn-primary"
-						href="${pageContext.request.contextPath}/user/condominium/condominiumfee/new?id_condominium=${condominium.id}">Novo período</a>
+						href="${pageContext.request.contextPath}/user/condominium/condominiumfee/form?id_condominium=${condominium.id}&id=0">Novo período</a>
 					</div>
 				</div>
 				<table class="table">
@@ -35,6 +36,7 @@
 						<tr>
 							<th scope="col">Visualizar</th>
 							<th scope="col">Data fechamento</th>
+							<th scope="col">Status</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -44,20 +46,31 @@
 								<a class="btn btn-light"
 									href="${pageContext.request.contextPath}/user/condominium/condominiumfee?idCondominiumFee=${fee.id}"><i
 										class="fas fa-eye" title="Visualizar período"></i></a>
-										<a class="btn btn-light"
+										<c:if test="${!fee.finished }"><a class="btn btn-light"
 									href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${fee.id}&id_fee=0"><i
-										class="fas fa-folder-plus" title="Adicionar taxa neste período"></i></a>
+										class="fas fa-folder-plus" title="Adicionar taxa neste período"></i></a></c:if>
 										</td>
 								<td><fmt:formatDate value="${fee.closingDate}" pattern="dd/MM/yyyy"/></td>
+								<td>
+								<c:choose >
+								<c:when test="${fee.finished }"><span class="badge badge-info">Fechado</span></c:when>
+								<c:otherwise><span class="badge badge-secondary">Aberto</span></c:otherwise>
+								</c:choose>
+								
+								
+								</td>
 								
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
 
+<div> ${paginacao.geraPaginacao(currentPage, totalPages, "condominiumfees", "page", map)}</div>
 
 			</main>
 		</div>
 	</div>
+	
+	<jsp:include page="../../../result.jsp"></jsp:include>
 </body>
 </html>

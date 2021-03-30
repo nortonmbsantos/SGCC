@@ -32,6 +32,7 @@ public class Warning {
 	private double value;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date warningDate;
+	private int idCondominiumFee;
 
 	public int getId() {
 		return id;
@@ -71,6 +72,14 @@ public class Warning {
 
 	public void setWarningDate(Date warningDate) {
 		this.warningDate = warningDate;
+	}
+
+	public int getIdCondominiumFee() {
+		return idCondominiumFee;
+	}
+
+	public void setIdCondominiumFee(int idCondominiumFee) {
+		this.idCondominiumFee = idCondominiumFee;
 	}
 
 }

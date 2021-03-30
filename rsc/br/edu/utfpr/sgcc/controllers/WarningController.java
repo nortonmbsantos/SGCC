@@ -30,6 +30,7 @@ import br.edu.utfpr.sgcc.models.Resident;
 import br.edu.utfpr.sgcc.models.Result;
 import br.edu.utfpr.sgcc.models.Warning;
 import br.edu.utfpr.sgcc.service.AdminService;
+import br.edu.utfpr.sgcc.service.CondominiumFeeService;
 import br.edu.utfpr.sgcc.service.CondominiumService;
 import br.edu.utfpr.sgcc.service.FeeTypeService;
 import br.edu.utfpr.sgcc.service.ResidentService;
@@ -38,17 +39,17 @@ import br.edu.utfpr.sgcc.service.WarningService;
 @Controller
 public class WarningController {
 	@GetMapping("/user/condominium/warning/new")
-	public ModelAndView addResident(@SessionAttribute("admin") Admin admin, @RequestParam int id_resident) {
+	public ModelAndView addWarning(@RequestParam int id_resident, @RequestParam int id_condominium) {
 		ModelAndView modelAndView = new ModelAndView("user/condominium/warning/new");
 		ResidentService residentService = new ResidentService();
 		modelAndView.addObject("resident", residentService.returnById(id_resident));
-
+		modelAndView.addObject("condominiumFees", new CondominiumFeeService().returnActives(id_condominium));
 		modelAndView.addObject("warning", new Warning());
 		return modelAndView;
 	}
 
 	@PostMapping("/user/condominium/warning/new")
-	public ModelAndView addResidentForm(@ModelAttribute @Valid Warning warning, BindingResult result, final RedirectAttributes redirectAttributes) {
+	public ModelAndView addWarningForm(@ModelAttribute @Valid Warning warning, BindingResult result, final RedirectAttributes redirectAttributes) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/user/dashboard");
 		WarningService service = new WarningService();
 		

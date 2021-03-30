@@ -53,6 +53,18 @@
 							<td>${fee.currentInstallment}/${fee.installments}</td>
 						</tr>
 					</c:forEach>
+					<c:forEach items="${warnings}" var="w">
+						<tr>
+							<td><a class="btn btn-light"
+								href="${pageContext.request.contextPath}/admin/warning?id=${w.id}"><i
+									class="fas fa-eye"></i></a></td>
+							<td>${w.description }</td>
+							<td><fmt:formatNumber value="${w.value}" type="currency" /></td>
+							<td><fmt:formatDate value="${w.warningDate}" pattern="dd/MM/yyyy"/></td>
+							<td></td>
+							<td>1</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</main>

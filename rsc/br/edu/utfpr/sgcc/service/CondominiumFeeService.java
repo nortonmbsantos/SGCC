@@ -39,8 +39,12 @@ public class CondominiumFeeService {
 		return dao.returnById(id);
 	}
 	
+	public List<CondominiumFee> returnByCondominiumId(int id, int page, int results) {
+		return dao.returnByCondominiumId(id, page, results);
+	}
+	
 	public List<CondominiumFee> returnByCondominiumId(int id) {
-		return dao.returnByCondominiumId(id);
+		return returnByCondominiumId(id, 1, 10);
 	}
 
 	public List<Report> reportByClosingDate(int id) {
@@ -49,6 +53,10 @@ public class CondominiumFeeService {
 	
 	public List<Report> reportByFeeType(int id) {
 		return dao.reportByFeeType(id);
+	}
+
+	public List<CondominiumFee> returnActives(int idCondominium) {
+		return dao.returnActives(idCondominium);
 	}
 
 	public boolean insert(CondominiumFee fee) {
@@ -65,5 +73,9 @@ public class CondominiumFeeService {
 	
 	public boolean isValidMonth(Date date, int idCondominium) {
 		return dao.isValidMonth(date, idCondominium);
+	}
+
+	public int returnCount(int id) {
+		return dao.returnCount(id);
 	}
 }
