@@ -7,6 +7,7 @@ package br.edu.utfpr.sgcc.models;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -25,13 +26,16 @@ public class Warning {
 
 	@Id
 	private int id;
+	@Column(name = "id_resident")
 	private int idResident;
 	@NotNull
 	@Size(min = 3, message = "Descrição inválida")
 	private String description;
 	private double value;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Column(name = "warning_date")
 	private Date warningDate;
+	@Column(name = "id_condominium_fee")
 	private int idCondominiumFee;
 
 	public int getId() {

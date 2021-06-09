@@ -19,11 +19,19 @@
 
 
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-					Lista de condomínios <a class="btn"
-						href="${pageContext.request.contextPath}/user/condominium/new">Adicionar
-						condomínio</a>
+
+					<div class="jumbotron">
+						<h1 class="display-4">Condomínios</h1>
+						<p class="lead">Sua lista de condomínios</p>
+						<hr class="my-4">
+						<p></p>
+						<a class="btn btn-primary btn-sm"
+							href="${pageContext.request.contextPath}/user/condominium/new"
+							role="button">Novo condomínio</a> 
+					</div>
 				</div>
 				<table class="table">
 					<thead class="thead-dark">
@@ -31,7 +39,6 @@
 							<th scope="col">Visualizar</th>
 							<th scope="col">Nome</th>
 							<th scope="col">Descrição</th>
-							<th scope="col">Residencial</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -44,7 +51,6 @@
 								</td>
 								<td>${condominium.name }</td>
 								<td>${condominium.description }</td>
-								<td>${condominium.residential }</td>
 							</tr>
 						</c:forEach>
 					</tbody>

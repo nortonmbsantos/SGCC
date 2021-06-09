@@ -1,5 +1,6 @@
 package br.edu.utfpr.sgcc.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -21,11 +24,16 @@ public class User {
 	private int id;
 	@NotNull
 	@Size(min = 6, message = "Usuário deve ter no mínimo 6 caracteres")
+	@Column(name="user_name", unique=true)
 	private String userName;
 	@Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
 	private String password;
 	@Size(min = 1, message = "Nome não deve ser vazio")
+	@Column(name="first_name")
 	private String firstName;
+	@NotNull(message = "Este campo não pode ser vazio")
+	@Email(message = "Email inválido")
+	private String email;
 	@Transient
 	@Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
 	private String confirmPassword;
@@ -95,6 +103,14 @@ public class User {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }

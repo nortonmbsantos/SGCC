@@ -35,6 +35,11 @@ public class CondominiumService {
 		return dao.list(idAdmin);
 	}
 	
+	
+	public List<Condominium> listSidebar(int idAdmin) {
+		return dao.listSidebar(idAdmin);
+	}
+	
 	public Condominium insert(Condominium condominium) {
 		condominium = dao.insert(condominium);
 		if(condominium != null) {

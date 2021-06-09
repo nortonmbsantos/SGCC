@@ -39,7 +39,7 @@ public class FeeController {
 		CondominiumService condominiumService = new CondominiumService();
 		Condominium condominium = condominiumService.returnById(id_condominium);
 		CondominiumFee condominiumFee = new CondominiumFeeService().returnById(id_condominium_fee);
-		if (condominium.getIdUser() == user.getId() && condominiumFee.getId_condominium() == condominium.getId()) {
+		if (condominium.getIdUser() == user.getId() && condominiumFee.getIdCondominium() == condominium.getId()) {
 			ModelAndView modelAndView = new ModelAndView("user/condominium/fee/fees");
 			FeeService feeService = new FeeService();
 			modelAndView.addObject("fees", feeService.returnByCondominiumFeeId(id_condominium_fee));
@@ -57,8 +57,8 @@ public class FeeController {
 		Fee fee = new FeeService().returnById(id_fee);
 		CondominiumFee condominiumFee = new CondominiumFeeService().returnById(fee.getIdCondominiumFee());
 
-		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
-		if (condominium.getIdUser() == user.getId() && condominiumFee.getId_condominium() == condominium.getId()) {
+		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
+		if (condominium.getIdUser() == user.getId() && condominiumFee.getIdCondominium() == condominium.getId()) {
 			ModelAndView modelAndView = new ModelAndView("user/condominium/fee/fee");
 			FeeService feeService = new FeeService();
 			modelAndView.addObject("format", new SimpleDateFormat("dd/MM/yyyy"));
@@ -88,7 +88,7 @@ public class FeeController {
 		CondominiumFee condominiumFee = condominiumFeeService.returnById(id_condominium_fee);
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 		if (condominium.getIdUser() == user.getId()) {
 			modelAndView.addObject("condominium", condominium);
 			modelAndView.addObject("idCondominiumFee", id_condominium_fee);
@@ -127,7 +127,7 @@ public class FeeController {
 		CondominiumFee condominiumFee = condominiumFeeService.returnById(fee.getIdCondominiumFee());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 
 		if (condominium.getIdUser() == user.getId()) {
 			if (!condominiumFee.isFinished()) {
@@ -166,7 +166,7 @@ public class FeeController {
 		CondominiumFee condominiumFee = condominiumFeeService.returnById(id_condominium_fee);
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 		if (condominium.getIdUser() == user.getId()) {
 			if (!condominiumFee.isFinished()) {
 				modelAndView.addObject("condominium", condominium);
@@ -211,7 +211,7 @@ public class FeeController {
 		CondominiumFee condominiumFee = condominiumFeeService.returnById(fee.getIdCondominiumFee());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 
 		if (condominium.getIdUser() == user.getId()) {
 			if (!condominiumFee.isFinished()) {

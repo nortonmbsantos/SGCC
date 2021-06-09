@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
@@ -30,32 +31,67 @@
 						<hr class="my-4">
 						<p>Último condomínio: R$ ${reportLastFeeValue.value} -
 							(Fechamento: ${reportLastFeeValue.title})</p>
-						 <a class="btn btn-primary btn-sm"
+						<a class="btn btn-primary btn-sm"
 							href="${pageContext.request.contextPath}/user/condominium/condominiumfees?id_condominium=${condominium.id}"
-							role="button">Períodos de taxas</a>
-							<a class="btn btn-primary btn-sm"
+							role="button">Períodos de taxas</a> <a
+							class="btn btn-primary btn-sm"
 							href="${pageContext.request.contextPath}/user/condominium/residents?id_condominium=${condominium.id}"
-							role="button">Moradores</a> 
-							<a class="btn btn-primary btn-sm"
+							role="button">Moradores</a> <a class="btn btn-primary btn-sm"
 							href="${pageContext.request.contextPath}/user/condominium/commomareas?id_condominium=${condominium.id}"
-							role="button">Áreas Comuns</a> 
-							<a class="btn btn-primary btn-sm"
+							role="button">Áreas Comuns</a> <a class="btn btn-primary btn-sm"
 							href="${pageContext.request.contextPath}/user/condominium/entries?idcondominium=${condominium.id}"
-							role="button">Solicitações de entrada</a>
-							
-							<a class="btn btn-primary btn-sm"
+							role="button">Solicitações de entrada</a> <a
+							class="btn btn-primary btn-sm"
 							href="${pageContext.request.contextPath}/user/condominium/update?id=${condominium.id}"
-							role="button">Editar condomínio</a> 
-							
-							
+							role="button">Editar condomínio</a>
+
+
 					</div>
 				</div>
-				<div class="row">
+				<div class="row mt-3">
 					<div class="col-12 col-md-6">
-						<canvas style="" id="reportByClosingDateChart"></canvas>
-					</div class="col-12 col-md-6">
-					<div>
-						<canvas style="" id="reportByFeeTypeChart"></canvas>
+						<div class="card">
+							<div class="card-header">Variação dos períodos</div>
+							<div class="card-body">
+								<canvas style="" id="reportByClosingDateChart"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-md-6">
+						<div class="card">
+							<div class="card-header">Média por tipo de taxa</div>
+							<div class="card-body">
+								<table class="table">
+									<thead class="thead-dark">
+										<tr>
+											<th scope="col">Taxa</th>
+											<th scope="col">Valor médio</th>
+											<th scope="col">Quantidade</th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach items="${reportAverageFeeType}" var="report">
+											<tr>
+												<td>${report.title }</td>
+												<td><fmt:formatNumber value="${report.value }"
+														type="currency" /></td>
+												<td>${report.quantity }</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header">Valor total por tipo</div>
+							<div class="card-body">
+								<canvas style="" id="reportByFeeTypeChart"></canvas>
+							</div>
+						</div>
 					</div>
 				</div>
 			</main>

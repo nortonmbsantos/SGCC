@@ -18,6 +18,8 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import br.edu.utfpr.sgcc.models.Result;
+
 public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     protected final Log logger = LogFactory.getLog(this.getClass());
 
@@ -44,7 +46,7 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
             return;
         }
-
+        request.setAttribute("result", new Result("Login efetuado com sucesso", "success"));
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 

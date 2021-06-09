@@ -61,7 +61,7 @@ public class CondominiumFeeDAOImpl {
 		Session session = factory.getCurrentSession();
 		session.beginTransaction();
 		Query query = session.createQuery(
-				"from condominium_fee f where f.id_condominium = :idCondominium order by f.id desc limit 1");
+				"from condominium_fee f where f.idCondominium = :idCondominium order by f.id desc limit 1");
 		query.setParameter("idCondominium", id_condominium);
 
 		return (CondominiumFee) query.getSingleResult();
@@ -74,7 +74,7 @@ public class CondominiumFeeDAOImpl {
 
 			session.beginTransaction();
 			Query query = session.createQuery(
-					"from condominium_fee f where f.id_condominium = :idCondominium order by f.closingDate desc");
+					"from condominium_fee f where f.idCondominium = :idCondominium order by f.closingDate desc");
 			query.setParameter("idCondominium", id);
 			query.setFirstResult((page - 1) * results);
 			query.setMaxResults(results);
@@ -91,14 +91,14 @@ public class CondominiumFeeDAOImpl {
 		}
 	}
 
-	public List<CondominiumFee> returnActives(int idCondominium){
+	public List<CondominiumFee> returnActives(int idCondominium) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 
 			session.beginTransaction();
 			Query query = session.createQuery(
-					"from condominium_fee f where f.id_condominium = :idCondominium and f.finished = 0 order by f.closingDate desc");
+					"from condominium_fee f where f.idCondominium = :idCondominium and f.finished = 0 order by f.closingDate desc");
 			query.setParameter("idCondominium", idCondominium);
 			List<CondominiumFee> fees = (List<CondominiumFee>) query.getResultList();
 
@@ -111,9 +111,9 @@ public class CondominiumFeeDAOImpl {
 				session.close();
 			}
 		}
-		
+
 	}
-	
+
 	public int returnCount(int id) {
 		Session session = null;
 		try {
@@ -124,7 +124,7 @@ public class CondominiumFeeDAOImpl {
 					"SELECT count(id) as total FROM condominium_fee WHERE id_condominium = :idCondominium");
 			query.setParameter("idCondominium", id);
 
-			int count =  Integer.valueOf(String.valueOf(query.getSingleResult()));
+			int count = Integer.valueOf(String.valueOf(query.getSingleResult()));
 			return count;
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
@@ -135,18 +135,20 @@ public class CondominiumFeeDAOImpl {
 			}
 		}
 	}
-public static void main(String[] args) {
-	System.out.println(new CondominiumFeeService().returnCount(1)); 
-	
-}
+
+	public static void main(String[] args) {
+		System.out.println(new CondominiumFeeService().returnCount(1));
+
+	}
+
 	public List<Report> reportByClosingDate(int id) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 
 			session.beginTransaction();
-			Query query = session.createSQLQuery("SELECT cf.closingDate, SUM(f.value) as value FROM fee f "
-					+ "inner join condominium_fee cf on cf.id = f.idCondominiumFee where cf.id_condominium = :idCondominium group by idCondominiumFee order by cf.closingDate desc ");
+			Query query = session.createSQLQuery("SELECT cf.closing_date, SUM(f.value) as value FROM fee f "
+					+ "inner join condominium_fee cf on cf.id = f.id_condominium_fee where cf.id_condominium = :idCondominium group by id_condominium_fee order by cf.closing_date desc ");
 			query.setParameter("idCondominium", id);
 			List<Object[]> report = query.getResultList();
 			List<Report> reports = new ArrayList<Report>();
@@ -169,6 +171,95 @@ public static void main(String[] args) {
 		}
 	}
 
+	public List<Report> reportAverageFeeType(int idCondominium) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+
+			session.beginTransaction();
+			Query query = session.createSQLQuery(
+					"SELECT AVG(f.value) as average, ft.description, ft.id, count(ft.id) FROM fee f INNER JOIN fee_type ft ON ft.id = f.id_fee_type INNER JOIN condominium_fee cf ON cf.id = f.id_condominium_fee WHERE cf.id_condominium = :idCondominium GROUP BY f.id_fee_type ORDER BY average DESC ");
+			query.setParameter("idCondominium", idCondominium);
+			List<Object[]> report = query.getResultList();
+			List<Report> reports = new ArrayList<Report>();
+
+			for (Object[] obj : report) {
+				Report r = new Report();
+				r.setValue((double) obj[0]);
+				r.setTitle((String) obj[1]);
+				r.setId((int) obj[2]);
+				r.setQuantity(((BigInteger) obj[3]).intValue());
+				reports.add(r);
+			}
+			return reports;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return new ArrayList<Report>();
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
+	public List<Report> reportSumByFeeType(int idCondominiumFee) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+
+			session.beginTransaction();
+			Query query = session.createSQLQuery(
+					"SELECT SUM(f.value), ft.description, ft.id FROM fee f INNER JOIN fee_type ft ON ft.id = f.id_fee_type WHERE f.id_condominium_fee = :idCondominiumFee GROUP BY f.id_fee_type ");
+			query.setParameter("idCondominiumFee", idCondominiumFee);
+			List<Object[]> report = query.getResultList();
+			List<Report> reports = new ArrayList<Report>();
+
+			for (Object[] obj : report) {
+				Report r = new Report();
+				r.setValue((double) obj[0]);
+				r.setTitle((String) obj[1]);
+				r.setId((int) obj[2]);
+				reports.add(r);
+			}
+			return reports;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return new ArrayList<Report>();
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
+	public List<Report> reportsCondominiumFeeType(int idCondominium, int idCondominiumFee) {
+		List<Report> reportSumByFeeType = this.reportSumByFeeType(idCondominiumFee);
+		List<Report> reportAverageFeeType = this.reportAverageFeeType(idCondominium);
+		
+		List<Report> reports = new ArrayList<Report>();
+		for (Report r : reportSumByFeeType) {
+			for (Report r2 : reportAverageFeeType) {
+				if (r.getId() == r2.getId()) {
+					Report report = new Report();
+					report.setValue(r.getValue());
+					report.setTitle(r.getTitle());
+					int val = Math.round(((float) r.getValue() / (float) r2.getValue()) * 100);
+
+					if (val >= 120) {
+						report.setDescription("Valor maior do que a média");
+					} else if (val >= 80) {
+						report.setDescription("Valor dentro da média");
+					} else if (val < 80) {
+						report.setDescription("Valor abaixo da média");
+					}
+					reports.add(report);
+				}
+			}
+		}
+
+		return reports;
+	}
+
 	public List<Report> reportByFeeType(int id) {
 		Session session = null;
 		try {
@@ -176,7 +267,7 @@ public static void main(String[] args) {
 
 			session.beginTransaction();
 			Query query = session.createSQLQuery(
-					"SELECT ft.description, sum(f.value) from condominium_fee cf INNER JOIN fee f on f.idCondominiumFee = cf.id INNER JOIN fee_type ft on f.idFeeType = ft.id WHERE cf.id_condominium = :idCondominium GROUP BY ft.id ");
+					"SELECT ft.description, sum(f.value) from condominium_fee cf INNER JOIN fee f on f.id_condominium_fee = cf.id INNER JOIN fee_type ft on f.id_fee_type = ft.id WHERE cf.id_condominium = :idCondominium GROUP BY ft.id ");
 			query.setParameter("idCondominium", id);
 			List<Object[]> report = query.getResultList();
 			List<Report> reports = new ArrayList<Report>();
@@ -206,7 +297,7 @@ public static void main(String[] args) {
 
 			session.beginTransaction();
 			Query query = session.createSQLQuery(
-					"SELECT cf.closingDate, sum(f.value) from condominium_fee cf INNER JOIN fee f on f.idCondominiumFee = cf.id WHERE cf.id_condominium = :idCondominium GROUP BY f.idCondominiumFee ORDER BY cf.closingDate DESC LIMIT 1 ");
+					"SELECT cf.closing_date, sum(f.value) from condominium_fee cf INNER JOIN fee f on f.id_condominium_fee = cf.id WHERE cf.id_condominium = :idCondominium GROUP BY f.id_condominium_fee ORDER BY cf.closing_date DESC LIMIT 1 ");
 			query.setParameter("idCondominium", id);
 			List<Object[]> reportsObject = query.getResultList();
 
@@ -236,7 +327,7 @@ public static void main(String[] args) {
 
 			session.beginTransaction();
 			Query query = session.createQuery(
-					"from condominium_fee f where f.id_condominium = :idCondominium and MONTH(f.closingDate) = MONTH(:date)");
+					"from condominium_fee f where f.idCondominium = :idCondominium and MONTH(f.closingDate) = MONTH(:date)");
 			query.setParameter("idCondominium", idCondominium);
 			query.setParameter("date", date);
 			List<CondominiumFee> fees = (List<CondominiumFee>) query.getResultList();

@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,12 +69,56 @@ public class ResidentController {
 	}
 
 	@GetMapping("/user/condominium/residents")
-	public ModelAndView residentList(@RequestParam int id_condominium) {
+	public ModelAndView residentList(@RequestParam int id_condominium, @RequestParam(defaultValue = "") String name,
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int results) {
 		ModelAndView modelAndView = new ModelAndView("user/condominium/resident/residents");
-		CondominiumResidentService residentService = new CondominiumResidentService();
-		modelAndView.addObject("residents", residentService.returnUserByCondominium(id_condominium));
+
 		CondominiumService condominiumService = new CondominiumService();
-		modelAndView.addObject("condominium", condominiumService.returnById(id_condominium));
+		Condominium condominium = condominiumService.returnById(id_condominium);
+		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (condominium.getIdUser() == user.getId()) {
+
+			CondominiumResidentService residentService = new CondominiumResidentService();
+			int totalData = residentService.returnCount(id_condominium);
+			modelAndView.addObject("totalPages", ((int) Math.ceil(((double) totalData) / results)));
+			modelAndView.addObject("currentPage", page);
+			HashMap<String, String> map = new HashMap<>();
+			map.put("id_condominium", String.valueOf(id_condominium));
+			map.put("results", String.valueOf(results));
+			modelAndView.addObject("map", map);
+			modelAndView.addObject("residents", residentService.returnUserByCondominium(id_condominium, page, results));
+			modelAndView.addObject("condominium", condominium);
+		} else {
+			modelAndView = new ModelAndView("errors/accessdenied");
+		}
+		return modelAndView;
+	}
+
+	@PostMapping("/user/condominium/residents")
+	public ModelAndView residentListPost(@RequestParam int id_condominium, @RequestParam(defaultValue = "") String name,
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int results) {
+		ModelAndView modelAndView = new ModelAndView("user/condominium/resident/residents");
+		
+		CondominiumService condominiumService = new CondominiumService();
+		Condominium condominium = condominiumService.returnById(id_condominium);
+		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if (condominium.getIdUser() == user.getId()) {
+			
+			CondominiumResidentService residentService = new CondominiumResidentService();
+			int totalData = residentService.returnCount(id_condominium);
+			modelAndView.addObject("totalPages", ((int) Math.ceil(((double) totalData) / results)));
+			modelAndView.addObject("currentPage", page);
+			HashMap<String, String> map = new HashMap<>();
+			map.put("id_condominium", String.valueOf(id_condominium));
+			map.put("results", String.valueOf(results));
+			modelAndView.addObject("map", map);
+			modelAndView.addObject("residents", residentService.returnUserByCondominium(id_condominium, page, results));
+			modelAndView.addObject("condominium", condominium);
+		} else {
+			modelAndView = new ModelAndView("errors/accessdenied");
+		}
 		return modelAndView;
 	}
 
@@ -112,11 +157,12 @@ public class ResidentController {
 			final RedirectAttributes redirectAttributes) {
 
 		if (result.hasErrors()) {
-			return new ModelAndView("redirect:/user/condominium/resident/block?id_resident="+resident.getIdResident()+"&id_condominium="+resident.getIdCondominium());
+			return new ModelAndView("redirect:/user/condominium/resident/block?id_resident=" + resident.getIdResident()
+					+ "&id_condominium=" + resident.getIdCondominium());
 		}
 
-
-		ModelAndView modelAndView = new ModelAndView("redirect:/user/condominium/residents?id_condominium=" + resident.getIdCondominium());
+		ModelAndView modelAndView = new ModelAndView(
+				"redirect:/user/condominium/residents?id_condominium=" + resident.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		CondominiumService condominiumService = new CondominiumService();
@@ -128,7 +174,8 @@ public class ResidentController {
 
 			if (resident != null) {
 				if (resident.isActive()) {
-					boolean bolresult = condominiumResidentService.block(resident.getIdResident(), resident.getIdCondominium());
+					boolean bolresult = condominiumResidentService.block(resident.getIdResident(),
+							resident.getIdCondominium());
 
 					if (bolresult) {
 						redirectAttributes.addFlashAttribute("result",
@@ -187,10 +234,12 @@ public class ResidentController {
 			final RedirectAttributes redirectAttributes) {
 
 		if (result.hasErrors()) {
-			return new ModelAndView("redirect:/user/condominium/resident/unblock?id_resident="+resident.getIdResident()+"&id_condominium="+resident.getIdCondominium());
+			return new ModelAndView("redirect:/user/condominium/resident/unblock?id_resident="
+					+ resident.getIdResident() + "&id_condominium=" + resident.getIdCondominium());
 		}
 
-		ModelAndView modelAndView = new ModelAndView("redirect:/user/condominium/residents?id_condominium=" + resident.getIdCondominium());
+		ModelAndView modelAndView = new ModelAndView(
+				"redirect:/user/condominium/residents?id_condominium=" + resident.getIdCondominium());
 
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

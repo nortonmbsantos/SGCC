@@ -49,7 +49,7 @@ public class CondominiumFeeController {
 
 	@GetMapping("/user/condominium/condominiumfees")
 	public ModelAndView returnByCondominiumId(@RequestParam int id_condominium,
-			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "2") int results) {
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int results) {
 		ModelAndView modelAndView = new ModelAndView("user/condominium/condominiumfee/condominiumfees");
 
 		CondominiumService condominiumService = new CondominiumService();
@@ -66,6 +66,7 @@ public class CondominiumFeeController {
 			modelAndView.addObject("currentPage", page);
 			HashMap<String, String> map = new HashMap<>();
 			map.put("id_condominium", String.valueOf(id_condominium));
+			map.put("results", String.valueOf(results));
 			modelAndView.addObject("map", map);
 			modelAndView.addObject("condominiumFees", fees);
 			modelAndView.addObject("condominium", condominium);
@@ -77,7 +78,7 @@ public class CondominiumFeeController {
 
 	@PostMapping("/user/condominium/condominiumfees")
 	public ModelAndView returnByCondominiumIdPost(@RequestParam int id_condominium,
-			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "2") int results) {
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int results) {
 		ModelAndView modelAndView = new ModelAndView("user/condominium/condominiumfee/condominiumfees");
 
 		CondominiumService condominiumService = new CondominiumService();
@@ -93,6 +94,7 @@ public class CondominiumFeeController {
 			modelAndView.addObject("totalPages", Math.ceil(((double) totalData) / results));
 			HashMap<String, String> map = new HashMap<>();
 			map.put("id_condominium", String.valueOf(id_condominium));
+			map.put("results", String.valueOf(results));
 			modelAndView.addObject("map", map);
 			modelAndView.addObject("currentPage", page);
 			modelAndView.addObject("condominiumFees", fees);
@@ -110,7 +112,7 @@ public class CondominiumFeeController {
 		CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
 		CondominiumFee condominiumFee = condominiumFeeService.returnById(id_condominium_fee);
 		CondominiumService condominiumService = new CondominiumService();
-		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		if (condominium.getIdUser() == user.getId()) {
@@ -131,7 +133,7 @@ public class CondominiumFeeController {
 
 		if (condominiumFee != null) {
 			CondominiumService condominiumService = new CondominiumService();
-			Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+			Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 			MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			if (condominium.getIdUser() == user.getId()) {
 				modelAndView = new ModelAndView(
@@ -181,7 +183,7 @@ public class CondominiumFeeController {
 		CondominiumFee condominiumFee = condominiumFeeService.returnById(idCondominiumFee);
 
 		CondominiumService condominiumService = new CondominiumService();
-		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		if (condominium.getIdUser() == user.getId()) {
@@ -189,6 +191,9 @@ public class CondominiumFeeController {
 			modelAndView.addObject("fees", new FeeService().returnByCondominiumFeeId(idCondominiumFee));
 			modelAndView.addObject("condominiumFee", condominiumFee);
 			modelAndView.addObject("condominium", condominium);
+			modelAndView.addObject("reportSumByFeeType", condominiumFeeService.reportSumFeeType(idCondominiumFee));
+			modelAndView.addObject("reportsCondominiumFeeType", condominiumFeeService.reportsCondominiumFeeType(condominium.getId(), idCondominiumFee));
+
 		} else {
 			modelAndView = new ModelAndView("errors/accessdenied");
 		}
@@ -202,7 +207,7 @@ public class CondominiumFeeController {
 		CondominiumFee condominiumFee = condominiumFeeService.returnById(idCondominiumFee);
 
 		CondominiumService condominiumService = new CondominiumService();
-		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		CondominiumResident condominiumResident = new CondominiumResidentService()
@@ -238,7 +243,7 @@ public class CondominiumFeeController {
 			CondominiumFee fee;
 			if (id <= 0) {
 				fee = new CondominiumFee();
-				fee.setId_condominium(id_condominium);
+				fee.setIdCondominium(id_condominium);
 			} else {
 				CondominiumFeeService feeService = new CondominiumFeeService();
 				fee = feeService.returnById(id);
@@ -258,7 +263,7 @@ public class CondominiumFeeController {
 		}
 		ModelAndView modelAndView;
 		CondominiumService condominiumService = new CondominiumService();
-		Condominium condominium = condominiumService.returnById(condominiumFee.getId_condominium());
+		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (condominium.getIdUser() == user.getId()) {
 

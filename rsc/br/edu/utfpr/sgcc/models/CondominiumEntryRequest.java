@@ -16,11 +16,15 @@ public class CondominiumEntryRequest {
 
 	@Id
 	private int id;
+	@Column(name = "id_resident")
 	private int idResident;
+	@Column(name = "id_condominium")
 	private int idCondominium;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Column(name = "request_date")
 	private Date requestDate;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Column(name = "response_date")
 	private Date responseDate;
 	private boolean accepted;
 	@Transient

@@ -75,8 +75,8 @@ public class FeeDAOImpl {
 
 			session.beginTransaction();
 			Query query = session.createSQLQuery(
-					"select  id, idCondominiumFee, value, dueDate, payDate, installments, currentInstallment, description, idFeeType, father "
-							+ "from fee where id in (select MAX(f.id) from fee f inner join condominium_fee cf on cf.id = f.idCondominiumFee where cf.id_condominium = :idCondominium group by f.father) and installments > currentInstallment");
+					"select  id, id_condominium_fee, value, due_date, pay_date, installments, current_installment, description, id_fee_type, father "
+							+ "from fee where id in (select MAX(f.id) from fee f inner join condominium_fee cf on cf.id = f.id_condominium_fee where cf.id_condominium = :idCondominium group by f.father) and installments > current_installment");
 			query.setParameter("idCondominium", id_condominium);
 			List<Object[]> objects = query.getResultList();
 			List<Fee> fees = new ArrayList<>();
@@ -115,8 +115,8 @@ public class FeeDAOImpl {
 
 			session.beginTransaction();
 			Query query = session.createSQLQuery(
-					"select  id, idCondominiumFee, value, dueDate, payDate, installments, currentInstallment, description, idFeeType, father "
-							+ "from fee where id in (select MAX(f.id) from fee f inner join condominium_fee cf on cf.id = f.idCondominiumFee where cf.id_condominium = :idCondominium group by f.father) and installments > currentInstallment");
+					"select  id, id_condominium_fee, value, due_date, pay_date, installments, current_installment, description, id_fee_type, father "
+							+ "from fee where id in (select MAX(f.id) from fee f inner join condominium_fee cf on cf.id = f.id_condominium_fee where cf.id_condominium = :idCondominium group by f.father) and installments > current_installment");
 			query.setParameter("idCondominium", id_condominium);
 			List<Object[]> objects = query.getResultList();
 			List<Fee> fees = new ArrayList<>();

@@ -29,6 +29,11 @@
 					<form:errors path="firstName" cssStyle="color: #ff0000;" />
 				</div>
 				<div class="form-group">
+					<label for="firstName">Email*</label>
+					<form:input path="email" cssClass="form-control" id="email" />
+					<form:errors path="email" cssStyle="color: #ff0000;" />
+				</div>
+				<div class="form-group">
 					<label for="password">Senha*</label>
 					<form:password path="password" cssClass="form-control"
 						id="password" />

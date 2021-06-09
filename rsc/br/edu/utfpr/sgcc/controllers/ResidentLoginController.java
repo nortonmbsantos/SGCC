@@ -48,6 +48,7 @@ import br.edu.utfpr.sgcc.service.UserService;
 import br.edu.utfpr.sgcc.service.WarningService;
 
 @Controller
+@SessionAttributes({ "resident" })
 public class ResidentLoginController {
 
 	@GetMapping("/resident/login")

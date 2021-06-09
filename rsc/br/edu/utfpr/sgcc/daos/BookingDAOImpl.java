@@ -60,7 +60,7 @@ public class BookingDAOImpl {
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Query query = session.createQuery("from booking f where f.idCondominiumBooking = :idCondominiumBooking ");
+			Query query = session.createQuery("from booking f where f.id_condominium_booking = :idCondominiumBooking ");
 			query.setParameter("idCondominiumBooking", id);
 			List<Booking> bookings = (List<Booking>) query.getResultList();
 
@@ -82,7 +82,7 @@ public class BookingDAOImpl {
 			session.beginTransaction();
 			Booking booking = this.returnById(id);
 			booking.setStatus(true);
-			booking.setStatus_date(new java.util.Date());
+			booking.setStatusDate(new java.util.Date());
 			session.update(booking);
 			session.getTransaction().commit();
 
@@ -102,7 +102,7 @@ public class BookingDAOImpl {
 		try {
 			Booking booking = this.returnById(id);
 			booking.setStatus(false);
-			booking.setStatus_date(new java.util.Date());
+			booking.setStatusDate(new java.util.Date());
 			session = factory.getCurrentSession();
 			session.beginTransaction();
 			session.update(booking);
@@ -162,7 +162,7 @@ public class BookingDAOImpl {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
 			Query query = session.createQuery(
-					"FROM booking b inner join commom_area c ON c.id = b.id_commom_area WHERE c.idCondominium = :idCondominium and status_date is null");
+					"FROM booking b inner join commom_area c ON c.id = b.id_commom_area WHERE c.id_condominium = :idCondominium and status_date is null");
 			query.setParameter("idCondominium", id_condominium);
 			List<Booking> bookings = (List<Booking>) query.getResultList();
 
@@ -188,7 +188,7 @@ public class BookingDAOImpl {
 			List<Booking> bookings = (List<Booking>) query.getResultList();
 			UserService userService = new UserService();
 			for (Booking b : bookings) {
-				b.setResident_name(userService.returnById(b.getId_resident()).getFirstName());
+				b.setResident_name(userService.returnById(b.getIdResident()).getFirstName());
 			}
 
 			return bookings;
@@ -213,7 +213,7 @@ public class BookingDAOImpl {
 			List<Booking> bookings = (List<Booking>) query.getResultList();
 			UserService userService = new UserService();
 			for (Booking b : bookings) {
-				b.setResident_name(userService.returnById(b.getId_resident()).getFirstName());
+				b.setResident_name(userService.returnById(b.getIdResident()).getFirstName());
 			}
 
 			return bookings;
@@ -233,7 +233,7 @@ public class BookingDAOImpl {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
 			Query query = session.createSQLQuery(
-					"SELECT c.id as title, count(b.id) as value FROM booking b inner join commom_area c ON c.id = b.id_commom_area WHERE c.idCondominium = :idCondominium and b.status_date is null");
+					"SELECT c.id as title, count(b.id) as value FROM booking b inner join commom_area c ON c.id = b.id_commom_area WHERE c.id_condominium = :idCondominium and b.status_date is null");
 			query.setParameter("idCondominium", id_condominium);
 			List<Object[]> report = query.getResultList();
 			List<Report> reports = new ArrayList<Report>();

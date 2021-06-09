@@ -3,6 +3,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<jsp:useBean id="paginacao" class="br.edu.utfpr.sgcc.config.Paginacao"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,6 +80,7 @@
 					</tbody>
 				</table>
 
+<div> ${paginacao.geraPaginacao(currentPage, totalPages, "residents", "page", map)}</div>
 
 			</main>
 		</div>

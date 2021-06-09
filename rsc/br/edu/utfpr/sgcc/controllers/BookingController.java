@@ -63,7 +63,7 @@ public class BookingController {
 		ModelAndView modelAndView = new ModelAndView("redirect:/resident/dashboard");
 		BookingService service = new BookingService();
 		CommomAreaService commomAreaService = new CommomAreaService();
-		CommomArea commomArea = commomAreaService.returnById(booking.getId_commom_area());
+		CommomArea commomArea = commomAreaService.returnById(booking.getIdCommomArea());
 		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (resident.hasAuthority("RESIDENT")) {
 //		TODO mudar como resident funciona para adaptar ao sistema com Spring Security e o User.
@@ -89,7 +89,7 @@ public class BookingController {
 		ModelAndView modelAndView = new ModelAndView("redirect:/user/dashboard");
 		BookingService bookingService = new BookingService();
 		Booking bookingValidation = bookingService.returnById(id);
-		CommomArea commomAreaValidation = new CommomAreaService().returnById(bookingValidation.getId_commom_area());
+		CommomArea commomAreaValidation = new CommomAreaService().returnById(bookingValidation.getIdCommomArea());
 		Condominium condominiumValidation = new CondominiumService()
 				.returnById(commomAreaValidation.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -113,7 +113,7 @@ public class BookingController {
 		ModelAndView modelAndView = new ModelAndView("redirect:/user/dashboard");
 		BookingService bookingService = new BookingService();
 		Booking bookingValidation = bookingService.returnById(id);
-		CommomArea commomAreaValidation = new CommomAreaService().returnById(bookingValidation.getId_commom_area());
+		CommomArea commomAreaValidation = new CommomAreaService().returnById(bookingValidation.getIdCommomArea());
 		Condominium condominiumValidation = new CondominiumService()
 				.returnById(commomAreaValidation.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

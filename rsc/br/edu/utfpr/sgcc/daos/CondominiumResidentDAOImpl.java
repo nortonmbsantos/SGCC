@@ -58,7 +58,7 @@ public class CondominiumResidentDAOImpl {
 
 			session.beginTransaction();
 			Query query = session.createSQLQuery(
-					"SELECT c.id, c.name, c.description FROM condominium_resident cr inner join condominium c on c.id = cr.idCondominium WHERE cr.idResident = :idResident and cr.active = 1");
+					"SELECT c.id, c.name, c.description FROM condominium_resident cr inner join condominium c on c.id = cr.id_condominium WHERE cr.id_resident = :idResident and cr.active = 1");
 			query.setParameter("idResident", id_resident);
 			List<Object[]> objects = query.getResultList();
 			List<Condominium> condominiuns = new ArrayList<>();
@@ -105,13 +105,15 @@ public class CondominiumResidentDAOImpl {
 		}
 	}
 
-	public List<CondominiumResident> returnUserByCondominium(int id) {
+	public List<CondominiumResident> returnUserByCondominium(int id, int page, int results, String name) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
 			Query query = session.createQuery("from condominium_resident u where u.idCondominium = :idCondominium");
 			query.setParameter("idCondominium", id);
+			query.setFirstResult((page - 1) * results);
+			query.setMaxResults(results);
 			List<CondominiumResident> residents = (List<CondominiumResident>) query.getResultList();
 
 			UserService userService = new UserService();
@@ -124,6 +126,27 @@ public class CondominiumResidentDAOImpl {
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
 			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
+	public int returnCount(int id) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createSQLQuery(
+					"SELECT count(id) as total FROM condominium_resident WHERE id_condominium = :idCondominium");
+			query.setParameter("idCondominium", id);
+
+			int count = Integer.valueOf(String.valueOf(query.getSingleResult()));
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return 0;
 		} finally {
 			if (null != session) {
 				session.close();

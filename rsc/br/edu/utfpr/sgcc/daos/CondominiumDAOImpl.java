@@ -79,6 +79,27 @@ public class CondominiumDAOImpl extends BaseDAO {
 		}
 	}
 
+	public List<Condominium> listSidebar(int idUser) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery("from condominium a where idUser = :idUser ");
+			query.setParameter("idUser", idUser);
+			query.setMaxResults(5);
+			List<Condominium> condominiuns = (List<Condominium>) query.getResultList();
+			
+			return condominiuns;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
 	public Condominium insert(Condominium condominium) {
 		Session session = null;
 		try {

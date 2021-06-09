@@ -5,6 +5,7 @@
  */
 package br.edu.utfpr.sgcc.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -25,7 +26,9 @@ public class CommomArea {
 	@Size(min = 3, message = "Nome inválido")
 	private String name;
 	@NotNull
+	@Column(name = "id_condominium")
 	private int idCondominium;
+	@Column(name = "booking_fee")
 	@NotNull(message="Taxa inválida")
 	private double bookingFee;
 

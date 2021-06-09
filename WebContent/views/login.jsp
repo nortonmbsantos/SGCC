@@ -21,8 +21,9 @@
 
 			<c:if test="${not empty errorMessge}">
 				<div style="color: red; font-weight: bold; margin: 30px 0px;font-size: 15px;">${errorMessge}</div>
+				
 			</c:if>
-
+	
 			<form name='login' action="login" method='POST'>
 				<table>
 					<tr>
@@ -42,7 +43,7 @@
 				<input type="hidden" name="${_csrf.parameterName}"
 					value="${_csrf.token}" />
 			</form>
-
+			<a href="forgotpassword">Esqueci minha senha</a>
 		</div>
 	</div>
 </body>

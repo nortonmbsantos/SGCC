@@ -43,9 +43,29 @@ public class CondominiumResidentService {
 		return dao.save(resident);
 	}
 
+	public int returnCount(int id) {
+		return dao.returnCount(id);
+	}
+	
 
 	public List<CondominiumResident> returnUserByCondominium(int id) {
-		return dao.returnUserByCondominium(id);
+		return returnUserByCondominium(id, 1);
+	}
+
+	public List<CondominiumResident> returnUserByCondominium(int id, String name) {
+		return returnUserByCondominium(id, 1, 20, name);
+	}
+
+	public List<CondominiumResident> returnUserByCondominium(int id, int page) {
+		return returnUserByCondominium(id, page, 20);
+	}
+	
+	public List<CondominiumResident> returnUserByCondominium(int id, int page, int results) {
+		return returnUserByCondominium(id, page, results, "");
+	}
+
+	public List<CondominiumResident> returnUserByCondominium(int id, int page, int results, String name) {
+		return dao.returnUserByCondominium(id, page, results, name);
 	}
 
 	public boolean block(int id_resident, int id_condominium) {

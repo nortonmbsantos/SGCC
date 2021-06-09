@@ -37,7 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/resident", "/resident/**").hasRole("RESIDENT")
                 .and().formLogin().loginPage("/login")
                 .successHandler(myAuthenticationSuccessHandler())
-                .failureUrl("/?error=true").permitAll()
+                .failureUrl("/login?error=true").permitAll()
                 .and().logout().permitAll()
                 .and().csrf().disable()
                 .logout().logoutSuccessUrl("/login");

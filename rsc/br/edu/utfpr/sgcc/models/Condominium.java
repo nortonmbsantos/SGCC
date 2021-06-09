@@ -1,5 +1,6 @@
 package br.edu.utfpr.sgcc.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class Condominium {
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name = "id_user")
 	private int idUser;
 	@NotNull
 	@Size(min = 3, message = "Nome inválido")

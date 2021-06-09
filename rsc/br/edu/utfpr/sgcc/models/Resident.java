@@ -7,6 +7,7 @@ package br.edu.utfpr.sgcc.models;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -31,14 +32,17 @@ public class Resident {
 	@NotNull
 	@Size(min = 3, message = "Nome inválido")
 	private String name;
+	@Column(name = "id_condominium")
 	private int idCondominium;
 	private boolean active;
 	private String login;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Column(name = "birth_date")
 	private Date birthDate;
 	@NotNull
 	@Size(min = 3, message = "Documento inválido")
 	private String document;
+	@Column(name = "document_type")
 	private String documentType;
 	@NotNull
 	@Email(message="Email inválido")
@@ -46,8 +50,10 @@ public class Resident {
 	private String email;
 	@NotNull
 	@Size(min = 8, message = "Telefone inválido")
+	@Column(name = "phone_number")
 	private String phoneNumber;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Column(name = "entry_date")
 	private Date entryDate;
 	@NotNull
 	@Size(min = 8, message = "Senha inválida, deve possuir no mínimo 8 caracteres")

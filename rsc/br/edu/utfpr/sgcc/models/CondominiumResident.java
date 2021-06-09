@@ -21,7 +21,9 @@ public class CondominiumResident {
 
 	@Id
 	private int id;
+	@Column(name = "id_resident")
 	private int idResident;
+	@Column(name = "id_condominium")
 	private int idCondominium;
 	private boolean active;
 	@Transient

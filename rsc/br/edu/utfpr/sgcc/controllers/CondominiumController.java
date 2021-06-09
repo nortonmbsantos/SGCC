@@ -58,6 +58,7 @@ public class CondominiumController {
 				modelAndView.addObject("reportByFeeType", condominiumFeeService.reportByFeeType(condominium.getId()));
 				modelAndView.addObject("reportLastFeeValue",
 						condominiumFeeService.reportLastCondominiumFeeTotalValue(condominium.getId()));
+				modelAndView.addObject("reportAverageFeeType", new CondominiumFeeService().reportAverageFeeType(condominium.getId()));
 			} else {
 				modelAndView = new ModelAndView("errors/accessdenied");
 			}

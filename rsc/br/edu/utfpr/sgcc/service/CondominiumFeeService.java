@@ -38,11 +38,11 @@ public class CondominiumFeeService {
 	public CondominiumFee returnLastIdByIdCondominium(int id) {
 		return dao.returnById(id);
 	}
-	
+
 	public List<CondominiumFee> returnByCondominiumId(int id, int page, int results) {
 		return dao.returnByCondominiumId(id, page, results);
 	}
-	
+
 	public List<CondominiumFee> returnByCondominiumId(int id) {
 		return returnByCondominiumId(id, 1, 10);
 	}
@@ -50,7 +50,7 @@ public class CondominiumFeeService {
 	public List<Report> reportByClosingDate(int id) {
 		return dao.reportByClosingDate(id);
 	}
-	
+
 	public List<Report> reportByFeeType(int id) {
 		return dao.reportByFeeType(id);
 	}
@@ -70,7 +70,7 @@ public class CondominiumFeeService {
 	public Report reportLastCondominiumFeeTotalValue(int id) {
 		return dao.reportLastCondominiumFeeTotalValue(id);
 	}
-	
+
 	public boolean isValidMonth(Date date, int idCondominium) {
 		return dao.isValidMonth(date, idCondominium);
 	}
@@ -78,4 +78,17 @@ public class CondominiumFeeService {
 	public int returnCount(int id) {
 		return dao.returnCount(id);
 	}
+
+	public List<Report> reportSumFeeType(int idCondominiumFee) {
+		return dao.reportSumByFeeType(idCondominiumFee);
+	}
+
+	public List<Report> reportAverageFeeType(int idCondominium) {
+		return dao.reportAverageFeeType(idCondominium);
+	}
+
+	public List<Report> reportsCondominiumFeeType(int idCondominium, int idCondominiumFee) {
+		return dao.reportsCondominiumFeeType(idCondominium, idCondominiumFee);
+	}
+
 }

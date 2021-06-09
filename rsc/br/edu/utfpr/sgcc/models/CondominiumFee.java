@@ -7,6 +7,7 @@ package br.edu.utfpr.sgcc.models;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -24,7 +25,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class CondominiumFee {
 	@Id
 	private int id;
-	private int id_condominium;
+	@Column(name = "id_condominium")
+	private int idCondominium;
+	@Column(name = "closing_date")
 	@NotNull(message = "Data inválida")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date closingDate;
@@ -38,12 +41,12 @@ public class CondominiumFee {
 		this.id = id;
 	}
 
-	public int getId_condominium() {
-		return id_condominium;
+	public int getIdCondominium() {
+		return idCondominium;
 	}
 
-	public void setId_condominium(int id_condominium) {
-		this.id_condominium = id_condominium;
+	public void setIdCondominium(int idCondominium) {
+		this.idCondominium = idCondominium;
 	}
 
 	public Date getClosingDate() {

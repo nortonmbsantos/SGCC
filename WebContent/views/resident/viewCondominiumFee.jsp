@@ -28,7 +28,6 @@
 			<table class="table">
 				<thead class="thead-dark">
 					<tr>
-						<th scope="col">Visualizar</th>
 						<th scope="col">Descrição</th>
 						<th scope="col">Valor</th>
 						<th scope="col">Data de vencimento</th>
@@ -40,10 +39,7 @@
 					<fmt:setLocale value="pt_BR" />
 					<c:forEach items="${fees}" var="fee">
 						<tr>
-							<td><a class="btn btn-light"
-								href="${pageContext.request.contextPath}/admin/fee/fee?id=${fee.id}"><i
-									class="fas fa-eye"></i></a></td>
-							<td>${fee.description }</td>
+							<td>${fee.description } <span class="badge bg-primary text-white">Taxa</span></td>
 							<td><fmt:formatNumber value="${fee.value}" type="currency" /></td>
 							<td><fmt:formatDate value="${fee.dueDate}" pattern="dd/MM/yyyy"/></td>
 							<td><c:choose>
@@ -55,10 +51,7 @@
 					</c:forEach>
 					<c:forEach items="${warnings}" var="w">
 						<tr>
-							<td><a class="btn btn-light"
-								href="${pageContext.request.contextPath}/admin/warning?id=${w.id}"><i
-									class="fas fa-eye"></i></a></td>
-							<td>${w.description }</td>
+							<td>${w.description } <span class="badge bg-danger text-white">Multa</span></td>
 							<td><fmt:formatNumber value="${w.value}" type="currency" /></td>
 							<td><fmt:formatDate value="${w.warningDate}" pattern="dd/MM/yyyy"/></td>
 							<td></td>
