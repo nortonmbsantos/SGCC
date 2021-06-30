@@ -43,8 +43,27 @@ public class PasswordResetDAOImpl extends BaseDAO {
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Query query = session.createQuery("from password_reset p where p.id_user = :idUser ");
+			Query query = session.createQuery("from password_reset p where p.idUser = :idUser ");
 			query.setParameter("idUser", idUser);
+			PasswordReset passwordReset = (PasswordReset) query.getSingleResult();
+			return passwordReset;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+	
+	public PasswordReset returnByValidationHash(String validationHash) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery("from password_reset p where p.validationHash = :validationHash ");
+			query.setParameter("validationHash", validationHash);
 			PasswordReset passwordReset = (PasswordReset) query.getSingleResult();
 			return passwordReset;
 		} catch (Exception e) {
@@ -101,7 +120,7 @@ public class PasswordResetDAOImpl extends BaseDAO {
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Query query = session.createQuery("update password_reset set used = true where id = :id");
+			Query query = session.createQuery("update password_reset set used = true, usedDate = now() where id = :id");
 			query.setParameter("id", passwordReset.getId());
 			query.executeUpdate();
 		} catch (Exception e) {

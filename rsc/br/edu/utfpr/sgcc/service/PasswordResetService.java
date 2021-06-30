@@ -21,7 +21,6 @@ public class PasswordResetService {
 	public PasswordResetService() {
 //		dao = context.getBean("AdminDAOBean", AdminDAOImpl.class);
 		dao = new PasswordResetDAOImpl(context.getBean("DAOBean", DataSource.class));
-		
 	}
 	
 	public PasswordReset returnById(int id) {
@@ -44,6 +43,8 @@ public class PasswordResetService {
 	public Serializable insertSerializable(PasswordReset passwordReset) {
 		return dao.insertSerializable(passwordReset);
 	}
-	
-	
+
+	public PasswordReset returnByValidationHash(String validationHash) {
+		return dao.returnByValidationHash(validationHash);
+	}
 }

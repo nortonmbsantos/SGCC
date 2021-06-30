@@ -68,6 +68,25 @@ public class UserDAOImpl implements UserDAO {
 			}
 		}
 	}
+	
+	public User returnByEmail(String email) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery("from users a where a.email = :email ");
+			query.setParameter("email", email);
+			User userLogin = (User) query.getSingleResult();
+			return userLogin;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
 
 	public User login(User user) {
 		Session session = null;

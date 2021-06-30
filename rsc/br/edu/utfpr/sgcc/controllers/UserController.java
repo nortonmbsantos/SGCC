@@ -17,6 +17,7 @@ import br.edu.utfpr.sgcc.service.CondominiumService;
 import br.edu.utfpr.sgcc.service.PasswordResetService;
 import br.edu.utfpr.sgcc.service.UserService;
 
+import java.util.Date;
 import java.util.Random;
 
 import javax.security.auth.callback.ConfirmationCallback;
@@ -124,21 +125,21 @@ public class UserController {
 		return modelAndView;
 	}
 
-	@GetMapping("/forgotpassword")
+	@GetMapping("/user/forgotpassword")
 	public ModelAndView forgotPassword() {
 		ModelAndView modelAndView = new ModelAndView("forgot_password");
 		return modelAndView;
 	}
 
-	@PostMapping("/forgotpassword")
-	public ModelAndView forgotPasswordForm(@RequestParam String username) {
+	@PostMapping("/user/forgotpassword")
+	public ModelAndView forgotPasswordForm(@RequestParam String username, final RedirectAttributes redirectAttributes) {
 		UserService userService = new UserService();
 		User user = userService.returnByUserName(username);
 
 		if (user != null) {
-//			Criar resgate de senha
 			Encryptor encryptor = new Encryptor();
-			String hash = encryptor.encrypt(user.getId() + user.getEmail() + new Random().nextInt(1000));
+			String hash = encryptor
+					.encrypt(new Date().getTime() + user.getId() + user.getEmail() + new Random().nextInt(1000));
 			PasswordReset ps = new PasswordReset();
 			ps.setIdUser(user.getId());
 			ps.setUsed(false);
@@ -146,12 +147,14 @@ public class UserController {
 			PasswordResetService passwordResetService = new PasswordResetService();
 			if (passwordResetService.insert(ps) != null) {
 //			Enviar email link para resgate de senha
-				ModelAndView modelAndView = new ModelAndView("forgot_password");
-				modelAndView.addObject("result", new Result("Email enviado para mudança de senha", "success"));
+				ModelAndView modelAndView = new ModelAndView("redirect:/");
+				redirectAttributes.addFlashAttribute("result",
+						new Result("Email enviado para mudança de senha", "success"));
 				return modelAndView;
 			} else {
 				ModelAndView modelAndView = new ModelAndView("forgot_password");
-				modelAndView.addObject("result", new Result("Falha ao gerar solicitação de recuperação de senha", "error"));
+				modelAndView.addObject("result",
+						new Result("Falha ao gerar solicitação de recuperação de senha", "error"));
 				return modelAndView;
 			}
 		} else {
@@ -161,14 +164,69 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/resetpassword")
-	public ModelAndView resetPassword() {
+	@GetMapping("/user/resetpassword")
+	public ModelAndView resetPassword(@RequestParam String email, @RequestParam String validationHash) {
+		ModelAndView modelAndView = new ModelAndView("reset_password");
+		modelAndView.addObject("validationHash", validationHash);
+		modelAndView.addObject("email", email);
+		return modelAndView;
+	}
+
+	@PostMapping("/user/resetpassword")
+	public ModelAndView resetPasswordForm(@RequestParam String email, @RequestParam String validationHash,
+			@RequestParam String password, @RequestParam String confirmPassword) {
+		ModelAndView modelAndView = new ModelAndView("reset_password");
+		modelAndView.addObject("validationHash", validationHash);
+		modelAndView.addObject("email", email);
+		if (password.length() >= 8) {
+			if (password.equals(confirmPassword)) {
+
+				PasswordResetService passwordResetService = new PasswordResetService();
+				PasswordReset passwordReset = passwordResetService.returnByValidationHash(validationHash);
+
+				if (passwordReset != null) {
+					UserService userService = new UserService();
+					User user = userService.returnById(passwordReset.getIdUser());
+
+					if (user != null) {
+						if (user.getEmail().equals(email)) {
+//					atualiza senha
+							user.setPassword(password);
+							if (userService.updatePassword(user)) {
+								passwordReset.setUsed(true);
+								passwordReset.setUsedDate(new Date());
+								passwordResetService.updateUsed(passwordReset);
+								modelAndView = new ModelAndView("login");
+								modelAndView.addObject("result",
+										new Result("Email enviado para mudança de senha", "success"));
+								return modelAndView;
+							}
+							modelAndView.addObject("result",
+									new Result("Falha ao atualizar senha de usuário", "error"));
+							return modelAndView;
+						}
+					}
+					modelAndView.addObject("result", new Result("Não foi possível localizar usuário", "error"));
+					return modelAndView;
+				}
+				modelAndView.addObject("result", new Result("Não foi possível validar usuário", "error"));
+				return modelAndView;
+			}
+			modelAndView.addObject("result", new Result("Senhas devem ser iguais", "error"));
+			return modelAndView;
+		}
+		modelAndView.addObject("result", new Result("Senha deve mínimo de 8 caracteres", "error"));
+		return modelAndView;
+	}
+
+	@GetMapping("/user/active")
+	public ModelAndView activeUser() {
 		ModelAndView modelAndView = new ModelAndView("forgot_password");
 		return modelAndView;
 	}
 
-	@PostMapping("/resetpassword")
-	public ModelAndView resetPasswordForm(@RequestParam String login) {
+	@PostMapping("/user/active")
+	public ModelAndView activeUserForm(@RequestParam String login) {
 		UserService userService = new UserService();
 		User user = userService.returnByUserName(login);
 

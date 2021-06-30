@@ -15,7 +15,7 @@ public class UserService {
 	public UserService() {
 		dao = new UserDAOImpl(context.getBean("DAOBean", DataSource.class));
 	}
-	
+
 	public User returnById(int id) {
 		return dao.returnById(id);
 	}
@@ -24,15 +24,21 @@ public class UserService {
 		return dao.returnByUserName(userName);
 	}
 
-
 	public boolean insert(User user) {
 		return dao.insert(user);
 	}
-	
+
 	public boolean update(User user) {
 		User userVal = this.returnById(user.getId());
 		userVal.setFirstName(user.getFirstName());
 		return dao.update(userVal);
 	}
+	
+	public boolean updatePassword(User user) {
+		return dao.update(user);
+	}
 
+	public User returnByEmail(String email) {
+		return dao.returnByEmail(email);
+	}
 }

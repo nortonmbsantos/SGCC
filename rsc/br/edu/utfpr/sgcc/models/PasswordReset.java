@@ -11,11 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import br.edu.utfpr.sgcc.config.Encryptor;
 
@@ -23,7 +25,7 @@ import br.edu.utfpr.sgcc.config.Encryptor;
  *
  * @author norto
  */
-@Entity(name = "passwordreset")
+@Entity(name = "password_reset")
 @Table(name = "password_reset")
 public class PasswordReset {
 
@@ -35,10 +37,16 @@ public class PasswordReset {
 	@Column(name = "validation_hash")
 	private String validationHash;
 	@Column(name = "created_at")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
 	@Column(name = "used_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date usedDate;
-
+	@Transient
+	private String password;
+	@Transient
+	private String confirmPassword;
+	
 	public int getId() {
 		return id;
 	}
@@ -85,6 +93,22 @@ public class PasswordReset {
 
 	public void setUsedDate(Date usedDate) {
 		this.usedDate = usedDate;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 

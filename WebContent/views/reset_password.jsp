@@ -23,8 +23,9 @@
 			<c:if test="${not empty errorMessge}">
 				<div style="color: red; font-weight: bold; margin: 30px 0px;font-size: 15px;">${errorMessge}</div>
 			</c:if>
-			<form name='password' action="password" method='POST'>
-						<input class="form-control" type='hidden' name='confirmation'>
+			<form name='resetpassword' action="resetpassword" method='POST'>
+						<input class="form-control" type='hidden' name='validationHash' value='${param.validationHash}'> 
+						<input class="form-control" type='hidden' name='email' value='${param.email}'> 
 				<table>
 					<tr>
 						<td>Nova senha:</td>

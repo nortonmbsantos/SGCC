@@ -43,7 +43,7 @@
 				<input type="hidden" name="${_csrf.parameterName}"
 					value="${_csrf.token}" />
 			</form>
-			<a href="forgotpassword">Esqueci minha senha</a>
+			<a href="user/forgotpassword">Esqueci minha senha</a>
 		</div>
 	</div>
 </body>

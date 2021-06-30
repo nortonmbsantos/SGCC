@@ -88,7 +88,7 @@
 				<div class="row mt-3">
 					<div class="col-6">
 						<div class="card">
-							<div class="card-header">Relação entre a média do
+							<div class="card-header">Médias do
 								condomínio</div>
 							<div class="card-body">
 								<table class="table">
