@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
@@ -23,14 +24,14 @@
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-
-					<div class="jumbotron">
-						<h1 class="display-4">${resident.name}</h1>
-						<p class="lead">${condominium.name}</p>
-						<hr class="my-4">
-						<p class="lead">${resident.email} - (${resident.phoneNumber.substring(0,2)})${resident.phoneNumber.substring(2,6)}-${resident.phoneNumber.substring(6)}</p>
-						
-					</div>
+					<c:choose>
+						<c:when test="${resident != null }">
+							<div class="jumbotron">
+								<h1 class="display-4">${resident.resident.firstName}</h1>
+								<p class="lead">${condominium.name}</p>
+								<hr class="my-4">
+								<p class="lead">${resident.resident.email}</p>
+							</div>
 				</div>
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
 					<li class="nav-item" role="presentation"><a
@@ -39,43 +40,54 @@
 							e advertências</a></li>
 					<li class="nav-item" role="presentation"><a class="nav-link"
 						id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-						aria-controls="profile" aria-selected="false">Reservas de áreas comuns</a></li>
-					<li class="nav-item" role="presentation"><a class="nav-link"
-						id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-						aria-controls="contact" aria-selected="false"> ondo </a></li>
+						aria-controls="profile" aria-selected="false">Reservas de
+							áreas comuns</a></li>
 				</ul>
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade show active" id="home" role="tabpanel"
 						aria-labelledby="home-tab">
+						<c:if test="${warnings.isEmpty() }">Este morador não possui multas ou advertências</c:if>
 						<div class="mt-5 row">
 							<c:forEach items="${warnings}" var="warning">
-								<div class="card border-danger mb-3 col-md-3 col-12 mr-1" style="max-width: 18rem;">
-									<div class="card-header">
-										<c:choose>
-											<c:when test="${warning.value > 0}">R$ ${warning.value}</c:when>
-											<c:otherwise>Advertência</c:otherwise>
-										</c:choose>
-									</div>
-									<div class="card-body text-danger">
-										<h5 class="card-title">
-											${format.format(warning.warningDate.time)}
-											</h5>
-										<p class="card-text">${warning.description }</p>
+								<div class="mb-3 col-md-3 col-12 mr-1">
+									<div class="card border-danger " style="max-width: 18rem;">
+										<div class="card-header">
+											<c:choose>
+												<c:when test="${warning.value > 0}">R$ ${warning.value}</c:when>
+												<c:otherwise>Advertência</c:otherwise>
+											</c:choose>
+										</div>
+										<div class="card-body text-danger">
+											<h5 class="card-title">
+											<fmt:formatDate value="${warning.warningDate }" pattern="dd/MM/yyyy"/></h5>
+											<p class="card-text">${warning.description }</p>
+										</div>
 									</div>
 								</div>
 							</c:forEach>
 						</div>
 					</div>
 					<div class="tab-pane fade" id="profile" role="tabpanel"
-						aria-labelledby="profile-tab"> 
-						
-						Reservas de aeracomum
-						</div>
-					<div class="tab-pane fade" id="contact" role="tabpanel"
-						aria-labelledby="contact-tab">...</div>
+						aria-labelledby="profile-tab">
+
+						<c:if test="${bookigns == null}">Este morador não possui reservas </c:if>
+					</div>
+
 				</div>
 
-				<div class="card-header"></div>
+				</c:when>
+				<c:otherwise>
+					<div class="jumbotron">
+						<h1 class="display-4">Falha ao localizar morador</h1>
+						<p class="lead">${condominium.name }</p>
+						<hr class="my-4">
+						<p class="lead">Morador não encontrado ou não pertencente a
+							este condomínio</p>
+
+					</div>
+				</c:otherwise>
+				</c:choose>
+
 
 			</main>
 		</div>

@@ -29,7 +29,7 @@ public class CondominiumFee {
 	private int idCondominium;
 	@Column(name = "closing_date")
 	@NotNull(message = "Data inválida")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "dd/mm/yyyy")
 	private Date closingDate;
 	private boolean finished;
 

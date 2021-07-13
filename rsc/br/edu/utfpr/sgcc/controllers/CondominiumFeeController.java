@@ -248,7 +248,7 @@ public class CondominiumFeeController {
 				CondominiumFeeService feeService = new CondominiumFeeService();
 				fee = feeService.returnById(id);
 			}
-			modelAndView.addObject("condominiumfee", fee);
+			modelAndView.addObject("condominiumFee", fee);
 			return modelAndView;
 		} else {
 			return new ModelAndView("errors/accessdenied");

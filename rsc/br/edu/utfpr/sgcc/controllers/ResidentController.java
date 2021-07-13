@@ -30,6 +30,7 @@ import br.edu.utfpr.sgcc.config.DataBaseConfig;
 import br.edu.utfpr.sgcc.config.Encryptor;
 import br.edu.utfpr.sgcc.daos.AdminDAOImpl;
 import br.edu.utfpr.sgcc.models.Admin;
+import br.edu.utfpr.sgcc.models.CommomArea;
 import br.edu.utfpr.sgcc.models.Condominium;
 import br.edu.utfpr.sgcc.models.CondominiumFee;
 import br.edu.utfpr.sgcc.models.CondominiumResident;
@@ -39,6 +40,8 @@ import br.edu.utfpr.sgcc.models.Resident;
 import br.edu.utfpr.sgcc.models.Result;
 import br.edu.utfpr.sgcc.models.User;
 import br.edu.utfpr.sgcc.service.AdminService;
+import br.edu.utfpr.sgcc.service.BookingService;
+import br.edu.utfpr.sgcc.service.CommomAreaService;
 import br.edu.utfpr.sgcc.service.CondominiumFeeService;
 import br.edu.utfpr.sgcc.service.CondominiumResidentService;
 import br.edu.utfpr.sgcc.service.CondominiumService;
@@ -52,19 +55,30 @@ import br.edu.utfpr.sgcc.service.WarningService;
 public class ResidentController {
 
 	@GetMapping("/user/condominium/resident")
-	public ModelAndView residentView(@RequestParam int id_resident) throws ParseException {
+	public ModelAndView residentView(@RequestParam int id_resident, @RequestParam int id_condominium)
+			throws ParseException {
 		ModelAndView modelAndView = new ModelAndView("user/condominium/resident/resident");
-		ResidentService residentService = new ResidentService();
-		Resident resident = residentService.returnById(id_resident);
-		modelAndView.addObject("resident", resident);
+		
+		modelAndView.addObject("condominium", new CondominiumService().returnById(id_condominium));
+		CondominiumResidentService condominiumResidentService = new CondominiumResidentService();
 
-		CondominiumService condominiumService = new CondominiumService();
-		modelAndView.addObject("condominium", condominiumService.returnById(resident.getIdCondominium()));
+		CondominiumResident resident = condominiumResidentService.returnByResidentAndCondominium(id_resident,
+				id_condominium);
 
-		modelAndView.addObject("format", new SimpleDateFormat("dd/MM/yyyy"));
-		WarningService warningService = new WarningService();
-		modelAndView.addObject("warnings", warningService.returnByResident(id_resident));
+		if (resident != null) {
+			UserService userService = new UserService();
+			User userResident = userService.returnById(resident.getIdResident());
+			resident.setResident(userResident);
 
+			modelAndView.addObject("resident", resident);
+
+			WarningService warningService = new WarningService();
+			modelAndView.addObject("warnings", warningService.returnByResident(id_resident));
+			BookingService bookingService = new BookingService();
+			modelAndView.addObject("bookings", bookingService.bookingsByResident(id_resident));
+			
+			
+		}
 		return modelAndView;
 	}
 
@@ -99,13 +113,13 @@ public class ResidentController {
 	public ModelAndView residentListPost(@RequestParam int id_condominium, @RequestParam(defaultValue = "") String name,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int results) {
 		ModelAndView modelAndView = new ModelAndView("user/condominium/resident/residents");
-		
+
 		CondominiumService condominiumService = new CondominiumService();
 		Condominium condominium = condominiumService.returnById(id_condominium);
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
+
 		if (condominium.getIdUser() == user.getId()) {
-			
+
 			CondominiumResidentService residentService = new CondominiumResidentService();
 			int totalData = residentService.returnCount(id_condominium);
 			modelAndView.addObject("totalPages", ((int) Math.ceil(((double) totalData) / results)));

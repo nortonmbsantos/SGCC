@@ -19,7 +19,6 @@ public class Encryptor {
 			while (hashtext.length() < 32) {
 				hashtext = "0" + hashtext;
 			}
-
 			return hashtext;
 		}
 
@@ -27,4 +26,6 @@ public class Encryptor {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	
 }

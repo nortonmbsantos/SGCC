@@ -25,8 +25,9 @@ import br.edu.utfpr.sgcc.models.MyUserDetails;
 public class IndexController {
 	@GetMapping("/")
 	public ModelAndView welcome() throws SQLException {
+//		int i = 10/0;
 		try {
-
+			
 			MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 			if (user == null) {

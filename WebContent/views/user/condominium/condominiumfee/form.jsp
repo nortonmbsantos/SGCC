@@ -25,9 +25,9 @@
 						<p class="lead">Preencha o formulário com os dados</p>
 						<hr class="my-4">
 						<p>Campos marcados com * são considerados obrigatórios</p>
-						<form:form action="add" modelAttribute="condominiumfee">
+						<form:form action="form" modelAttribute="condominiumFee">
 							<form:hidden path="id" value="${condominiumfee.id}" />
-							<form:hidden path="id_condominium" value="${condominiumfee.id_condominium}" />
+							<form:hidden path="idCondominium" value="${condominiumfee.idCondominium}" />
 							<div class="form-group">
 								<label for="closingDate">Data de vencimento*</label>
 								<form:input type="date" path="closingDate"

@@ -46,10 +46,10 @@
 						<c:forEach items="${residents}" var="resident">
 							<tr>
 								<td><a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/resident?id_resident=${resident.idResident}"
+									href="${pageContext.request.contextPath}/user/condominium/resident?id_resident=${resident.idResident}&id_condominium=${condominium.id}"
 									title="Visualizar Morador"><i class="fas fa-eye"></i></a> <a
 									class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/warnings?id_resident=${resident.idResident}"
+									href="${pageContext.request.contextPath}/user/condominium/warnings?id_resident=${resident.idResident}&id_condominium=${condominium.id}"
 									title="Multas do morador"><i class="fas fa-list"></i></a> <a
 									class="btn btn-light"
 									href="${pageContext.request.contextPath}/user/condominium/warning/new?id_resident=${resident.idResident}&id_condominium=${condominium.id}"

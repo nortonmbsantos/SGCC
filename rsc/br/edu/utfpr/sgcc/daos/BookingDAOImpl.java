@@ -227,6 +227,31 @@ public class BookingDAOImpl {
 		}
 	}
 
+	public List<Booking> bookingsByResident(int id_resident) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery(
+					"FROM booking b WHERE b.id_resident = :idResident order by b.booking_date desc");
+			query.setParameter("idResident", id_resident);
+			List<Booking> bookings = (List<Booking>) query.getResultList();
+			UserService userService = new UserService();
+			for (Booking b : bookings) {
+				b.setResident_name(userService.returnById(b.getIdResident()).getFirstName());
+			}
+			
+			return bookings;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
 	public List<Report> countPendingBookings(int id_condominium) {
 		Session session = null;
 		try {
