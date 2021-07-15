@@ -142,11 +142,11 @@ public class CondominiumDAOImpl extends BaseDAO {
 		Session session = null;
 		try {
 			Condominium condominiumVal = this.returnById(condominium.getId());
-			condominiumVal.setDescription(condominium.getDescription());
-			condominiumVal.setName(condominium.getName());
+			condominium.setIdUser(condominiumVal.getIdUser());
+			condominium.setCode(condominiumVal.getCode());
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			session.update(condominiumVal);
+			session.update(condominium);
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {

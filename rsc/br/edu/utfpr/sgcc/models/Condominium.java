@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @Table(name = "condominium")
 public class Condominium {
 	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(name = "id_user")
 	private int idUser;
@@ -29,6 +29,20 @@ public class Condominium {
 	private String description;
 	private String code;
 	private boolean residential;
+	
+	private String street;
+	
+	@Size(min = 3, message = "Número inválido")
+	@Column(name = "street_number")
+	private String streetNumber;
+	private String city;
+	
+	@Size(min = 3, message = "CEP inválido")
+	private String cep;
+	private String state;
+	@Column(name = "number_complement")
+	private String numberComplement;
+	private String neighborhood;
 
 	public Condominium() {
 	}
@@ -79,6 +93,62 @@ public class Condominium {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getStreetNumber() {
+		return streetNumber;
+	}
+
+	public void setStreetNumber(String streetNumber) {
+		this.streetNumber = streetNumber;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getNumberComplement() {
+		return numberComplement;
+	}
+
+	public void setNumberComplement(String numberComplement) {
+		this.numberComplement = numberComplement;
+	}
+
+	public String getNeighborhood() {
+		return neighborhood;
+	}
+
+	public void setNeighborhood(String neighborhood) {
+		this.neighborhood = neighborhood;
 	}
 
 }

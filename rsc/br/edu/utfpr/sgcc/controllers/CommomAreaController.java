@@ -97,10 +97,13 @@ public class CommomAreaController {
 
 		if (condominium.getIdUser() == user.getId()) {
 			if (service.insert(commomArea)) {
+				modelAndView = new ModelAndView("redirect:/user/condominium/commomareas?id_condominium=" + condominium.getId());
 				redirectAttributes.addFlashAttribute("result", new Result("Área comum cadastrada com sucesso", "success"));
 			} else {
 				redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar área comum", "error"));
 			}
+		} else {
+			return new ModelAndView("errors/accessdenied");
 		}
 		return modelAndView;
 	}

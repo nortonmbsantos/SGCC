@@ -39,10 +39,48 @@
 					<form:errors path="description" cssStyle="color: #ff0000;" />
 				</div>
 				<div class="form-group">
-					<label for="residential">Residencial?*</label>
-					<form:checkbox path="residential" cssClass="form-control"
-						id="residential" />
+					<label for="cep">CEP*</label>
+					<form:input path="cep" cssClass="form-control"
+						id="cep" />
+					<form:errors path="cep" cssStyle="color: #ff0000;" />
 				</div>
+				<div class="form-group">
+					<label for="cep">Rua</label>
+					<form:input path="street" cssClass="form-control"
+						id="street" />
+					<form:errors path="street" cssStyle="color: #ff0000;" />
+				</div>
+				<div class="form-group">
+					<label for="cep">Número</label>
+					<form:input path="streetNumber" cssClass="form-control"
+						id="streetNumber" />
+					<form:errors path="streetNumber" cssStyle="color: #ff0000;" />
+				</div>
+				<div class="form-group">
+					<label for="cep">Complemento</label>
+					<form:input path="numberComplement" cssClass="form-control"
+						id="numberComplement" />
+					<form:errors path="numberComplement" cssStyle="color: #ff0000;" />
+				</div>
+				<div class="form-group">
+					<label for="cep">Bairro</label>
+					<form:input path="neighborhood" cssClass="form-control"
+						id="neighborhood" />
+					<form:errors path="neighborhood" cssStyle="color: #ff0000;" />
+				</div>
+				<div class="form-group">
+					<label for="cep">Cidade</label>
+					<form:input path="city" cssClass="form-control"
+						id="city" />
+					<form:errors path="city" cssStyle="color: #ff0000;" />
+				</div>
+				<div class="form-group">
+					<label for="cep">Estado</label>
+					<form:input path="state" cssClass="form-control"
+						id="state" />
+					<form:errors path="state" cssStyle="color: #ff0000;" />
+				</div>
+				
 				<button type="submit" class="btn btn-primary">Cadastrar</button>
 			</form:form>
 		</div>
