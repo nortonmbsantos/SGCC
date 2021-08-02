@@ -18,49 +18,81 @@
 			<hr class="my-4">
 			<p>Campos marcados com * são considerados obrigatórios</p>
 			<form:form action="register" modelAttribute="user">
-				<div class="form-group">
-					<label for="userName">Usuário*</label>
-					<form:input path="userName" cssClass="form-control" id="userName" />
-					<form:errors path="userName" cssStyle="color: #ff0000;" />
-				</div>
-				<div class="form-group">
-					<label for="firstName">Primeiro Nome*</label>
-					<form:input path="firstName" cssClass="form-control" id="firstName" />
-					<form:errors path="firstName" cssStyle="color: #ff0000;" />
-				</div>
-				<div class="form-group">
-					<label for="firstName">Email*</label>
-					<form:input path="email" cssClass="form-control" id="email" />
-					<form:errors path="email" cssStyle="color: #ff0000;" />
-				</div>
-				<div class="form-group">
-					<label for="password">Senha*</label>
-					<form:password path="password" cssClass="form-control"
-						id="password" />
-					<form:errors path="password" cssStyle="color: #ff0000;" />
-				</div>
-				<div class="form-group">
-					<label for="confirmPassword">Confirma Senha*</label>
-					<form:password path="confirmPassword" cssClass="form-control"
-						id="confirmPassword" />
-				</div>
-				
-				<div class="form-group"><label>Eu sou: </label>
-					<label> <form:radiobutton path="roles"
-							value="ROLE_USER" /> Síndico 
-					</label>
-					<label> <form:radiobutton path="roles"
-							value="ROLE_RESIDENT" /> Morador
-					</label>
-					<form:errors path="roles" cssStyle="color: #ff0000;" />
-				</div>				
-				<div class="form-group">
-					<button type="submit" class="btn btn-primary">Cadastrar</button>
+				<div class="row">
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<div class="col-12">
+								<label for="userName">Usuário*</label>
+							</div>
+							<form:input path="userName" cssClass="form-control" id="userName" />
+							<form:errors path="userName" cssStyle="color: #ff0000;" />
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<div class="col-12">
+								<label for="firstName">Primeiro Nome*</label>
+							</div>
+							<form:input path="firstName" cssClass="form-control"
+								id="firstName" />
+							<form:errors path="firstName" cssStyle="color: #ff0000;" />
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<div class="col-12">
+								<label for="firstName">Email*</label>
+							</div>
+							<form:input path="email" cssClass="form-control" id="email" />
+							<form:errors path="email" cssStyle="color: #ff0000;" />
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<div class="col-12">
+								<label for="password">Senha*</label>
+							</div>
+							<form:password path="password" cssClass="form-control"
+								id="password" />
+							<form:errors path="password" cssStyle="color: #ff0000;" />
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<div class="col-12">
+								<label for="confirmPassword">Confirma Senha*</label>
+							</div>
+							<form:password path="confirmPassword" cssClass="form-control"
+								id="confirmPassword" />
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<div class="col-12">
+								<label>Eu sou: *</label>
+							</div>
+							<label> 
+							<form:radiobutton path="roles" value="ROLE_USER" />
+								Síndico
+							</label>
+							 <label class="ml-3"> 
+							 <form:radiobutton path="roles"
+									value="ROLE_RESIDENT" /> Morador
+							</label>
+						</div>
+						<form:errors path="roles" cssStyle="color: #ff0000;" />
+
+					</div>
+					<div class="col-12 mt-3">
+						<div class="input-group">
+							<button type="submit" class="btn btn-primary float-rigth">Cadastrar</button>
+						</div>
+					</div>
 				</div>
 			</form:form>
 		</div>
 	</div>
-	
+
 	<jsp:include page="result.jsp" />
 </body>
 </html>

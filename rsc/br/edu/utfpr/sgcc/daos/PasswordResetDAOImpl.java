@@ -10,16 +10,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.models.PasswordReset;
 
-public class PasswordResetDAOImpl extends BaseDAO {
+public class PasswordResetDAOImpl {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(PasswordReset.class)
-			.buildSessionFactory();
-
-	public PasswordResetDAOImpl(DataSource dataSource) {
-		super(dataSource);
-	}
+	SessionFactory factory = DBConfig.getSessionFactory();
 
 	public PasswordReset returnById(int id) {
 		Session session = null;

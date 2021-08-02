@@ -27,14 +27,23 @@
 						<p>Campos marcados com * são considerados obrigatórios</p>
 						<form:form action="form" modelAttribute="condominiumFee">
 							<form:hidden path="id" value="${condominiumfee.id}" />
-							<form:hidden path="idCondominium" value="${condominiumfee.idCondominium}" />
-							<div class="form-group">
-								<label for="closingDate">Data de vencimento*</label>
-								<form:input type="date" path="closingDate"
-									cssClass="form-control" id="closingDate" />
-								<form:errors path="closingDate" cssStyle="color: #ff0000;" />
+							<form:hidden path="idCondominium"
+								value="${condominiumfee.idCondominium}" />
+							<div class="row">
+								<div class="col-12 col-md-6 col-lg-6">
+									<div class="input-group">
+										<div class="col-12">
+											<label for="closingDate">Data de vencimento*</label>
+										</div>
+										<form:input type="date" path="closingDate"
+											cssClass="form-control" id="closingDate" />
+										<form:errors path="closingDate" cssStyle="color: #ff0000;" />
+									</div>
+								</div>
+								<div class="col-12 mt-3">
+									<button type="submit" class="btn btn-primary">Cadastrar</button>
+								</div>
 							</div>
-							<button type="submit" class="btn btn-primary">Cadastrar</button>
 						</form:form>
 					</div>
 				</div>

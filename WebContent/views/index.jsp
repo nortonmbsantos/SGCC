@@ -20,29 +20,44 @@
 			<hr class="my-4">
 
 			<c:if test="${not empty errorMessge}">
-				<div style="color: red; font-weight: bold; margin: 30px 0px;font-size: 15px;">${errorMessge}</div>
+				<div
+					style="color: red; font-weight: bold; margin: 30px 0px; font-size: 15px;">${errorMessge}</div>
 			</c:if>
 
 			<form name='login' action="login" method='POST'>
-				<table>
-					<tr>
-						<td>Usuário:</td>
-						<td><input class="form-control" type='text' name='username'></td>
-					</tr>
-					<tr>
-						<td>Senha:</td>
-						<td><input class="form-control" type='password'
-							name='password' /></td>
-					</tr>
-					<tr>
-						<td colspan='2'><input class="btn" name="submit"
-							type="submit" value="Entrar" /></td>
-					</tr>
-				</table>
-				<input type="hidden" name="${_csrf.parameterName}"
-					value="${_csrf.token}" />
+				<div class="row">
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<div class="col-12">
+								<label for="confirmPassword">Usuário</label>
+							</div>
+
+							<input class="form-control" type='text' name='username'>
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<div class="col-12">
+								<label for="confirmPassword">Senha</label>
+							</div>
+
+							<input class="form-control" type='password' name='password' />
+						</div>
+					</div>
+					<div class="col-12 mt-3">
+						<div class="input-group">
+							<input class="btn btn-primary" name="submit" type="submit" value="Entrar" />
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
+						</div>
+					</div>
+				</div>
+				<div class="col-12 mt-3 pl-0">
+					<div class="input-group">
+						<a href="forgotpassword">Esqueci minha senha</a>
+					</div>
+				</div>
 			</form>
-			<a href="forgotpassword">Esqueci minha senha</a>
 		</div>
 	</div>
 </body>

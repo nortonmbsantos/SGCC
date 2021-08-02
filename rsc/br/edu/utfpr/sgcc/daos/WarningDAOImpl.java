@@ -17,6 +17,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.config.Encryptor;
 import br.edu.utfpr.sgcc.models.Admin;
 import br.edu.utfpr.sgcc.models.Fee;
@@ -25,14 +26,8 @@ import br.edu.utfpr.sgcc.models.Warning;
 
 public class WarningDAOImpl implements WarningDAO {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Warning.class)
-			.buildSessionFactory();
+	SessionFactory factory = DBConfig.getSessionFactory();
 
-	private DataSource dataSource;
-
-	public WarningDAOImpl(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
 
 	public Warning returnById(int id) {
 		Session session = null;

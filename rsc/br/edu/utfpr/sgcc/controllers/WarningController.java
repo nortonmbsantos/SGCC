@@ -40,7 +40,7 @@ import br.edu.utfpr.sgcc.service.WarningService;
 public class WarningController {
 	@GetMapping("/user/condominium/warning/new")
 	public ModelAndView addWarning(@RequestParam int id_resident, @RequestParam int id_condominium) {
-		ModelAndView modelAndView = new ModelAndView("user/condominium/warning/new");
+		ModelAndView modelAndView = new ModelAndView("user/condominium/warning/form");
 		ResidentService residentService = new ResidentService();
 		modelAndView.addObject("resident", residentService.returnById(id_resident));
 		modelAndView.addObject("condominiumFees", new CondominiumFeeService().returnActives(id_condominium));

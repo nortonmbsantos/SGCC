@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
@@ -20,20 +21,14 @@
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 					<div class="jumbotron">
-						<h1 class="display-4">Formulário de cadastro de taxa para o
-							condomínio ${condominium.name }</h1>
+						<h1 class="display-4">Formulário de cadastro de avisos e
+							multas para o morador ${resident.name }</h1>
 						<p class="lead">Preencha o formulário com os dados</p>
-						<a
-							href="${pageContext.request.contextPath}/user/condominium/fee/forminstalment?id_condominium_fee=${fee.idCondominiumFee }&id_fee=${fee.id}"
-							class="btn btn-link">Cadastrar parcela de taxa já cadastrada?
-							Clique aqui</a>
 						<hr class="my-4">
 						<p>Campos marcados com * são considerados obrigatórios</p>
-						<form:form action="form" modelAttribute="fee">
-							<form:hidden path="idCondominiumFee" cssClass="form-control"
-								value="${fee.idCondominiumFee}" />
-							<form:hidden path="id" value="${fee.id}" />
-							<form:hidden path="father" value="0" />
+						<form:form action="new" modelAttribute="warning">
+							<form:hidden path="idResident" cssClass="form-control"
+								value="${resident.id}" />
 							<div class="row">
 								<div class="col-12 col-md-6 col-lg-6">
 									<div class="input-group">
@@ -48,57 +43,39 @@
 								<div class="col-12 col-md-6 col-lg-6">
 									<div class="input-group">
 										<div class="col-12">
-											<label for="value">Valor*</label>
+											<label for="warningDate">Data da multa*</label>
 										</div>
-										<span class="input-group-text" id="basic-addon1">R$</span>
-										<form:input path="value" cssClass="form-control" id="value"
-										aria-describedby="basic-addon1"	/>
-										<form:errors path="value" cssStyle="color: #ff0000;" />
+										<form:input type="date" path="warningDate"
+											cssClass="form-control" id="warningDate" />
 									</div>
 								</div>
 								<div class="col-12 col-md-6 col-lg-6">
 									<div class="input-group">
 										<div class="col-12">
-											<label for="payDate">Data de pagamento*</label>
+											<label for="value">Valor* (Pode ser zero, caso seja
+												apenas um aviso)</label>
 										</div>
-										<form:input type="date" path="payDate" cssClass="form-control"
-											id="payDate"  />
-									</div>
-								</div>
-								<div class="col-12 col-md-6 col-lg-6">
-									<div class="form-group">
-										<div class="col-12">
-											<label for="dueDate">Data de vencimento*</label>
-										</div>
-										<form:input type="date" path="dueDate" cssClass="form-control"
-											id="dueDate" />
+										<form:input path="value" cssClass="form-control" id="value" />
 									</div>
 								</div>
 								<div class="col-12 col-md-6 col-lg-6">
 									<div class="input-group">
 										<div class="col-12">
-											<label for="installments">Total de parcelas*</label>
+											<label for="feeType">Período*</label>
 										</div>
-										<form:input path="installments" cssClass="form-control"
-											id="installments" />
-										<form:errors path="installments" cssStyle="color: #ff0000;" />
-									</div>
-								</div>
-								<div class="col-12 col-md-6 col-lg-6">
-									<div class="input-group">
-										<div class="col-12">
-											<label for="feeType">Tipo de taxa*</label>
-										</div>
-										<form:select cssClass="form-control" path="idFeeType"
+										<form:select cssClass="form-control" path="idCondominiumFee"
 											id="feeType">
-											<c:forEach items="${feeTypes}" var="feeType">
-												<form:option value="${feeType.id}">${feeType.description}</form:option>
+											<c:forEach items="${condominiumFees}" var="fee">
+												<form:option value="${fee.id}">
+													<fmt:formatDate value="${fee.closingDate}"
+														pattern="dd/MM/yyyy" />
+												</form:option>
 											</c:forEach>
 										</form:select>
 									</div>
 								</div>
-								<div class="mt-3 col-12">
-									<button type="submit" class="btn btn-primary float-right">Cadastrar</button>
+								<div class="col-12 mt-3">
+									<button type="submit" class="btn btn-primary">Cadastrar</button>
 								</div>
 							</div>
 						</form:form>

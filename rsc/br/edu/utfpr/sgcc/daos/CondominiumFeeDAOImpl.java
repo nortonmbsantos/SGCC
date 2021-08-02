@@ -22,6 +22,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.models.Condominium;
 import br.edu.utfpr.sgcc.models.CondominiumFee;
 import br.edu.utfpr.sgcc.models.Fee;
@@ -30,14 +31,7 @@ import br.edu.utfpr.sgcc.service.CondominiumFeeService;
 
 public class CondominiumFeeDAOImpl {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(CondominiumFee.class)
-			.buildSessionFactory();
-
-	private DataSource dataSource;
-
-	public CondominiumFeeDAOImpl(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
+	SessionFactory factory = DBConfig.getSessionFactory();
 
 	public CondominiumFee returnById(int id) {
 		Session session = null;

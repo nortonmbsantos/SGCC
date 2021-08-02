@@ -6,7 +6,13 @@
               <li class="nav-item">
                 <a class="nav-link active" href="${pageContext.request.contextPath}/user/dashboard">
                   <i class="fas fa-lg fa-home"></i>
-                  Dashboard <span class="sr-only">(current)</span>
+                  Página inicial <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/user/update">
+					<i class="fas fa-lg fa-user"></i>                  
+					Meus dados
                 </a>
               </li>
               <li class="nav-item">
@@ -24,7 +30,7 @@
               </a>
             </h6>
             <ul class="nav flex-column mb-2">
-			<c:forEach items="${condominiuns}" var="condominium">
+			<c:forEach items="${condominiunsSideBar}" var="condominium">
               <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/user/condominium?id=${condominium.id}">
                   ${condominium.name } 

@@ -22,7 +22,6 @@
 				<hr class="my-4">
 				<form action="add" method="POST">
 					<input type="text" name="code" maxlength="6"> 
-					<input type="hidden" name="idResident" value="${resident.id}">
 					<input type="submit">
 				</form>
 

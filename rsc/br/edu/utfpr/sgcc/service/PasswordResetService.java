@@ -20,7 +20,7 @@ public class PasswordResetService {
 	
 	public PasswordResetService() {
 //		dao = context.getBean("AdminDAOBean", AdminDAOImpl.class);
-		dao = new PasswordResetDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new PasswordResetDAOImpl();
 	}
 	
 	public PasswordReset returnById(int id) {

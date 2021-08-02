@@ -20,7 +20,7 @@ public class WarningService {
 	
 	public WarningService() {
 //		dao = context.getBean("WarningDAOBean", WarningDAOImpl.class);
-		dao = new WarningDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new WarningDAOImpl();
 	}
 	
 	public Warning returnById(int id) {

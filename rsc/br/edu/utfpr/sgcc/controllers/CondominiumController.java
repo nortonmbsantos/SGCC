@@ -24,6 +24,7 @@ import br.edu.utfpr.sgcc.models.MyUserDetails;
 import br.edu.utfpr.sgcc.models.Report;
 import br.edu.utfpr.sgcc.models.Result;
 import br.edu.utfpr.sgcc.models.User;
+import br.edu.utfpr.sgcc.service.BookingService;
 import br.edu.utfpr.sgcc.service.CondominiumEntryRequestService;
 import br.edu.utfpr.sgcc.service.CondominiumFeeService;
 import br.edu.utfpr.sgcc.service.CondominiumService;
@@ -56,6 +57,7 @@ public class CondominiumController {
 				modelAndView.addObject("reportByClosingDate",
 						condominiumFeeService.reportByClosingDate(condominium.getId()));
 				modelAndView.addObject("reportByFeeType", condominiumFeeService.reportByFeeType(condominium.getId()));
+				modelAndView.addObject("acceptedBookings", new BookingService().acceptedBookingsByCondominium(condominium.getId()));
 				modelAndView.addObject("reportLastFeeValue",
 						condominiumFeeService.reportLastCondominiumFeeTotalValue(condominium.getId()));
 				modelAndView.addObject("reportAverageFeeType", new CondominiumFeeService().reportAverageFeeType(condominium.getId()));
@@ -110,7 +112,6 @@ public class CondominiumController {
 		Condominium condominium = condominiumService.returnById(cRequest.getIdCondominium());
 		ModelAndView modelAndView = new ModelAndView(
 				"redirect:/user/condominium/entries?idcondominium=" + condominium.getId());
-		modelAndView.addObject("condominium", condominium);
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (condominium.getIdUser() == user.getId()) {
 			if (service.accept(cRequest.getId())) {
@@ -135,7 +136,6 @@ public class CondominiumController {
 		Condominium condominium = condominiumService.returnById(cRequest.getIdCondominium());
 		ModelAndView modelAndView = new ModelAndView(
 				"redirect:/user/condominium/entries?idcondominium=" + condominium.getId());
-		modelAndView.addObject("condominium", condominium);
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (condominium.getIdUser() == user.getId()) {
 			if (service.refuse(cRequest.getId())) {
@@ -150,7 +150,7 @@ public class CondominiumController {
 
 	@GetMapping("/user/condominium/new")
 	public ModelAndView addCondominium() {
-		ModelAndView modelAndView = new ModelAndView("user/condominium/new");
+		ModelAndView modelAndView = new ModelAndView("user/condominium/form");
 		Condominium condominium = new Condominium();
 		modelAndView.addObject("condominium", condominium);
 		return modelAndView;
@@ -177,7 +177,7 @@ public class CondominiumController {
 
 	@GetMapping("/user/condominium/update")
 	public ModelAndView updateCondominium(@RequestParam int id) {
-		ModelAndView modelAndView = new ModelAndView("user/condominium/update");
+		ModelAndView modelAndView = new ModelAndView("user/condominium/form");
 		Condominium condominium = new CondominiumService().returnById(id);
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

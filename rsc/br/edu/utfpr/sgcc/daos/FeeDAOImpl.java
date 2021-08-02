@@ -19,20 +19,15 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.models.Condominium;
 import br.edu.utfpr.sgcc.models.Fee;
 import br.edu.utfpr.sgcc.service.FeeService;
 
 public class FeeDAOImpl {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Fee.class)
-			.buildSessionFactory();
+	SessionFactory factory = DBConfig.getSessionFactory();
 
-	private DataSource dataSource;
-
-	public FeeDAOImpl(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
 
 	public Fee returnById(int id) {
 		Session session = null;

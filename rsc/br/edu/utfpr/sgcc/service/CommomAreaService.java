@@ -21,7 +21,7 @@ public class CommomAreaService {
 	
 	public CommomAreaService() {
 //		dao = context.getBean("CommomAreaDAOBean", CommomAreaDAOImpl.class);
-		dao = new CommomAreaDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new CommomAreaDAOImpl();
 	}
 	
 	public CommomArea returnById(int id) {

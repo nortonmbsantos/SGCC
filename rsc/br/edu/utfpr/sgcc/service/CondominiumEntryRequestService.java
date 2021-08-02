@@ -22,7 +22,7 @@ public class CondominiumEntryRequestService {
 
 	public CondominiumEntryRequestService() {
 //		dao = context.getBean("CondominiumDAOBean", CondominiumDAOImpl.class);
-		dao = new CondominiumEntryRequestDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new CondominiumEntryRequestDAOImpl();
 	}
 
 	public CondominiumEntryRequest returnById(int id) {

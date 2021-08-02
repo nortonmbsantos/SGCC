@@ -23,7 +23,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
 import br.edu.utfpr.sgcc.models.Booking;
+import br.edu.utfpr.sgcc.models.Fee;
 import br.edu.utfpr.sgcc.models.Report;
+import br.edu.utfpr.sgcc.service.CommomAreaService;
 import br.edu.utfpr.sgcc.service.MyUserDetailsService;
 import br.edu.utfpr.sgcc.service.UserService;
 
@@ -189,6 +191,37 @@ public class BookingDAOImpl {
 			UserService userService = new UserService();
 			for (Booking b : bookings) {
 				b.setResident_name(userService.returnById(b.getIdResident()).getFirstName());
+			}
+
+			return bookings;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
+	public List<Booking> acceptedBookingsByCondominium(int id_condominium) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+
+			session.beginTransaction();
+			Query query = session.createSQLQuery(
+					"SELECT b.booking_date, ca.name, r.first_name FROM booking b inner join commom_area ca on ca.id = b.id_commom_area inner join users r on r.id = b.id_resident WHERE ca.id_condominium = :idCondominium and status = 1 and booking_date >= now() order by b.booking_date");
+			query.setParameter("idCondominium", id_condominium);
+			List<Object[]> objects = query.getResultList();
+			List<Booking> bookings = new ArrayList<>();
+
+			for (Object[] o : objects) {
+				Booking b = new Booking();
+				b.setBookingDate((Date) o[0]);
+				b.setCommomarea_name((String) o[1]);
+				b.setResident_name((String) o[2]);
+				bookings.add(b);
 			}
 
 			return bookings;

@@ -18,7 +18,7 @@ public class FeeTypeService {
 
 	public FeeTypeService() {
 //		dao = context.getBean("FeeTypeDAOBean", FeeTypeDAOImpl.class);
-		dao = new FeeTypeDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new FeeTypeDAOImpl();
 	}
 
 	public FeeType returnById(int id) {

@@ -46,7 +46,7 @@ import br.edu.utfpr.sgcc.models.MyUserDetails;
 import br.edu.utfpr.sgcc.models.User;
 
 @Controller
-@SessionAttributes({ "condominiuns", "user" })
+@SessionAttributes({ "condominiunsSideBar", "user" })
 public class UserController {
 
 	@PostMapping("/register")
@@ -65,27 +65,42 @@ public class UserController {
 				new Result("Usuário cadastrado com sucesso, entre com suas credenciais", "success"));
 	}
 
-	@GetMapping("/update")
+	@GetMapping("/user/update")
 	public ModelAndView updateUser() {
 		ModelAndView modelAndView = new ModelAndView("user/update");
-		modelAndView.addObject("user", new User());
+		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User myUser = new UserService().returnById(user.getId());
+		modelAndView.addObject("user", myUser);
 		return modelAndView;
 	}
 
-	@PostMapping("/update")
-	public ModelAndView update(@ModelAttribute @Valid User user, BindingResult result) {
+	@PostMapping("/user/update")
+	public ModelAndView update(@ModelAttribute @Valid User user, BindingResult result, final RedirectAttributes redirectAttributes) {
 		UserService service = new UserService();
 
-		if (!new BCryptPasswordEncoder().matches(user.getConfirmPassword(), user.getPassword())) {
-			result.addError(new FieldError("user", "password", "Senhas devem ser iguais"));
-		}
+//		if (!new BCryptPasswordEncoder().matches(user.getConfirmPassword(), user.getPassword())) {
+//			result.addError(new FieldError("user", "password", "Senhas devem ser iguais"));
+//		}
+		
 		if (result.hasErrors()) {
-			return new ModelAndView("register").addObject("result",
-					new Result("Falha ao se cadastrar, verifique suas informações", "error"));
+			return new ModelAndView("user/update").addObject("result",
+					new Result("Falha ao se atualizar, verifique suas informações", "error"));
 		}
-		service.update(user);
-		return new ModelAndView("login").addObject("result",
-				new Result("Usuário cadastrado com sucesso, entre com suas credenciais", "success"));
+//		MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		User myUser = new UserService().returnById(user.getId());
+//		user.setUserName(myUser.getUserName());
+//		user.setActive(myUser.isActive());
+//		user.setPassword(user.getPassword());
+//		user.setRoles(myUser.getRoles());
+//		user.setEmail(myUser.getEmail());
+//		user.setId(myUser.getId());
+		if(service.update(user)) {
+		redirectAttributes.addFlashAttribute("result", new Result("Você atualizou seus dados com sucesso", "success"));
+		return new ModelAndView("redirect:/user/dashboard");
+		} else {
+			redirectAttributes.addFlashAttribute("result", new Result("Falha ao atualizar usuário", "error"));
+			return new ModelAndView("redirect:/user/dashboard");			
+		}
 	}
 
 	@GetMapping("/register")
@@ -114,7 +129,7 @@ public class UserController {
 		ModelAndView modelAndView = new ModelAndView("user/dashboard");
 		CondominiumService condominiumService = new CondominiumService();
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		modelAndView.addObject("condominiuns", condominiumService.listSidebar(user.getId()));
+		modelAndView.addObject("condominiunsSideBar", condominiumService.listSidebar(user.getId()));
 		modelAndView.addObject("user", user);
 		return modelAndView;
 	}

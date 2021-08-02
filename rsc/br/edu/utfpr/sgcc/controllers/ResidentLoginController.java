@@ -113,7 +113,7 @@ public class ResidentLoginController {
 			cer.setRequestDate(new Date());
 			CondominiumEntryRequestService requestService = new CondominiumEntryRequestService();
 			CondominiumEntryRequest cerVal = requestService.returnByCondominiumAndResident(cer.getIdCondominium(), cer.getIdResident());
-			if (cerVal.isAccepted() || cerVal.getResponseDate() == null) {
+			if (cerVal == null || !cerVal.isAccepted()) {
 				if (requestService.insert(cer)) {
 					return new ModelAndView("resident/dashboard").addObject("result", new Result(
 							"Solicitação para " + condominium.getName() + " enviada com sucesso", "success"));
@@ -121,9 +121,12 @@ public class ResidentLoginController {
 					return new ModelAndView("resident/entryCondominium").addObject("result",
 							new Result("Falha ao enviar solicitação ao condomínio", "error"));
 				}
-			} else {
+			} else if(cerVal.isAccepted()) {
 				return new ModelAndView("resident/dashboard").addObject("result", new Result(
-						"Solicitação para " + condominium.getName() + " enviada com sucesso", "success"));
+						"Solicitação para " + condominium.getName() + " já aceita", "success"));
+			} else {
+				return new ModelAndView("resident/entryCondominium").addObject("result",
+						new Result("Falha ao enviar solicitação ao condomínio", "error"));
 			}
 		} else {
 			return new ModelAndView("resident/entryCondominium").addObject("result",

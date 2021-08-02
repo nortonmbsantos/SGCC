@@ -20,7 +20,7 @@ public class CondominiumService {
 	
 	public CondominiumService() {
 //		dao = context.getBean("CondominiumDAOBean", CondominiumDAOImpl.class);
-		dao = new CondominiumDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new CondominiumDAOImpl();
 	}
 	
 	public Condominium returnById(int id) {

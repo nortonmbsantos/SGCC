@@ -24,7 +24,7 @@ public class CondominiumFeeService {
 
 	public CondominiumFeeService() {
 //		dao = context.getBean("CondominiumFeeDAOBean", CondominiumFeeDAOImpl.class);
-		dao = new CondominiumFeeDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new CondominiumFeeDAOImpl();
 	}
 
 	public CondominiumFee returnById(int id) {

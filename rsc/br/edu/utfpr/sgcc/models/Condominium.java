@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.swing.text.MaskFormatter;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -120,11 +121,18 @@ public class Condominium {
 	}
 
 	public String getCep() {
-		return cep;
+		try {
+			MaskFormatter mask = new MaskFormatter("##.###-###");
+			mask.setValueContainsLiteralCharacters(false);
+			return mask.valueToString(cep);			
+		}catch (Exception e) {
+			return cep;
+		}
+		
 	}
 
 	public void setCep(String cep) {
-		this.cep = cep;
+		this.cep = cep.trim().replace("-", "").replace(".", "");
 	}
 
 	public String getState() {

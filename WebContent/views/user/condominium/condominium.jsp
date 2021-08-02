@@ -28,6 +28,7 @@
 					<div class="jumbotron">
 						<h1 class="display-4">${condominium.name}</h1>
 						<p class="lead">${condominium.description}</p>
+						<p class="lead"> Código de acesso: <b>${condominium.code}</b></p>
 						<hr class="my-4">
 						<p>Último condomínio: R$ ${reportLastFeeValue.value} -
 							(Fechamento: ${reportLastFeeValue.title})</p>
@@ -44,9 +45,26 @@
 							class="btn btn-primary btn-sm"
 							href="${pageContext.request.contextPath}/user/condominium/update?id=${condominium.id}"
 							role="button">Editar condomínio</a>
-
-
 					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12">
+						Próxima(s) ${booking.size } reserva(s) de área comum
+						<div class="row mt-3">
+							<c:forEach items="${acceptedBookings }" var="booking">
+								<div class="col-3">
+									<div class="card" style="width: 18rem;">
+										<div class="card-body">
+											<h5 class="card-title"><fmt:formatDate value="${booking.bookingDate}" pattern="dd/MM/yyyy" /></h5>
+											<h6 class="card-subtitle mb-2 text-muted">${booking.commomarea_name }</h6>
+											<p class="card-text">${booking.resident_name }</p> 
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
+					</div>
+					<div class="col-12"></div>
 				</div>
 				<div class="row mt-3">
 					<div class="col-12 col-md-6">
@@ -85,7 +103,7 @@
 					</div>
 				</div>
 				<div class="row mt-3">
-					<div class="col-12">
+					<div class="col-12 col-md-6">
 						<div class="card">
 							<div class="card-header">Valor total por tipo</div>
 							<div class="card-body">
@@ -100,9 +118,9 @@
 	<script>
 		var reportByClosingDateChart = document.getElementById('reportByClosingDateChart').getContext('2d');
 		var chart = new Chart(reportByClosingDateChart, {
-			// The type of chart we want to create
+			
 			type : 'line',
-			// The data for our dataset
+			
 			data : {
 
 				labels : [<c:forEach items="${reportByClosingDate}" var="report">
@@ -117,14 +135,14 @@
 				} ]
 			},
 
-			// Configuration options go here
+			
 			options : {}
 		});
 		var reportByFeeTypeChart = document.getElementById('reportByFeeTypeChart').getContext('2d');
 		var chart = new Chart(reportByFeeTypeChart, {
-			// The type of chart we want to create
+			
 			type : 'bar',
-			// The data for our dataset
+			
 			data : {
 
 				labels : [<c:forEach items="${reportByFeeType}" var="report">
@@ -140,7 +158,7 @@
 				} ]
 			},
 
-			// Configuration options go here
+			
 			options : {}
 		});
 	</script>

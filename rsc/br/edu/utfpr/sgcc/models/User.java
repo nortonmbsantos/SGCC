@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import javax.swing.text.MaskFormatter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,12 +25,12 @@ public class User {
 	private int id;
 	@NotNull
 	@Size(min = 6, message = "Usuário deve ter no mínimo 6 caracteres")
-	@Column(name="user_name", unique=true)
+	@Column(name = "user_name", unique = true)
 	private String userName;
 	@Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
 	private String password;
 	@Size(min = 1, message = "Nome não deve ser vazio")
-	@Column(name="first_name")
+	@Column(name = "first_name")
 	private String firstName;
 	@NotNull(message = "Este campo não pode ser vazio")
 	@Email(message = "Email inválido")
@@ -40,6 +41,18 @@ public class User {
 	private boolean active;
 	@NotNull(message = "Este campo não pode ser vazio")
 	private String roles;
+
+	private String street;
+
+	@Column(name = "street_number")
+	private String streetNumber;
+	private String city;
+
+	private String cep;
+	private String state;
+	@Column(name = "number_complement")
+	private String numberComplement;
+	private String neighborhood;
 
 	public int getId() {
 		return id;
@@ -111,6 +124,69 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getStreetNumber() {
+		return streetNumber;
+	}
+
+	public void setStreetNumber(String streetNumber) {
+		this.streetNumber = streetNumber;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getCep() {
+		try {
+			MaskFormatter mask = new MaskFormatter("##.###-###");
+			mask.setValueContainsLiteralCharacters(false);
+			return mask.valueToString(cep);			
+		}catch (Exception e) {
+			e.printStackTrace(System.err);
+			return cep;
+		}
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep.trim().replace("-", "").replace(".", "");
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getNumberComplement() {
+		return numberComplement;
+	}
+
+	public void setNumberComplement(String numberComplement) {
+		this.numberComplement = numberComplement;
+	}
+
+	public String getNeighborhood() {
+		return neighborhood;
+	}
+
+	public void setNeighborhood(String neighborhood) {
+		this.neighborhood = neighborhood;
 	}
 
 }

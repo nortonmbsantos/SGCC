@@ -14,7 +14,7 @@ public class AdminService {
 	
 	public AdminService() {
 //		dao = context.getBean("AdminDAOBean", AdminDAOImpl.class);
-		dao = new AdminDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new AdminDAOImpl();
 		
 	}
 	

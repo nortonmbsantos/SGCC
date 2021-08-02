@@ -22,15 +22,15 @@
 			<hr class="my-4">
 			<p>Campos marcados com * são considerados obrigatórios</p>
 			<form:form action="add" modelAttribute="booking">
-				<form:hidden path="id_resident" cssClass="form-control"
+				<form:hidden path="idResident" cssClass="form-control"
 					id="id_resident" value="${resident.id }" />
 				<div class="form-group">
 					<label for="firstName">Data solicitada*</label>
-					<form:input type="date" path="booking_date" cssClass="form-control"
+					<form:input type="date" path="bookingDate" cssClass="form-control"
 						id="booking_date" />
 				</div>
 				<label for="firstName">Área comum*</label>
-				<form:select cssClass="form-control" path="id_commom_area" id="id_commom_area">
+				<form:select cssClass="form-control" path="idCommomArea" id="id_commom_area">
 					<c:forEach items="${commomareas}" var="area">
 						<form:option value="${area.id}">${area.name}</form:option>
 					</c:forEach>

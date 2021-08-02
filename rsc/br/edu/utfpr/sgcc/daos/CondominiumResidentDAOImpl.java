@@ -19,6 +19,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.models.Condominium;
 import br.edu.utfpr.sgcc.models.CondominiumEntryRequest;
 import br.edu.utfpr.sgcc.models.CondominiumResident;
@@ -28,14 +29,7 @@ import br.edu.utfpr.sgcc.service.UserService;
 
 public class CondominiumResidentDAOImpl {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-			.addAnnotatedClass(CondominiumResident.class).buildSessionFactory();
-
-	private DataSource dataSource;
-
-	public CondominiumResidentDAOImpl(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
+	SessionFactory factory = DBConfig.getSessionFactory();
 
 	public boolean save(CondominiumResident resident) {
 		Session session = null;

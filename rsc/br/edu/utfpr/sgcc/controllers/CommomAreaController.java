@@ -75,7 +75,7 @@ public class CommomAreaController {
 
 	@GetMapping("/user/condominium/commomarea/new")
 	public ModelAndView addCondominium(@RequestParam int id_condominium) {
-		ModelAndView modelAndView = new ModelAndView("user/condominium/commomarea/new");
+		ModelAndView modelAndView = new ModelAndView("user/condominium/commomarea/form");
 		CommomArea commomArea = new CommomArea();
 		modelAndView.addObject("commomArea", commomArea);
 		CondominiumService condominiumService = new CondominiumService();
@@ -92,7 +92,7 @@ public class CommomAreaController {
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (result.hasErrors()) {
  			redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar área comum", "error"));
-			return new ModelAndView("user/condominium/commomarea/new");
+			return new ModelAndView("user/condominium/commomarea/form");
 		}
 
 		if (condominium.getIdUser() == user.getId()) {
@@ -110,7 +110,7 @@ public class CommomAreaController {
 
 	@GetMapping("/user/condominium/commomarea/update")
 	public ModelAndView updateArea(@RequestParam int id) {
-		ModelAndView modelAndView = new ModelAndView("user/condominium/commomarea/update");
+		ModelAndView modelAndView = new ModelAndView("user/condominium/commomarea/form");
 		CommomArea commomArea = new CommomAreaService().returnById(id);
 		modelAndView.addObject("commomArea", commomArea);
 		CondominiumService condominiumService = new CondominiumService();
@@ -136,7 +136,7 @@ public class CommomAreaController {
 			ModelAndView modelAndView = new ModelAndView(
 					"redirect:/user/condominium/commomareas?id_condominium=" + condominium.getId());
 			if (result.hasErrors()) {
-				return new ModelAndView("user/condominium/commomarea/update");
+				return new ModelAndView("user/condominium/commomarea/form");
 			}
 			service.update(commomArea);
 			return modelAndView;

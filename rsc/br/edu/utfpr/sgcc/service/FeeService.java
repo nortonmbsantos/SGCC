@@ -19,7 +19,7 @@ public class FeeService {
 
 	public FeeService() {
 //		dao = context.getBean("FeeDAOBean", FeeDAOImpl.class);
-		dao = new FeeDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new FeeDAOImpl();
 	}
 
 	public Fee returnById(int id) {

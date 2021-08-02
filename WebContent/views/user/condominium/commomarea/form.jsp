@@ -28,24 +28,44 @@
 						<form:form action="add" modelAttribute="commomArea">
 							<form:hidden path="idCondominium" cssClass="form-control"
 								value="${condominium.id}" />
-							<div class="form-group">
-								<label for="name">Nome*</label>
-								<form:input path="name" cssClass="form-control" id="name" />
-								<form:errors path="name" cssStyle="color: #ff0000;" />
+							<div class="row">
+								<div class="col-12 col-md-6 col-lg-6">
+									<div class="input-group">
+										<div class="col-12">
+											<label for="name">Nome*</label>
+										</div>
+										<form:input path="name" cssClass="form-control" id="name" />
+										<form:errors path="name" cssStyle="color: #ff0000;" />
+									</div>
+								</div>
+								<div class="col-12 col-md-6 col-lg-6">
+									<div class="input-group">
+										<div class="col-12">
+											<label for="bookingFee">Valor da reserva*</label>
+										</div>
+										<form:input path="bookingFee" cssClass="form-control"
+											id="bookingFee" />
+										<form:errors path="bookingFee" cssStyle="color: #ff0000;" />
+									</div>
+								</div>
+								<div class="col-12 mt-3">
+									<button type="submit" class="btn btn-primary">Cadastrar</button>
+								</div>
 							</div>
-							<div class="form-group">
-								<label for="bookingFee">Valor da reserva*</label>
-								<form:input path="bookingFee" cssClass="form-control"
-									id="bookingFee" />
-								<form:errors path="bookingFee" cssStyle="color: #ff0000;" />
-							</div>
-
-							<button type="submit" class="btn btn-primary">Cadastrar</button>
 						</form:form>
 					</div>
 				</div>
 			</main>
 		</div>
 	</div>
+	<script	src="${pageContext.request.contextPath}/assets/js/jquery.maskMoney.min.js"></script>
+	<script type="text/javascript">
+		$("#bookingFee").maskMoney({
+			allowNegative : false,
+			thousands : '',
+			decimal : '.',
+			allowZero : true
+		});
+	</script>
 </body>
 </html>

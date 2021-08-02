@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.models.Admin;
 import br.edu.utfpr.sgcc.models.Booking;
 import br.edu.utfpr.sgcc.models.Condominium;
@@ -19,14 +20,9 @@ import br.edu.utfpr.sgcc.models.CondominiumResident;
 import br.edu.utfpr.sgcc.models.Fee;
 import br.edu.utfpr.sgcc.service.UserService;
 
-public class CondominiumEntryRequestDAOImpl extends BaseDAO {
+public class CondominiumEntryRequestDAOImpl {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml")
-			.addAnnotatedClass(CondominiumEntryRequest.class).buildSessionFactory();
-
-	public CondominiumEntryRequestDAOImpl(DataSource dataSource) {
-		super(dataSource);
-	}
+	SessionFactory factory = DBConfig.getSessionFactory();
 
 	public CondominiumEntryRequest returnById(int id) {
 		Session session = null;

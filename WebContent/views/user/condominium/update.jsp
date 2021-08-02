@@ -44,6 +44,7 @@
 					<form:input path="cep" cssClass="form-control"
 						id="cep" />
 					<form:errors path="cep" cssStyle="color: #ff0000;" />
+					<button class="btn btn-small btn-secondary" type="button" id="findcep">Buscar cep</button>
 				</div>
 				<div class="form-group">
 					<label for="cep">Rua</label>
@@ -91,5 +92,6 @@
 			</main>
 		</div>
 	</div>
+	<script src="${pageContext.request.contextPath}/assets/js/findcep.js" ></script>
 </body>
 </html>

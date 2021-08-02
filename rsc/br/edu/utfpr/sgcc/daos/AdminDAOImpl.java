@@ -17,19 +17,14 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.config.Encryptor;
 import br.edu.utfpr.sgcc.models.Admin;
 
 public class AdminDAOImpl implements AdminDAO {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Admin.class)
-			.buildSessionFactory();
+	SessionFactory factory = DBConfig.getSessionFactory();
 
-	private DataSource dataSource;
-
-	public AdminDAOImpl(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
 
 	public Admin returnById(int id) {
 		Session session = null;

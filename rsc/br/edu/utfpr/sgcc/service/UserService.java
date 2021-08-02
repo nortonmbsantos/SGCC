@@ -13,7 +13,7 @@ public class UserService {
 	AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DataBaseConfig.class);
 
 	public UserService() {
-		dao = new UserDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new UserDAOImpl();
 	}
 
 	public User returnById(int id) {
@@ -29,9 +29,7 @@ public class UserService {
 	}
 
 	public boolean update(User user) {
-		User userVal = this.returnById(user.getId());
-		userVal.setFirstName(user.getFirstName());
-		return dao.update(userVal);
+		return dao.update(user);
 	}
 	
 	public boolean updatePassword(User user) {

@@ -17,19 +17,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.config.Encryptor;
 import br.edu.utfpr.sgcc.models.User;
 
 public class UserDAOImpl implements UserDAO {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class)
-			.buildSessionFactory();
-
-	private DataSource dataSource;
-
-	public UserDAOImpl(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
+	SessionFactory factory = DBConfig.getSessionFactory();
 
 	public User returnById(int id) {
 		Session session = null;

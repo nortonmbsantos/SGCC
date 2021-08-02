@@ -22,7 +22,7 @@ public class CondominiumResidentService {
 	AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DataBaseConfig.class);
 
 	public CondominiumResidentService() {
-		dao = new CondominiumResidentDAOImpl(context.getBean("DAOBean", DataSource.class));
+		dao = new CondominiumResidentDAOImpl();
 	}
 
 	public List<Condominium> returnCondominiunsByResident(int id_resident) {

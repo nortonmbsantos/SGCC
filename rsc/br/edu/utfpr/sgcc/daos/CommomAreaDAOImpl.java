@@ -9,18 +9,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.models.Admin;
 import br.edu.utfpr.sgcc.models.CommomArea;
 import br.edu.utfpr.sgcc.models.Condominium;
 
-public class CommomAreaDAOImpl extends BaseDAO {
+public class CommomAreaDAOImpl {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(CommomArea.class)
-			.buildSessionFactory();
-
-	public CommomAreaDAOImpl(DataSource dataSource) {
-		super(dataSource);
-	}
+	SessionFactory factory = DBConfig.getSessionFactory();
 
 	public CommomArea returnById(int id) {
 		Session session = null;

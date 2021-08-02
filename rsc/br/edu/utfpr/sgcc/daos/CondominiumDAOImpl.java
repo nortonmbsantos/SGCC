@@ -10,17 +10,18 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
+import br.edu.utfpr.sgcc.config.DataBaseConfig;
 import br.edu.utfpr.sgcc.models.Admin;
 import br.edu.utfpr.sgcc.models.Condominium;
 import br.edu.utfpr.sgcc.models.User;
 
-public class CondominiumDAOImpl extends BaseDAO {
+public class CondominiumDAOImpl {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Condominium.class)
-			.buildSessionFactory();
+	SessionFactory factory = DBConfig.getSessionFactory();
 
-	public CondominiumDAOImpl(DataSource dataSource) {
-		super(dataSource);
+	public CondominiumDAOImpl() {
+		
 	}
 
 	public Condominium returnById(int id) {
@@ -88,7 +89,7 @@ public class CondominiumDAOImpl extends BaseDAO {
 			query.setParameter("idUser", idUser);
 			query.setMaxResults(5);
 			List<Condominium> condominiuns = (List<Condominium>) query.getResultList();
-			
+
 			return condominiuns;
 		} catch (Exception e) {
 			e.printStackTrace(System.err);

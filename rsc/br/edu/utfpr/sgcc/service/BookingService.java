@@ -38,6 +38,10 @@ public class BookingService {
 		return dao.pendingBookingsByResident(id_resident);
 	}
 
+	public List<Booking> acceptedBookingsByCondominium(int id_condominium) {
+		return dao.acceptedBookingsByCondominium(id_condominium);
+	}
+
 
 	public List<Booking> bookingsByResident(int id_resident) {
 		return dao.bookingsByResident(id_resident);

@@ -17,6 +17,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
+import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.config.Encryptor;
 import br.edu.utfpr.sgcc.models.Admin;
 import br.edu.utfpr.sgcc.models.CondominiumResident;
@@ -25,8 +26,7 @@ import br.edu.utfpr.sgcc.models.Resident;
 
 public class ResidentDAOImpl implements ResidentDAO {
 
-	SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Resident.class)
-			.buildSessionFactory();
+	SessionFactory factory = DBConfig.getSessionFactory();
 
 	private DataSource dataSource;
 
