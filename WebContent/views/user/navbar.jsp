@@ -1,4 +1,3 @@
-<%@page import="br.edu.utfpr.sgcc.models.MyUserDetails"%>
 <%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
 <nav
 	class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">

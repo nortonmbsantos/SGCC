@@ -1,5 +1,3 @@
-<%@page import="br.edu.utfpr.sgcc.models.MyUserDetails"%>
-<%@page import="br.edu.utfpr.sgcc.models.User"%>
 <%@page import="org.springframework.security.core.context.SecurityContextHolder"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
