@@ -13,7 +13,7 @@
 		<property name="connection.username">root</property>
 		<property name="connection.password"></property>
 
-		<!--Setting Session context model -->
+		<!--Setting Session context models -->
 		<property name="current_session_context_class">thread</property>
 
 
