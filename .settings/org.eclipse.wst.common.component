@@ -9,6 +9,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/main"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/main/test"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/main/webapp"/>
         <property name="java-output-path" value="/SGCC/build/classes"/>
         <property name="context-root" value="SGCC"/>
     </wb-module>
