@@ -1,1 +1,1 @@
-web: java -war target/dependency/SGCC.war --port $PORT target/*.war
+web: java -jar target/dependency/SGCC.jar --port $PORT target/*.war
