@@ -19,6 +19,10 @@ public class GuestService {
 		return daos.returnById(id);
 	}
 
+	public Guest returnByCpf(String cpf) {
+		return daos.returnByCPF(cpf);
+	}
+
 	public List<Guest> pendingGuests(int id_condominium) {
 		return daos.pendingGuests(id_condominium);
 	}

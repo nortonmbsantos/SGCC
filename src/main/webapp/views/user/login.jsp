@@ -20,7 +20,7 @@
 			<p>Campos marcados com * são considerados obrigatórios</p>
 
 
-			<form:form action="login" modelsAttribute="admin">
+			<form:form action="login" modelAttribute="admin">
 				<div class="form-group">
 					<label for="email">Usuário/E-mail</label>
 					<form:input path="email" cssClass="form-control" id="email" />

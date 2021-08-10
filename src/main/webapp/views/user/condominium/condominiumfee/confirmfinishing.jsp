@@ -25,7 +25,7 @@
 						<p class="lead">Ao fechar o período não será mais possível
 							adicionar taxas e nem multas à este mesmo período</p>
 						<hr class="my-4">
-						<form:form action="closing" modelsAttribute="condominiumFee">
+						<form:form action="closing" modelAttribute="condominiumFee">
 							<form:hidden path="id" value="${condominiumFee.id}" />
 							<button type="submit" class="btn btn-primary">Fechar
 								condomínio</button>

@@ -1,0 +1,44 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+
+		<!-- Connection settings -->
+		<property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+		<!-- Sample MySQL URL provided -->
+		<property name="connection.url">jdbc:mysql://localhost:3306/tcc?useTimezone=true&amp;serverTimezone=UTC</property>
+		<property name="connection.username">root</property>
+		<property name="connection.password"></property>
+
+		<!--Setting Session context models -->
+		<property name="current_session_context_class">thread</property>
+
+
+		<!-- auto ou after_transaction ? -->
+		<property name="connection.release_mode">auto</property>
+		<property name="connection.auto_close_session">true</property>
+
+
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.use_sql_comments">true</property>
+
+		<mapping class="br.edu.utfpr.sgcc.models.Admin" />
+		<mapping class="br.edu.utfpr.sgcc.models.Booking" />
+		<mapping class="br.edu.utfpr.sgcc.models.CommomArea" />
+		<mapping class="br.edu.utfpr.sgcc.models.Condominium" />
+		<mapping class="br.edu.utfpr.sgcc.models.CondominiumEntryRequest" />
+		<mapping class="br.edu.utfpr.sgcc.models.CondominiumFee" />
+		<mapping class="br.edu.utfpr.sgcc.models.CondominiumResident" />
+		<mapping class="br.edu.utfpr.sgcc.models.Fee" />
+		<mapping class="br.edu.utfpr.sgcc.models.FeeType" />
+		<mapping class="br.edu.utfpr.sgcc.models.PasswordReset" />
+		<mapping class="br.edu.utfpr.sgcc.models.Resident" />
+		<mapping class="br.edu.utfpr.sgcc.models.User" />
+		<mapping class="br.edu.utfpr.sgcc.models.Warning" />
+		<mapping class="br.edu.utfpr.sgcc.models.Guest" />
+
+	</session-factory>
+</hibernate-configuration>

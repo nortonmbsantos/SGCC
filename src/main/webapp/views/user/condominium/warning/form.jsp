@@ -26,7 +26,7 @@
 						<p class="lead">Preencha o formulário com os dados</p>
 						<hr class="my-4">
 						<p>Campos marcados com * são considerados obrigatórios</p>
-						<form:form action="new" modelsAttribute="warning">
+						<form:form action="new" modelAttribute="warning">
 							<form:hidden path="idResident" cssClass="form-control"
 								value="${resident.id}" />
 							<div class="row">

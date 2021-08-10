@@ -127,7 +127,8 @@ public class BookingDAOImpl {
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			session.save(booking);
+			int id = (Integer) session.save(booking);
+			booking.setId(id);
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
@@ -162,14 +163,14 @@ public class BookingDAOImpl {
 		}
 	}
 
-	public List<Booking> pendingBookingsByArea(int id_commom_area) {
+	public List<Booking> pendingBookingsByArea(int idCommomArea) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
 			Query query = session
-					.createQuery("FROM booking b WHERE b.id_commom_area = :idCommomArea and status_date is null");
-			query.setParameter("idCommomArea", id_commom_area);
+					.createQuery("FROM booking b WHERE b.idCommomArea = :idCommomArea and statusDate is null");
+			query.setParameter("idCommomArea", idCommomArea);
 			@SuppressWarnings("unchecked")
 			List<Booking> bookings = (List<Booking>) query.getResultList();
 			UserService userService = new UserService();

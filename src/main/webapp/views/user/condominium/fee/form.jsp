@@ -29,7 +29,7 @@
 							Clique aqui</a>
 						<hr class="my-4">
 						<p>Campos marcados com * são considerados obrigatórios</p>
-						<form:form action="form" modelsAttribute="fee">
+						<form:form action="form" modelAttribute="fee">
 							<form:hidden path="idCondominiumFee" cssClass="form-control"
 								value="${fee.idCondominiumFee}" />
 							<form:hidden path="id" value="${fee.id}" />

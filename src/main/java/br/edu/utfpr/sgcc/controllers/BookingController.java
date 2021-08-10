@@ -1,5 +1,9 @@
 package br.edu.utfpr.sgcc.controllers;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,13 +16,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.edu.utfpr.sgcc.models.Booking;
+import br.edu.utfpr.sgcc.models.BookingGuest;
+import br.edu.utfpr.sgcc.models.BookingRequest;
 import br.edu.utfpr.sgcc.models.CommomArea;
 import br.edu.utfpr.sgcc.models.Condominium;
+import br.edu.utfpr.sgcc.models.Guest;
 import br.edu.utfpr.sgcc.models.MyUserDetails;
 import br.edu.utfpr.sgcc.models.Result;
+import br.edu.utfpr.sgcc.service.BookingGuestService;
 import br.edu.utfpr.sgcc.service.BookingService;
 import br.edu.utfpr.sgcc.service.CommomAreaService;
 import br.edu.utfpr.sgcc.service.CondominiumService;
+import br.edu.utfpr.sgcc.service.GuestService;
 
 @Controller
 public class BookingController {
@@ -37,38 +46,82 @@ public class BookingController {
 	@GetMapping("/resident/condominium/booking/new")
 	public ModelAndView addCondominium(@RequestParam int idCondominium) {
 		ModelAndView modelsAndView = new ModelAndView("resident/newbooking");
-		Booking booking = new Booking();
+		BookingRequest bookingRequest = new BookingRequest();
 		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		modelsAndView.addObject("resident", resident);
-		modelsAndView.addObject("booking", booking);
+		modelsAndView.addObject("bookingRequest", bookingRequest);
 		CommomAreaService commomAreaService = new CommomAreaService();
-		modelsAndView.addObject("commomareas", commomAreaService.list(idCondominium)); // TODO não deve ser hardcoded o
-																						// numero 1
+		modelsAndView.addObject("commomareas", commomAreaService.list(idCondominium)); 
 		return modelsAndView;
 	}
+//	@GetMapping("/resident/condominium/booking/new")
+//	public ModelAndView addCondominium(@RequestParam int idCondominium) {
+//		ModelAndView modelsAndView = new ModelAndView("resident/newbookingOld");
+//		Booking booking = new Booking();
+//		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		modelsAndView.addObject("resident", resident);
+//		modelsAndView.addObject("booking", booking);
+//		CommomAreaService commomAreaService = new CommomAreaService();
+//		modelsAndView.addObject("commomareas", commomAreaService.list(idCondominium)); 
+//		return modelsAndView;
+//	}
+//
+//	@PostMapping("/resident/condominium/booking/add")
+//	public ModelAndView formAddCondominium(@ModelAttribute @Valid Booking booking, BindingResult result,
+//			final RedirectAttributes redirectAttributes) {
+//		ModelAndView modelsAndView = new ModelAndView("redirect:/resident/dashboard");
+//		BookingService service = new BookingService();
+//		CommomAreaService commomAreaService = new CommomAreaService();
+//		CommomArea commomArea = commomAreaService.returnById(booking.getIdCommomArea());
+//		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		if (resident.hasAuthority("RESIDENT")) {
+////		TODO mudar como resident funciona para adaptar ao sistema com Spring Security e o User.
+////		if (resident.getIdCondominium() == commomArea.getIdCondominium()) {
+////		}
+//			if (result.hasErrors()) {
+//				return new ModelAndView("resident/newbooking");
+//			}
+//			if (service.insert(booking)) {
+//				redirectAttributes.addFlashAttribute("result", new Result("Reserva realizada com sucesso", "success"));
+//			} else {
+//				redirectAttributes.addFlashAttribute("result", new Result("Falha ao realizar reserva", "error"));
+//			}
+//		} else {
+//			redirectAttributes.addFlashAttribute("result",
+//					new Result("Usuário não tem permissão para esta ação", "error"));
+//		}
+//
+//		return modelsAndView;
+//	}
 
 	@PostMapping("/resident/condominium/booking/add")
-	public ModelAndView formAddCondominium(@ModelAttribute @Valid Booking booking, BindingResult result, final RedirectAttributes redirectAttributes) {
+	public ModelAndView formAddCondominium(@ModelAttribute @Valid BookingRequest bookingRequest,
+			final RedirectAttributes redirectAttributes) {
 		ModelAndView modelsAndView = new ModelAndView("redirect:/resident/dashboard");
-		BookingService service = new BookingService();
-		CommomAreaService commomAreaService = new CommomAreaService();
-		CommomArea commomArea = commomAreaService.returnById(booking.getIdCommomArea());
 		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (resident.hasAuthority("RESIDENT")) {
-//		TODO mudar como resident funciona para adaptar ao sistema com Spring Security e o User.
-//		if (resident.getIdCondominium() == commomArea.getIdCondominium()) {
-//		}
-			if (result.hasErrors()) {
-				return new ModelAndView("resident/newbooking");
-			}
-			if (service.insert(booking)) {
-				redirectAttributes.addFlashAttribute("result", new Result("Reserva realizada com sucesso", "success"));
-			} else {
-				redirectAttributes.addFlashAttribute("result", new Result("Falha ao realizar reserva", "error"));
-			}
-		} else {
-			redirectAttributes.addFlashAttribute("result", new Result("Usuário não tem permissão para esta ação", "error"));
+		bookingRequest.setIdResident(resident.getId());
+		BookingService bookingService = new BookingService();
+		GuestService guestService = new GuestService();
+		BookingGuestService bookingGuestService = new BookingGuestService();
+		Booking booking = new Booking();
+		booking.setBookingDate(bookingRequest.getBookingDate());
+		booking.setIdCommomArea(bookingRequest.getIdCommomArea());
+		booking.setIdResident(bookingRequest.getIdResident());
+
+		bookingService.insert(booking);
+
+		guestService.insert(bookingRequest.getGuests());
+
+		List<BookingGuest> bGuests = new ArrayList<>();
+
+		for (Guest g : bookingRequest.getGuests()) {
+			BookingGuest bguest = new BookingGuest();
+			bguest.setIdBooking(booking.getId());
+			bguest.setIdGuest(guestService.returnByCpf(g.getCpf()).getId());
+			bGuests.add(bguest);
 		}
+
+		bookingGuestService.insert(bGuests);
 
 		return modelsAndView;
 	}
@@ -82,7 +135,7 @@ public class BookingController {
 		Condominium condominiumValidation = new CondominiumService()
 				.returnById(commomAreaValidation.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
+
 		Result result;
 		if (condominiumValidation.getIdUser() == user.getId()) {
 			if (bookingService.accept(id)) {
@@ -93,7 +146,7 @@ public class BookingController {
 		} else {
 			result = new Result("Você não possui acesso à esta reserva", "error");
 		}
-        redirectAttributes.addFlashAttribute("result", result);
+		redirectAttributes.addFlashAttribute("result", result);
 		return modelsAndView;
 	}
 
@@ -117,7 +170,7 @@ public class BookingController {
 		} else {
 			result = new Result("Você não possui acesso à esta reserva", "error");
 		}
-        redirectAttributes.addFlashAttribute("result", result);
+		redirectAttributes.addFlashAttribute("result", result);
 		return modelsAndView;
 	}
 

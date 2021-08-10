@@ -17,7 +17,7 @@
 			<p class="lead">Preencha o formulário com os dados</p>
 			<hr class="my-4">
 			<p>Campos marcados com * são considerados obrigatórios</p>
-			<form:form action="add" modelsAttribute="admin">
+			<form:form action="add" modelAttribute="admin">
 				<div class="row">
 					<div class="col-12 col-md-6 col-lg-6">
 						<div class="input-group">

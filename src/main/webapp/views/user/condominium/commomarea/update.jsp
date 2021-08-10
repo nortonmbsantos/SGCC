@@ -25,7 +25,7 @@
 						<p class="lead">Preencha o formulário com os dados</p>
 						<hr class="my-4">
 						<p>Campos marcados com * são considerados obrigatórios</p>
-						<form:form action="update" modelsAttribute="commomArea">
+						<form:form action="update" modelAttribute="commomArea">
 							<form:hidden path="id" 
 								value="${commomArea.id}" />
 							<div class="form-group">

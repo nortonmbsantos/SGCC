@@ -24,12 +24,12 @@
 							para área comum ${commomArea.name }</h1>
 						<hr class="my-4">
 						<p>Campos marcados com * são considerados obrigatórios</p>
-						<form:form action="accept" modelsAttribute="booking">
+						<form:form action="accept" modelAttribute="booking">
 							<form:hidden path="id" cssClass="form-control"
 								value="${commomArea.id}" />
 							<button type="submit" class="btn btn-primary">Aceitar</button>
 						</form:form>
-						<form:form action="refuse" modelsAttribute="booking">
+						<form:form action="refuse" modelAttribute="booking">
 							<form:hidden path="id" cssClass="form-control"
 								value="${commomArea.id}" />
 							<button type="submit" class="btn btn-danger">Recusar</button>

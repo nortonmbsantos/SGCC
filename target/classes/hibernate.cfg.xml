@@ -39,6 +39,7 @@
 		<mapping class="br.edu.utfpr.sgcc.models.User" />
 		<mapping class="br.edu.utfpr.sgcc.models.Warning" />
 		<mapping class="br.edu.utfpr.sgcc.models.Guest" />
+		<mapping class="br.edu.utfpr.sgcc.models.BookingGuest" />
 
 	</session-factory>
 </hibernate-configuration>

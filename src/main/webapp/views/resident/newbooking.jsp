@@ -21,23 +21,78 @@
 			<p class="lead">Preencha o formulário com os dados</p>
 			<hr class="my-4">
 			<p>Campos marcados com * são considerados obrigatórios</p>
-			<form:form action="add" modelsAttribute="booking">
-				<form:hidden path="idResident" cssClass="form-control"
-					id="id_resident" value="${resident.id }" />
-				<div class="form-group">
-					<label for="firstName">Data solicitada*</label>
-					<form:input type="date" path="bookingDate" cssClass="form-control"
-						id="booking_date" />
+			<form:form action="add" modelAttribute="bookingRequest">
+				<div class="row">
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<div class="col-12">
+								<label for="firstName">Data solicitada*</label>
+							</div>
+							<form:input type="date" path="bookingDate"
+								cssClass="form-control" id="booking_date" />
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<div class="col-12">
+								<label for="firstName">Área comum*</label>
+							</div>
+							<form:select cssClass="form-control" path="idCommomArea"
+								id="id_commom_area">
+								<c:forEach items="${commomareas}" var="area">
+									<form:option value="${area.id}">${area.name}</form:option>
+								</c:forEach>
+							</form:select>
+						</div>
+					</div>
 				</div>
-				<label for="firstName">Área comum*</label>
-				<form:select cssClass="form-control" path="idCommomArea" id="id_commom_area">
-					<c:forEach items="${commomareas}" var="area">
-						<form:option value="${area.id}">${area.name}</form:option>
+
+				<div class="row">
+					<div class="col-12">
+						<hr class="my-4">
+						<label for="firstName">Convidados</label>
+					</div>
+				</div>
+				<div id="guestlist" class="row">
+					<c:forEach begin="0" end="1" varStatus="s">
+						<div class="col-12 col-md-4 col-lg-4">
+							<div class="input-group">
+								<div class="col-12">
+									<label for="firstName">Nome</label>
+								</div>
+								<form:input path="guests[${s.index}].name" class="form-control" />
+							</div>
+						</div>
+						<div class="col-12 col-md-4 col-lg-4">
+							<div class="input-group">
+								<div class="col-12">
+									<label for="firstName">Cpf</label>
+								</div>
+								<form:input path="guests[${s.index}].cpf" class="form-control" />
+							</div>
+						</div>
+						<div class="col-12 col-md-4 col-lg-4">
+							<div class="input-group">
+								<div class="col-12">
+									<label for="firstName">Telefone</label>
+								</div>
+								<form:input path="guests[${s.index}].phone" class="form-control" />
+							</div>
+						</div>
 					</c:forEach>
-				</form:select>
-				<button type="submit" class="btn btn-primary mt-3">Cadastrar</button>
+				</div>
+
+				<div class="col-12">
+					<button id="addGuest" type="button" class="btn btn-success">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
+				<div class="col-12">
+					<button type="submit" class="btn btn-primary mt-3">Cadastrar</button>
+				</div>
 			</form:form>
 		</div>
 	</div>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/guests.js"></script>
 </body>
 </html>

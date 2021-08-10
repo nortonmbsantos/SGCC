@@ -25,7 +25,7 @@
 						<p class="lead">Preencha o formulário com os dados</p>
 						<hr class="my-4">
 						<p>Campos marcados com * são considerados obrigatórios</p>
-						<form:form action="forminstalment" modelsAttribute="fee">
+						<form:form action="forminstalment" modelAttribute="fee">
 							<form:hidden path="idCondominiumFee" cssClass="form-control"
 								value="${fee.idCondominiumFee}" />
 							<form:hidden path="description" cssClass="form-control"

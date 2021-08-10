@@ -32,7 +32,7 @@
 								dados</p>
 							<hr class="my-4">
 							<p>Campos marcados com * são considerados obrigatórios</p>
-							<form:form action="update" modelsAttribute="user">
+							<form:form action="update" modelAttribute="user">
 
 								<div class="row">
 									<div class="col-12 col-md-6 col-lg-6">

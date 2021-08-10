@@ -9,3 +9,12 @@
 			}).show();
 		</script>
 	</c:if>
+	
+	<script type="text/javascript">
+			new Noty({
+				type : 'success',
+				layout : 'bottomCenter',
+				text : 'Login efetuado com sucesso',
+				timeout: 3000
+			}).show();
+		</script>
