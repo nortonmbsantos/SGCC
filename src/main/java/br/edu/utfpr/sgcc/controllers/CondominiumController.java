@@ -20,6 +20,7 @@ import br.edu.utfpr.sgcc.service.BookingService;
 import br.edu.utfpr.sgcc.service.CondominiumEntryRequestService;
 import br.edu.utfpr.sgcc.service.CondominiumFeeService;
 import br.edu.utfpr.sgcc.service.CondominiumService;
+import br.edu.utfpr.sgcc.service.FeeService;
 
 @Controller
 public class CondominiumController {
@@ -49,6 +50,7 @@ public class CondominiumController {
 						condominiumFeeService.reportByClosingDate(condominium.getId()));
 				modelsAndView.addObject("reportByFeeType", condominiumFeeService.reportByFeeType(condominium.getId()));
 				modelsAndView.addObject("acceptedBookings", new BookingService().acceptedBookingsByCondominium(condominium.getId()));
+				modelsAndView.addObject("feesDueDate", new FeeService().dahsboardFeesDueDate(condominium.getId()));
 				modelsAndView.addObject("reportLastFeeValue",
 						condominiumFeeService.reportLastCondominiumFeeTotalValue(condominium.getId()));
 				modelsAndView.addObject("reportAverageFeeType", new CondominiumFeeService().reportAverageFeeType(condominium.getId()));
@@ -180,9 +182,9 @@ public class CondominiumController {
 		return modelsAndView;
 	}
 
-	@PostMapping("/user/condominium/update")
+	@PostMapping("/user/condominium/form")
 	public ModelAndView updateCondominiumForm(@ModelAttribute @Valid Condominium condominium, BindingResult result, final RedirectAttributes redirectAttributes) {
-		ModelAndView modelsAndView = new ModelAndView("redirect:/user/condominiuns");
+		ModelAndView modelsAndView = new ModelAndView("redirect:/user/condominium?id="+condominium.getId());
 		CondominiumService service = new CondominiumService();
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Condominium condominiumVal = service.returnById(condominium.getId());

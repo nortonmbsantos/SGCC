@@ -136,12 +136,14 @@ public class CondominiumDAOImpl {
 	public boolean update(Condominium condominium) {
 		Session session = null;
 		try {
-			Condominium condominiumVal = this.returnById(condominium.getId());
-			condominium.setIdUser(condominiumVal.getIdUser());
-			condominium.setCode(condominiumVal.getCode());
+			if(condominium.getId() > 0) {
+				Condominium condominiumVal = this.returnById(condominium.getId());
+				condominium.setIdUser(condominiumVal.getIdUser());
+				condominium.setCode(condominiumVal.getCode());				
+			} 
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			session.update(condominium);
+			session.saveOrUpdate(condominium);
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {

@@ -42,7 +42,9 @@ public class GuestDAOImpl {
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Guest guest = session.get(Guest.class, cpf);
+			Query query = session.createQuery("from guest g where g.cpf = :cpf");
+			query.setParameter("cpf", cpf);
+			Guest guest = (Guest) query.getSingleResult();
 			return guest;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -98,26 +100,6 @@ public class GuestDAOImpl {
 				session.close();
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		GuestService service = new GuestService();
-//		for (Guest g : service.returnByNameOrCPF("João")) {
-//			System.out.println(g.getName() + " - " + g.getCpf());
-//		}
-		List<Guest> guests = new ArrayList<Guest>();
-		Guest g1 = new Guest();
-		g1.setName("Norton");
-		g1.setCpf("09853127695");
-		g1.setPhone("419912131");
-		guests.add(g1);
-		Guest g2 = new Guest();
-		g2.setName("Marcos");
-		g2.setCpf("09853145456");
-		g2.setPhone("419912131");
-		guests.add(g2);
-		service.insert(guests);
-
 	}
 
 	public List<Guest> reportByGuestType(int id) {
@@ -180,4 +162,30 @@ public class GuestDAOImpl {
 		}
 	}
 
+	public List<Guest> returnGuests() {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery("FROM guest ");
+			@SuppressWarnings("unchecked")
+			List<Guest> guests = (List<Guest>) query.getResultList();
+
+			return guests;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		for(Guest g : new GuestDAOImpl().returnGuests()) {
+			System.out.println(g.getName() + " = " + g.getCpf());
+		}
+	}
+	
 }

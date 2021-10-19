@@ -30,8 +30,9 @@
 							<h1 class="display-4">Meus dados</h1>
 							<p class="lead">Para atualizar preencha o formulário com seus
 								dados</p>
+							Deseja alterar sua senha? <a href="updatepassword">Clique aqui</a>
 							<hr class="my-4">
-							<p>Campos marcados com * são considerados obrigatórios</p>
+							<p>Campos marcados com * são considerados obrigatórios</p> 
 							<form:form action="update" modelAttribute="user">
 
 								<div class="row">

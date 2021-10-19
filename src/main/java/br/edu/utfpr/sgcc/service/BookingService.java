@@ -29,11 +29,16 @@ public class BookingService {
 	public List<Booking> pendingBookings(int id_condominium) {
 		return daos.pendingBookings(id_condominium);
 	}
-	
+
 	public List<Booking> pendingBookingsByArea(int id_commom_area) {
 		return daos.pendingBookingsByArea(id_commom_area);
 	}
 
+
+	public List<Booking> acceptedBookingsByArea(int idCommomArea) {
+		return daos.acceptedBookingsByArea(idCommomArea);
+	}
+	
 	public List<Booking> pendingBookingsByResident(int id_resident) {
 		return daos.pendingBookingsByResident(id_resident);
 	}

@@ -134,6 +134,41 @@ public class FeeDAOImpl {
 		}
 	}
 
+	public List<Fee> dahsboardFeesDueDate(int idCondominium) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			
+			session.beginTransaction();
+			Query query = session.createSQLQuery(
+					"SELECT f.id, f.id_condominium_fee, f.description, f.value, f.due_date FROM fee f INNER JOIN condominium_fee cf on cf.id = f.id_condominium_fee WHERE cf.id_condominium = :idCondominium and f.due_date >= now() order by f.due_date limit 5 ");
+			query.setParameter("idCondominium", idCondominium);
+			@SuppressWarnings("unchecked")
+			List<Object[]> objects = query.getResultList();
+			List<Fee> fees = new ArrayList<>();
+			
+			for (Object[] o : objects) {
+				Fee f = new Fee();
+				f.setId((int) o[0]);
+				f.setIdCondominiumFee((int) o[1]);
+				f.setDescription((String) o[2]);
+				f.setValue((double) o[3]);
+				f.setDueDate((Date) o[4]);
+				
+				fees.add(f);
+			}
+			
+			return fees;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
 
 
 	public List<Fee> reportByFeeType(int id) {

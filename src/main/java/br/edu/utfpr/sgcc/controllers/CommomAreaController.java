@@ -1,6 +1,8 @@
 package br.edu.utfpr.sgcc.controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+
 import javax.validation.Valid;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,14 +25,57 @@ import br.edu.utfpr.sgcc.service.CondominiumService;
 @Controller
 public class CommomAreaController {
 	@GetMapping("/user/condominium/commomareas")
-	public ModelAndView listCondominiuns(@RequestParam int id_condominium) {
+	public ModelAndView listCondominiuns(@RequestParam int id_condominium,
+			@RequestParam(required = false) String filter, @RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int results) {
 		ModelAndView modelsAndView = new ModelAndView("user/condominium/commomarea/commomareas");
 		CommomAreaService service = new CommomAreaService();
 		CondominiumService condominiumService = new CondominiumService();
 		Condominium condominium = condominiumService.returnById(id_condominium);
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (condominium.getIdUser() == user.getId()) {
-			modelsAndView.addObject("commomAreas", service.list(id_condominium));
+			modelsAndView.addObject("commomAreas", service.list(id_condominium, filter, page, results));
+			int totalData = service.returnCount(id_condominium, filter);
+			HashMap<String, String> map = new HashMap<>();
+			map.put("id_condominium", String.valueOf(id_condominium));
+			map.put("results", String.valueOf(results));
+			if (filter != null && !filter.isEmpty()) {
+				map.put("filter", String.valueOf(filter));
+			}
+			modelsAndView.addObject("map", map);
+			modelsAndView.addObject("filter", filter);
+			modelsAndView.addObject("totalPages", ((int) Math.ceil(((double) totalData) / results)));
+			modelsAndView.addObject("currentPage", page);
+			modelsAndView.addObject("condominium", condominium);
+			modelsAndView.addObject("pendingBookings", new BookingService().countPendingBookings(id_condominium));
+		} else {
+			modelsAndView = new ModelAndView("errors/accessdenied");
+		}
+		return modelsAndView;
+	}
+
+	@PostMapping("/user/condominium/commomareas")
+	public ModelAndView listCondominiunsPost(@RequestParam int id_condominium,
+			@RequestParam(required = false) String filter, @RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int results) {
+		ModelAndView modelsAndView = new ModelAndView("user/condominium/commomarea/commomareas");
+		CommomAreaService service = new CommomAreaService();
+		CondominiumService condominiumService = new CondominiumService();
+		Condominium condominium = condominiumService.returnById(id_condominium);
+		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (condominium.getIdUser() == user.getId()) {
+			modelsAndView.addObject("commomAreas", service.list(id_condominium, filter, page, results));
+			int totalData = service.returnCount(id_condominium, filter);
+			HashMap<String, String> map = new HashMap<>();
+			map.put("id_condominium", String.valueOf(id_condominium));
+			map.put("results", String.valueOf(results));
+			if (filter != null && !filter.isEmpty()) {
+				map.put("filter", String.valueOf(filter));
+			}
+			modelsAndView.addObject("map", map);
+			modelsAndView.addObject("filter", filter);
+			modelsAndView.addObject("totalPages", ((int) Math.ceil(((double) totalData) / results)));
+			modelsAndView.addObject("currentPage", page);
 			modelsAndView.addObject("condominium", condominium);
 			modelsAndView.addObject("pendingBookings", new BookingService().countPendingBookings(id_condominium));
 		} else {
@@ -48,7 +93,6 @@ public class CommomAreaController {
 			MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			if (condominium.getIdUser() == user.getId()) {
 				modelsAndView.addObject("condominium", condominium);
-				modelsAndView.addObject("format", new SimpleDateFormat("dd/MM/yyyy"));
 				CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
 
 				modelsAndView.addObject("reportByClosingDate",
@@ -77,21 +121,24 @@ public class CommomAreaController {
 	}
 
 	@PostMapping("/user/condominium/commomarea/add")
-	public ModelAndView addCondominiumForm(@ModelAttribute @Valid CommomArea commomArea, BindingResult result, final RedirectAttributes redirectAttributes) {
+	public ModelAndView addCondominiumForm(@ModelAttribute @Valid CommomArea commomArea, BindingResult result,
+			final RedirectAttributes redirectAttributes) {
 		ModelAndView modelsAndView = new ModelAndView("user/condominium/commomarea/new");
 		CommomAreaService service = new CommomAreaService();
 		CondominiumService condominiumService = new CondominiumService();
 		Condominium condominium = condominiumService.returnById(commomArea.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (result.hasErrors()) {
- 			redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar área comum", "error"));
+			redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar área comum", "error"));
 			return new ModelAndView("user/condominium/commomarea/form");
 		}
 
 		if (condominium.getIdUser() == user.getId()) {
 			if (service.insert(commomArea)) {
-				modelsAndView = new ModelAndView("redirect:/user/condominium/commomareas?id_condominium=" + condominium.getId());
-				redirectAttributes.addFlashAttribute("result", new Result("Área comum cadastrada com sucesso", "success"));
+				modelsAndView = new ModelAndView(
+						"redirect:/user/condominium/commomareas?id_condominium=" + condominium.getId());
+				redirectAttributes.addFlashAttribute("result",
+						new Result("Área comum cadastrada com sucesso", "success"));
 			} else {
 				redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar área comum", "error"));
 			}

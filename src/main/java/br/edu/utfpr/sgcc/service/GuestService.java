@@ -23,10 +23,14 @@ public class GuestService {
 		return daos.returnByCPF(cpf);
 	}
 
+	public List<Guest> returnGuests() {
+		return daos.returnGuests();
+	}
+
 	public List<Guest> pendingGuests(int id_condominium) {
 		return daos.pendingGuests(id_condominium);
 	}
-	
+
 	public List<Guest> returnByNameOrCPF(String text) {
 		return daos.returnByNameOrCPF(text);
 	}
@@ -37,6 +41,19 @@ public class GuestService {
 
 	public boolean insert(Guest guest) {
 		return daos.insert(guest);
+	}
+
+	public String returnGuestsForScript() {
+		List<Guest> guests = this.returnGuests();
+		StringBuilder sb = new StringBuilder();
+
+		for (Guest g : guests) {
+			sb.append("{ label: '").append(g.getName()).append("', value: '").append(g.getName()).append("', cpf: '")
+					.append(g.getCpf()).append("', id: '").append(g.getId()).append("', phone:'").append(g.getPhone()).append("'  },");
+		}
+
+		return sb.toString();
+
 	}
 
 }

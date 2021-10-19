@@ -1,20 +1,18 @@
 package br.edu.utfpr.sgcc.models;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import br.edu.utfpr.sgcc.service.BookingGuestService;
-import br.edu.utfpr.sgcc.service.BookingService;
-import br.edu.utfpr.sgcc.service.GuestService;
 
 public class BookingRequest {
 	private int idBooking;
 	private int idCommomArea;
 	private int idResident;
+	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date bookingDate;
 	private boolean status;

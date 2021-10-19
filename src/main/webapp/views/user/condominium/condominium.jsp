@@ -28,7 +28,9 @@
 					<div class="jumbotron">
 						<h1 class="display-4">${condominium.name}</h1>
 						<p class="lead">${condominium.description}</p>
-						<p class="lead"> Código de acesso: <b>${condominium.code}</b></p>
+						<p class="lead">
+							Código de acesso: <b>${condominium.code}</b>
+						</p>
 						<hr class="my-4">
 						<p>Último condomínio: R$ ${reportLastFeeValue.value} -
 							(Fechamento: ${reportLastFeeValue.title})</p>
@@ -47,25 +49,56 @@
 							role="button">Editar condomínio</a>
 					</div>
 				</div>
-				<div class="row mt-3">
-					<div class="col-12">
-						Próxima(s) ${booking.size } reserva(s) de área comum
-						<div class="row mt-3">
-							<c:forEach items="${acceptedBookings }" var="booking">
-								<div class="col-3">
-									<div class="card" style="width: 18rem;">
-										<div class="card-body">
-											<h5 class="card-title"><fmt:formatDate value="${booking.bookingDate}" pattern="dd/MM/yyyy" /></h5>
-											<h6 class="card-subtitle mb-2 text-muted">${booking.commomarea_name }</h6>
-											<p class="card-text">${booking.resident_name }</p> 
+				<c:if test="${acceptedBookings.size() > 0 }">
+					<div class="row mt-3">
+						<div class="col-12">
+							Próxima(s) ${acceptedBookings.size() } reserva(s) de área comum
+							<div class="row mt-3">
+								<c:forEach items="${acceptedBookings }" var="booking">
+									<div class="col-3">
+										<div class="card" style="width: 18rem;">
+											<div class="card-body">
+												<h5 class="card-title">
+													<fmt:formatDate value="${booking.bookingDate}"
+														pattern="dd/MM/yyyy" />
+												</h5>
+												<h6 class="card-subtitle mb-2 text-muted">${booking.commomarea_name }</h6>
+												<p class="card-text">${booking.resident_name }</p>
+											</div>
 										</div>
 									</div>
-								</div>
-							</c:forEach>
+								</c:forEach>
+							</div>
 						</div>
+						<hr class="my-4">
+						<div class="col-12"></div>
 					</div>
-					<div class="col-12"></div>
-				</div>
+				</c:if>
+				<c:if test="${feesDueDate.size() > 0 }">
+					<div class="row mt-3">
+						<div class="col-12">
+							Próximo(s) ${feesDueDate.size() } vencimento(s)
+							<div class="row mt-3">
+								<c:forEach items="${feesDueDate }" var="fee">
+									<div class="col-3">
+										<div class="card" style="width: 18rem;">
+											<div class="card-body">
+												<h5 class="card-title">
+													<fmt:formatDate value="${fee.dueDate}"
+														pattern="dd/MM/yyyy" />
+												</h5>
+												<h6 class="card-subtitle mb-2 text-muted">${fee.description }</h6>
+												<p class="card-text">${booking.value }</p>
+											</div>
+										</div>
+									</div>
+								</c:forEach>
+							</div>
+						</div>
+						<hr class="my-4">
+						<div class="col-12"></div>
+					</div>
+				</c:if>
 				<div class="row mt-3">
 					<div class="col-12 col-md-6">
 						<div class="card">
@@ -162,5 +195,6 @@
 			options : {}
 		});
 	</script>
+		<jsp:include page="../../result.jsp"></jsp:include>
 </body>
 </html>

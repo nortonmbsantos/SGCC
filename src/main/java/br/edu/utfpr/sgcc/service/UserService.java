@@ -33,7 +33,7 @@ public class UserService {
 	}
 	
 	public boolean updatePassword(User user) {
-		return daos.update(user);
+		return daos.updatePassword(user);
 	}
 
 	public User returnByEmail(String email) {

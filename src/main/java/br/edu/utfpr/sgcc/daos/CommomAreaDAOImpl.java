@@ -31,13 +31,16 @@ public class CommomAreaDAOImpl {
 		}
 	}
 
-	public List<CommomArea> list(int idCondominium) {
+	public List<CommomArea> list(int idCondominium, String filter, int page, int results) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Query query = session.createQuery("from commom_area a where idCondominium = :idCondominium ");
+			Query query = session.createQuery("from commom_area a where idCondominium = :idCondominium and a.name like concat(concat('%', :filter), '%')");
 			query.setParameter("idCondominium", idCondominium);
+			query.setParameter("filter", filter != null ? filter : "");
+			query.setFirstResult((page - 1) * results);
+			query.setMaxResults(results);
 			@SuppressWarnings("unchecked")
 			List<CommomArea> areas = (List<CommomArea>) query.getResultList();
 
@@ -71,6 +74,28 @@ public class CommomAreaDAOImpl {
 
 	}
 
+	public int returnCount(int idCondominium, String filter) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+
+			session.beginTransaction();
+			Query query = session.createSQLQuery(
+					"SELECT count(id) as total FROM commom_area WHERE id_condominium = :idCondominium and name like concat(concat('%', :filter), '%')");
+			query.setParameter("idCondominium", idCondominium);
+			query.setParameter("filter", filter != null ? filter : "");
+			int count = Integer.valueOf(String.valueOf(query.getSingleResult()));
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return 0;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+	
 	public boolean update(CommomArea area) {
 		Session session = null;
 		try {

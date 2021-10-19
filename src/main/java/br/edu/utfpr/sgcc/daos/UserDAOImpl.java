@@ -4,6 +4,7 @@ import javax.persistence.Query;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.edu.utfpr.sgcc.config.DBConfig;
 import br.edu.utfpr.sgcc.models.User;
@@ -109,6 +110,25 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	public boolean update(User user) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			session.update(user);
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return false;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+		
+	}
+
+	public boolean updatePassword(User user) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();

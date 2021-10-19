@@ -12,6 +12,7 @@ import br.edu.utfpr.sgcc.models.MyUserDetails;
 import br.edu.utfpr.sgcc.models.PasswordReset;
 import br.edu.utfpr.sgcc.models.Result;
 import br.edu.utfpr.sgcc.models.User;
+import br.edu.utfpr.sgcc.models.UserUpdatePassword;
 import br.edu.utfpr.sgcc.service.CondominiumService;
 import br.edu.utfpr.sgcc.service.PasswordResetService;
 import br.edu.utfpr.sgcc.service.UserService;
@@ -27,7 +28,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
 
 @Controller
 @SessionAttributes({ "condominiunsSideBar", "user" })
@@ -59,13 +59,14 @@ public class UserController {
 	}
 
 	@PostMapping("/user/update")
-	public ModelAndView update(@ModelAttribute @Valid User user, BindingResult result, final RedirectAttributes redirectAttributes) {
+	public ModelAndView update(@ModelAttribute @Valid User user, BindingResult result,
+			final RedirectAttributes redirectAttributes) {
 		UserService service = new UserService();
 
 //		if (!new BCryptPasswordEncoder().matches(user.getConfirmPassword(), user.getPassword())) {
 //			result.addError(new FieldError("user", "password", "Senhas devem ser iguais"));
 //		}
-		
+
 		if (result.hasErrors()) {
 			return new ModelAndView("user/update").addObject("result",
 					new Result("Falha ao se atualizar, verifique suas informações", "error"));
@@ -78,15 +79,70 @@ public class UserController {
 //		user.setRoles(myUser.getRoles());
 //		user.setEmail(myUser.getEmail());
 //		user.setId(myUser.getId());
-		if(service.update(user)) {
-		redirectAttributes.addFlashAttribute("result", new Result("Você atualizou seus dados com sucesso", "success"));
-		return new ModelAndView("redirect:/user/dashboard");
+		if (service.update(user)) {
+			redirectAttributes.addFlashAttribute("result",
+					new Result("Você atualizou seus dados com sucesso", "success"));
+			return new ModelAndView("redirect:/user/dashboard");
 		} else {
 			redirectAttributes.addFlashAttribute("result", new Result("Falha ao atualizar usuário", "error"));
-			return new ModelAndView("redirect:/user/dashboard");			
+			return new ModelAndView("redirect:/user/dashboard");
 		}
 	}
 
+	@GetMapping("/user/updatepassword")
+	public ModelAndView updateUserPassword() {
+		ModelAndView modelsAndView = new ModelAndView("user/updatepassword");
+
+		modelsAndView.addObject("userUpdatePassword", new UserUpdatePassword());
+		return modelsAndView;
+	}
+
+	@PostMapping("/user/updatepassword")
+	public ModelAndView updatePassword(@ModelAttribute @Valid UserUpdatePassword userUpdatePassword,
+			BindingResult result, final RedirectAttributes redirectAttributes) {
+		UserService service = new UserService();
+
+		if (result.hasErrors()) {
+			return new ModelAndView("user/updatepassword").addObject("result",
+					new Result("Falha ao se senha", "error"));
+		}
+
+		MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+
+		
+		User user = service.returnByUserName(myUserDetails.getUsername());
+		
+		if (!new BCryptPasswordEncoder().matches(userUpdatePassword.getPassword(), user.getPassword())) {
+			result.addError(new FieldError("user", "password", "Senha atual inválida"));
+		}
+		
+		if(!userUpdatePassword.getNewPassword().equals(userUpdatePassword.getConfirmPassword())) {
+			result.addError(new FieldError("userUpdatePassword", "newPassword", "Senhas devem ser iguais"));
+		}
+		
+		if (result.hasErrors()) {
+			return new ModelAndView("user/updatepassword").addObject("result",
+					new Result("Falha ao alterar senha", "error"));
+		}
+
+		user.setPassword(userUpdatePassword.getNewPassword());
+//		update password
+		if (service.updatePassword(user)) {
+			redirectAttributes.addFlashAttribute("result",
+					new Result("Você atualizou seus dados com sucesso", "success"));
+			return new ModelAndView("redirect:/user/dashboard");
+		} else {
+			redirectAttributes.addFlashAttribute("result", new Result("Falha ao atualizar usuário", "error"));
+			return new ModelAndView("redirect:/user/dashboard");
+		}
+	}
+
+	public static void main(String[] args) {
+		System.out.print(new BCryptPasswordEncoder().encode("norton123"));
+		
+	}
+	
 	@GetMapping("/register")
 	public ModelAndView addCondominium() {
 		ModelAndView modelsAndView = new ModelAndView("register");
@@ -101,7 +157,8 @@ public class UserController {
 		if (error != null) {
 			if (error.equals("true")) {
 //				modelsAndView.addObject("errorMessge", "Erro ao autenticar, verifique suas credenciais");
-				modelsAndView.addObject("result", new Result("Erro ao autenticar, verifique suas credenciais", "error"));
+				modelsAndView.addObject("result",
+						new Result("Erro ao autenticar, verifique suas credenciais", "error"));
 //				redirectAttributes.addFlashAttribute("result", new Result("Erro ao autenticar, verifique suas credenciais", "error"));
 			}
 		}

@@ -16,26 +16,34 @@ import br.edu.utfpr.sgcc.models.Condominium;
 
 public class CommomAreaService {
 	CommomAreaDAOImpl daos;
-	
+
 	public CommomAreaService() {
 //		daos = context.getBean("CommomAreaDAOBean", CommomAreaDAOImpl.class);
 		daos = new CommomAreaDAOImpl();
 	}
-	
+
 	public CommomArea returnById(int id) {
 		return daos.returnById(id);
 	}
-	
+
 	public List<CommomArea> list(int idCondominium) {
-		return daos.list(idCondominium);
+		return this.list(idCondominium, "", 1, 10);
 	}
-	
+
+	public List<CommomArea> list(int idCondominium, String filter, int page, int results) {
+		return daos.list(idCondominium, filter, page, results);
+	}
+
 	public boolean insert(CommomArea area) {
 		return daos.insert(area);
+	}
+
+	public int returnCount(int idCondominium, String filter) {
+		return daos.returnCount(idCondominium, filter);
 	}
 
 	public boolean update(CommomArea area) {
 		return daos.update(area);
 	}
-	
+
 }

@@ -65,6 +65,41 @@
 						</c:forEach>
 					</tbody>
 				</table>
+<br><hr>
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">Aceito</th>
+							<th scope="col">Data</th>
+							<th scope="col">Morador</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${accepted}" var="p">
+							<tr>
+								<td>
+									<div class="row" style="margin-left: 10px;">
+										<form action="booking/accept" method="POST">
+											<input type="hidden" name="id" value="${p.id}">
+										<button class="btn btn-success">
+											<i class="fas fa-check" title="Aceitar"></i>
+										</button>
+									</form>
+
+									<form action="booking/refuse" method="POST">
+										<input type="hidden" name="id" value="${p.id}">
+										<button class="btn btn-danger">
+											<i class="fas fa-times" title="Recusar"></i>
+										</button>
+									</form>
+									</div>
+									</td>
+								<td><fmt:formatDate value="${p.booking_date }" pattern="dd/MM/yyyy"/> </td>
+								<td>${p.resident_name }</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
 
 
 			</main>

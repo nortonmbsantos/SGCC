@@ -162,7 +162,35 @@ public class BookingDAOImpl {
 			}
 		}
 	}
+	
 
+	public List<Booking> acceptedBookingsByArea(int idCommomArea) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session
+					.createQuery("FROM booking b WHERE b.idCommomArea = :idCommomArea and status = 1");
+			query.setParameter("idCommomArea", idCommomArea);
+			@SuppressWarnings("unchecked")
+			List<Booking> bookings = (List<Booking>) query.getResultList();
+			UserService userService = new UserService();
+			for (Booking b : bookings) {
+				b.setResident_name(userService.returnById(b.getIdResident()).getFirstName());
+			}
+			
+			return bookings;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+	
+	
 	public List<Booking> pendingBookingsByArea(int idCommomArea) {
 		Session session = null;
 		try {

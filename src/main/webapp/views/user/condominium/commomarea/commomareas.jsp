@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<jsp:useBean id="paginacao" class="br.edu.utfpr.sgcc.config.Paginacao" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,6 +27,15 @@
 
 					<div class="jumbotron">
 						<h1 class="display-4">Areas comuns de ${condominium.name}</h1>
+						<form action="commomareas" method="GET">
+							<input type="text" name="filter" value="${filter}" class="form-control col-6"> 
+							<input type="hidden" name="id_condominium" value="${condominium.id}">
+							<button type="submit" class="btn btn-primary">Filtrar</button>
+						</form>
+						<form action="commomareas" method="GET">
+							<input type="hidden" name="id_condominium" value="${condominium.id}">
+							<button type="submit" class="btn btn-danger">Limpar Filtro</button>
+						</form>
 						<hr class="my-4">
 						<a class="btn"
 							href="${pageContext.request.contextPath}/user/condominium/commomarea/new?id_condominium=${condominium.id}">Nova
@@ -44,29 +54,30 @@
 					<tbody>
 						<c:forEach items="${commomAreas}" var="area">
 							<tr>
-								<td>
-								<a class="btn btn-light"
+								<td><a class="btn btn-light"
 									href="${pageContext.request.contextPath}/user/condominium/commomarea/bookings?id_commom_area=${area.id}"><i
-										class="fas fa-eye"></i></a>
-								<a class="btn btn-light"
+										class="fas fa-eye"></i></a> <a class="btn btn-light"
+									href="${pageContext.request.contextPath}/user/condominium/commomarea?id=${area.id}"><i
+										class="fas fa-eye"></i></a> <a class="btn btn-light"
 									href="${pageContext.request.contextPath}/user/condominium/commomarea/update?id=${area.id}"><i
-										class="fas fa-edit"></i></a>
-										</td>
+										class="fas fa-edit"></i></a></td>
 								<td>${area.name }</td>
-								<td><fmt:formatNumber value="${area.bookingFee }" type="currency" currencyCode="BRL" /></td>
+								<td><fmt:formatNumber value="${area.bookingFee }"
+										type="currency" currencyCode="BRL" /></td>
 								<c:set var="count" value="0"></c:set>
 								<c:forEach items="${pendingBookings}" var="p">
 									<c:if test="${p.title == area.id}">
 										<c:set var="count" value="${p.value}"></c:set>
 									</c:if>
 								</c:forEach>
-								<td><fmt:formatNumber type = "number" maxIntegerDigits = "3" value = "${count}" /></td>
+								<td><fmt:formatNumber type="number" maxIntegerDigits="3"
+										value="${count}" /></td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
 
-
+				<div>${paginacao.geraPaginacao(currentPage, totalPages, "commomareas", "page", map)}</div>
 			</main>
 		</div>
 	</div>

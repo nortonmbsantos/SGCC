@@ -21,8 +21,8 @@
 				<div class="row">
 					<div class="col-12 col-md-6 col-lg-6">
 						<div class="input-group">
-						<div class="col-12">
-							<label for="email">E-mail*</label>
+							<div class="col-12">
+								<label for="email">E-mail*</label>
 							</div>
 							<form:input path="email" cssClass="form-control" id="email" />
 							<form:errors path="email" cssStyle="color: #ff0000;" />
@@ -30,8 +30,8 @@
 					</div>
 					<div class="col-12 col-md-6 col-lg-6">
 						<div class="input-group">
-						<div class="col-12">
-							<label for="firstName">Primeiro Nome*</label>
+							<div class="col-12">
+								<label for="firstName">Primeiro Nome*</label>
 							</div>
 							<form:input path="firstName" cssClass="form-control"
 								id="firstName" />
@@ -39,42 +39,52 @@
 						</div>
 					</div>
 					<div class="col-12 col-md-6 col-lg-6">
-						<div class="input-group"><div class="col-12">
-							<label for="lastName">Sobrenome*</label>
-							<form:input path="lastName" cssClass="form-control" id="lastName" />
-							<form:errors path="lastName" cssStyle="color: #ff0000;" />
+						<div class="input-group">
+							<div class="col-12">
+								<label for="lastName">Sobrenome*</label>
+								<form:input path="lastName" cssClass="form-control"
+									id="lastName" />
+								<form:errors path="lastName" cssStyle="color: #ff0000;" />
+							</div>
 						</div>
 					</div>
-					<div class="col-12 col-md-6 col-lg-6"><div class="col-12">
-						<!-- <div class="form-group">
+					<div class="col-12 col-md-6 col-lg-6">
+						<div class="col-12">
+							<!-- <div class="form-group">
 					<label for="birthdate">Data de nascimento</label>
 					<form:input path="birthdate" cssClass="form-control" id="birthdate" />
 				</div>-->
-					</div>
-					<div class="col-12 col-md-6 col-lg-6">
-						<div class="input-group"><div class="col-12">
-							<label for="document">cpf/cnpj</label>
-							<form:input path="document" cssClass="form-control" id="document" />
-							<form:errors path="document" cssStyle="color: #ff0000;" />
 						</div>
 					</div>
 					<div class="col-12 col-md-6 col-lg-6">
 						<div class="input-group">
-							<label for="password">Senha*</label>
-							<form:password path="password" cssClass="form-control"
-								id="password" />
-							<form:errors path="password" cssStyle="color: #ff0000;" />
+							<div class="col-12">
+								<label for="document">cpf/cnpj</label>
+								<form:input path="document" cssClass="form-control"
+									id="document" />
+								<form:errors path="document" cssStyle="color: #ff0000;" />
+							</div>
 						</div>
-					</div>
-					<div class="col-12 col-md-6 col-lg-6">
-						<div class="input-group"><div class="col-12">
-							<label for="confirmPassword">Confirma Senha*</label>
-							<form:password path="confirmPassword" cssClass="form-control"
-								id="confirmPassword" />
+						<div class="col-12 col-md-6 col-lg-6">
+							<div class="input-group">
+								<label for="password">Senha*</label>
+								<form:password path="password" cssClass="form-control"
+									id="password" />
+								<form:errors path="password" cssStyle="color: #ff0000;" />
+							</div>
 						</div>
-					</div>
-					<div class="col-12">
-						<button type="submit" class="btn btn-primary">Cadastrar</button>
+						<div class="col-12 col-md-6 col-lg-6">
+							<div class="input-group">
+								<div class="col-12">
+									<label for="confirmPassword">Confirma Senha*</label>
+									<form:password path="confirmPassword" cssClass="form-control"
+										id="confirmPassword" />
+								</div>
+							</div>
+							<div class="col-12">
+								<button type="submit" class="btn btn-primary">Cadastrar</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</form:form>

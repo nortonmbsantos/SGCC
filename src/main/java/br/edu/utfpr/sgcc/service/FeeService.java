@@ -72,4 +72,8 @@ public class FeeService {
 		return daos.updateFather(fee);
 	}
 
+	public List<Fee> dahsboardFeesDueDate(int idCondominium) {
+		return daos.dahsboardFeesDueDate(idCondominium);
+	}
+
 }

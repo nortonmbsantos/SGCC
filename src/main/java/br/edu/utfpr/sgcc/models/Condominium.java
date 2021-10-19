@@ -30,14 +30,14 @@ public class Condominium {
 	private String description;
 	private String code;
 	private boolean residential;
-	
+
 	private String street;
-	
+
 	@Size(min = 3, message = "Número inválido")
 	@Column(name = "street_number")
 	private String streetNumber;
 	private String city;
-	
+
 	@Size(min = 3, message = "CEP inválido")
 	private String cep;
 	private String state;
@@ -122,13 +122,17 @@ public class Condominium {
 
 	public String getCep() {
 		try {
-			MaskFormatter mask = new MaskFormatter("##.###-###");
-			mask.setValueContainsLiteralCharacters(false);
-			return mask.valueToString(cep);			
-		}catch (Exception e) {
+			if (this.cep.isEmpty()) {
+				return this.cep;
+			} else {
+				MaskFormatter mask = new MaskFormatter("##.###-###");
+				mask.setValueContainsLiteralCharacters(false);
+				return mask.valueToString(cep);
+			}
+		} catch (Exception e) {
 			return cep;
 		}
-		
+
 	}
 
 	public void setCep(String cep) {
