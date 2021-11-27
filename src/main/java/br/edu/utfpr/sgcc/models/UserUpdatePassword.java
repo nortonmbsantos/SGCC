@@ -8,7 +8,7 @@ public class UserUpdatePassword {
 	private String login;
 	private String password;
 	private String confirmPassword;
-	@Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
+	@Size(min = 8, message = "Senha deve ter no mÃ­nimo 8 caracteres")
 	private String newPassword;
 
 	public int getId() {

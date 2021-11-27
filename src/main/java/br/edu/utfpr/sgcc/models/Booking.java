@@ -35,9 +35,11 @@ public class Booking {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date statusDate;
 	@Transient
-	private String resident_name;
+	private String residentName;
 	@Transient
-	private String commomarea_name;
+	private String commomAreaName;
+	@Transient
+	private CommomArea commomArea;
 
 	public int getId() {
 		return id;
@@ -103,20 +105,28 @@ public class Booking {
 		this.statusDate = statusDate;
 	}
 
-	public String getResident_name() {
-		return resident_name;
+	public String getResidentName() {
+		return residentName;
 	}
 
-	public void setResident_name(String resident_name) {
-		this.resident_name = resident_name;
+	public void setResidentName(String residentName) {
+		this.residentName = residentName;
 	}
 
-	public String getCommomarea_name() {
-		return commomarea_name;
+	public String getCommomAreaName() {
+		return commomAreaName;
 	}
 
-	public void setCommomarea_name(String commomarea_name) {
-		this.commomarea_name = commomarea_name;
+	public void setCommomAreaName(String commomAreaName) {
+		this.commomAreaName = commomAreaName;
+	}
+
+	public CommomArea getCommomArea() {
+		return commomArea;
+	}
+
+	public void setCommomArea(CommomArea commomArea) {
+		this.commomArea = commomArea;
 	}
 
 }

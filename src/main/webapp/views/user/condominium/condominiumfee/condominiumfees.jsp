@@ -14,6 +14,8 @@
 <jsp:include page="../../../header.jsp" />
 </head>
 <body>
+<fmt:setLocale value="pt-BR"/>
+<fmt:setTimeZone value="GMT-0"/>
 	<jsp:include page="../../navbar.jsp" />
 	<div class="container-fluid pt-5">
 		<div class="row">
@@ -50,7 +52,7 @@
 									href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${fee.id}&id_fee=0"><i
 										class="fas fa-folder-plus" title="Adicionar taxa neste período"></i></a></c:if>
 										</td>
-								<td><fmt:formatDate value="${fee.closingDate}" pattern="dd/MM/yyyy"/></td>
+								<td><fmt:formatDate value="${fee.closingDate}" pattern="dd/MM/yyyy"/> </td>
 								<td>
 								<c:choose >
 								<c:when test="${fee.finished }"><span class="badge badge-info">Fechado</span></c:when>

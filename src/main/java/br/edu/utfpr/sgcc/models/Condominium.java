@@ -23,22 +23,22 @@ public class Condominium {
 	@Column(name = "id_user")
 	private int idUser;
 	@NotNull
-	@Size(min = 3, message = "Nome inv·lido")
+	@Size(min = 3, message = "Nome inv√°lido")
 	private String name;
 	@NotNull
-	@Size(min = 3, message = "DescriÁ„o inv·lida")
+	@Size(min = 3, message = "Descri√ß√£o inv√°lida")
 	private String description;
 	private String code;
 	private boolean residential;
 
 	private String street;
 
-	@Size(min = 3, message = "N˙mero inv·lido")
+	@Size(min = 3, message = "N√∫mero inv√°lido")
 	@Column(name = "street_number")
 	private String streetNumber;
 	private String city;
 
-	@Size(min = 3, message = "CEP inv·lido")
+	@Size(min = 3, message = "CEP inv√°lido")
 	private String cep;
 	private String state;
 	@Column(name = "number_complement")

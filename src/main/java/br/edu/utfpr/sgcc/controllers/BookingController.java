@@ -48,8 +48,33 @@ public class BookingController {
 		modelsAndView.addObject("condominium", new CondominiumService().returnById(commomArea.getIdCondominium()));
 		modelsAndView.addObject("pending", bookingService.pendingBookingsByArea(id_commom_area));
 		modelsAndView.addObject("accepted", bookingService.acceptedBookingsByArea(id_commom_area));
-		
+
 		return modelsAndView;
+	}
+
+	@GetMapping("/resident/condominium/booking/list")
+	public ModelAndView listBooking(@RequestParam(defaultValue = "0") int idCondominium,
+			final RedirectAttributes redirectAttributes) {
+		ModelAndView modelsAndView = new ModelAndView("resident/bookings");
+		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		BookingService bookingService = new BookingService();
+		if (idCondominium > 0) {
+			CondominiumResidentService condominiumResidentService = new CondominiumResidentService();
+			CondominiumResident cr = condominiumResidentService.returnByResidentAndCondominium(resident.getId(),
+					idCondominium);
+			if (cr != null && cr.isActive()) {
+				CondominiumService condominiumService = new CondominiumService();
+				
+				modelsAndView.addObject("condominium", condominiumService.returnById(idCondominium));
+				modelsAndView.addObject("bookings", bookingService.bookingsByResidentAndCondominium(resident.getId(), idCondominium));
+			} else {
+				modelsAndView = new ModelAndView("error/accessdenied");
+			}
+		} else {
+			modelsAndView.addObject("bookings", bookingService.bookingsByResident(resident.getId()));			
+		}
+		return modelsAndView;
+
 	}
 
 	@GetMapping("/resident/condominium/booking/new")
@@ -83,18 +108,20 @@ public class BookingController {
 		CommomArea commomArea = commomAreaService.returnById(bookingRequest.getIdCommomArea());
 
 		if (commomArea != null) {
+			if(bookingRequest.getGuests() != null && !bookingRequest.getGuests().isEmpty()) {
 			for (Guest g : bookingRequest.getGuests()) {
 				for (Guest g2 : bookingRequest.getGuests()) {
 					if (g != g2) {
 						if (g.getCpf() == g2.getCpf()) {
 							ObjectError oe = new FieldError("bookingRequest",
 									"guests[" + bookingRequest.getGuests().indexOf(g) + "].cpf",
-									"Os cpfs de " + g.getName() + " e " + g2.getName() + " não devem ser iguais");
+									"Os cpfs de " + g.getName() + " e " + g2.getName() + " nÃ£o devem ser iguais");
 							result.addError(oe);
 						}
 					}
 				}
 			}
+		}
 
 			if (result.hasErrors()) {
 				modelsAndView = new ModelAndView("resident/newbooking");
@@ -126,7 +153,6 @@ public class BookingController {
 
 //						add guests
 //						verificar se possui duplicatas na lista e remover
-//						
 
 						List<Guest> guests = new ArrayList<Guest>();
 
@@ -163,17 +189,19 @@ public class BookingController {
 
 					}
 				} else {
-					redirectAttributes.addAttribute("result", new Result("Falha ao solicitar reserva", "error"));
+					redirectAttributes.addFlashAttribute("result", new Result("Falha ao solicitar reserva", "error"));
 					modelsAndView = new ModelAndView("resident/newbooking");
 				}
 			} else {
-				redirectAttributes.addAttribute("result", new Result("Falha ao solicitar reserva", "error"));
+				redirectAttributes.addFlashAttribute("result", new Result("Falha ao solicitar reserva", "error"));
 				modelsAndView = new ModelAndView("resident/newbooking");
 			}
 		} else {
-			redirectAttributes.addAttribute("result", new Result("Falha ao solicitar reserva", "error"));
+			redirectAttributes.addFlashAttribute("result", new Result("Falha ao solicitar reserva", "error"));
 			modelsAndView = new ModelAndView("resident/newbooking");
 		}
+		
+		redirectAttributes.addFlashAttribute("result", new Result("Reserva solicitada com sucesso", "success"));
 		return modelsAndView;
 	}
 
@@ -195,7 +223,7 @@ public class BookingController {
 				result = new Result("Falha ao aceitar reserva", "error");
 			}
 		} else {
-			result = new Result("Você não possui acesso à esta reserva", "error");
+			result = new Result("VocÃª nÃ£o possui acesso Ã  esta reserva", "error");
 		}
 		redirectAttributes.addFlashAttribute("result", result);
 		return modelsAndView;
@@ -219,7 +247,7 @@ public class BookingController {
 				result = new Result("Falha ao recusar reserva", "error");
 			}
 		} else {
-			result = new Result("Você não possui acesso à esta reserva", "error");
+			result = new Result("VocÃª nÃ£o possui acesso Ã  esta reserva", "error");
 		}
 		redirectAttributes.addFlashAttribute("result", result);
 		return modelsAndView;

@@ -21,22 +21,22 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@NotNull
-	@Size(min = 6, message = "Usu·rio deve ter no mÌnimo 6 caracteres")
+	@Size(min = 6, message = "Usu√°rio deve ter no m√≠nimo 6 caracteres")
 	@Column(name = "user_name", unique = true)
 	private String userName;
-	@Size(min = 8, message = "Senha deve ter no mÌnimo 8 caracteres")
+	@Size(min = 8, message = "Senha deve ter no m√≠nimo 8 caracteres")
 	private String password;
-	@Size(min = 1, message = "Nome n„o deve ser vazio")
+	@Size(min = 1, message = "Nome n√£o deve ser vazio")
 	@Column(name = "first_name")
 	private String firstName;
-	@NotNull(message = "Este campo n„o pode ser vazio")
-	@Email(message = "Email inv·lido")
+	@NotNull(message = "Este campo n√£o pode ser vazio")
+	@Email(message = "Email inv√°lido")
 	private String email;
 	@Transient
-	@Size(min = 8, message = "Senha deve ter no mÌnimo 8 caracteres")
+	@Size(min = 8, message = "Senha deve ter no m√≠nimo 8 caracteres")
 	private String confirmPassword;
 	private boolean active;
-	@NotNull(message = "Este campo n„o pode ser vazio")
+	@NotNull(message = "Este campo n√£o pode ser vazio")
 	private String roles;
 
 	private String street;

@@ -22,7 +22,7 @@
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 					<div class="jumbotron">
 						<h1 class="display-4">Formulário de cadastro de avisos e
-							multas para o morador ${resident.name }</h1>
+							multas para o morador ${resident.resident.firstName }</h1>
 						<p class="lead">Preencha o formulário com os dados</p>
 						<hr class="my-4">
 						<p>Campos marcados com * são considerados obrigatórios</p>

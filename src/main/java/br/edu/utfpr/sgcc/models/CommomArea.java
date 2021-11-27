@@ -5,12 +5,14 @@
  */
 package br.edu.utfpr.sgcc.models;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.persistence.Transient;
 
 /**
  *
@@ -22,14 +24,16 @@ public class CommomArea {
 	@Id
 	private int id;
 	@NotNull
-	@Size(min = 3, message = "Nome inv·lido")
+	@Size(min = 3, message = "Nome inv√°lido")
 	private String name;
 	@NotNull
 	@Column(name = "id_condominium")
 	private int idCondominium;
 	@Column(name = "booking_fee")
-	@NotNull(message="Taxa inv·lida")
+	@NotNull(message="Taxa inv√°lida")
 	private double bookingFee;
+	@Transient
+	private Condominium condominium;
 
 	public int getId() {
 		return id;
@@ -62,5 +66,14 @@ public class CommomArea {
 	public void setBookingFee(double bookingFee) {
 		this.bookingFee = bookingFee;
 	}
+
+	public Condominium getCondominium() {
+		return condominium;
+	}
+
+	public void setCondominium(Condominium condominium) {
+		this.condominium = condominium;
+	}
+	
 
 }

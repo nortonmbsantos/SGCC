@@ -29,8 +29,7 @@
 							${condominium.name}</h1>
 						<hr class="my-4">
 						<a class="btn btn-primary"
-							href="${pageContext.request.contextPath}/user/condominium/resident/new?idCondominium=${condominium.id}">Novo
-							Morador</a>
+							href="${pageContext.request.contextPath}/user/condominium/entries?idcondominium=${condominium.id}">Solicitações de entrada</a>
 					</div>
 				</div>
 				<table class="table">

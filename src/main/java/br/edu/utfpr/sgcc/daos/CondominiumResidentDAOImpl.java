@@ -61,15 +61,15 @@ public class CondominiumResidentDAOImpl {
 		}
 	}
 
-	public CondominiumResident returnByResidentAndCondominium(int id_resident, int id_condominium) {
+	public CondominiumResident returnByResidentAndCondominium(int idResident, int idCondominium) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
 			Query query = session.createQuery(
 					"from condominium_resident cr where cr.idCondominium = :idCondominium and cr.idResident = :idResident ");
-			query.setParameter("idCondominium", id_condominium);
-			query.setParameter("idResident", id_resident);
+			query.setParameter("idCondominium", idCondominium);
+			query.setParameter("idResident", idResident);
 			CondominiumResident resident = (CondominiumResident) query.getSingleResult();
 
 			return resident;
@@ -94,12 +94,6 @@ public class CondominiumResidentDAOImpl {
 			query.setMaxResults(results);
 			@SuppressWarnings("unchecked")
 			List<CondominiumResident> residents = (List<CondominiumResident>) query.getResultList();
-
-			UserService userService = new UserService();
-
-			for (CondominiumResident r : residents) {
-				r.setResident(userService.returnById(r.getIdResident()));
-			}
 
 			return residents;
 		} catch (Exception e) {

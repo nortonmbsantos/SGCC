@@ -54,7 +54,7 @@ public class CondominiumFeeDAOImpl {
 
 			session.beginTransaction();
 			Query query = session.createQuery(
-					"from condominium_fee f where f.idCondominium = :idCondominium order by f.closingDate desc");
+					"from condominium_fee f where f.idCondominium = :idCondominium order by f.finished, f.closingDate desc");
 			query.setParameter("idCondominium", id);
 			query.setFirstResult((page - 1) * results);
 			query.setMaxResults(results);
@@ -231,11 +231,11 @@ public class CondominiumFeeDAOImpl {
 					int val = Math.round(((float) r.getValue() / (float) r2.getValue()) * 100);
 
 					if (val >= 120) {
-						report.setDescription("Valor maior do que a média");
+						report.setDescription("Valor maior do que a mÃ©dia");
 					} else if (val >= 80) {
-						report.setDescription("Valor dentro da média");
+						report.setDescription("Valor dentro da mÃ©dia");
 					} else if (val < 80) {
-						report.setDescription("Valor abaixo da média");
+						report.setDescription("Valor abaixo da mÃ©dia");
 					}
 					reports.add(report);
 				}
@@ -313,7 +313,7 @@ public class CondominiumFeeDAOImpl {
 
 			session.beginTransaction();
 			Query query = session.createQuery(
-					"from condominium_fee f where f.idCondominium = :idCondominium and MONTH(f.closingDate) = MONTH(:date)");
+					"from condominium_fee f where f.idCondominium = :idCondominium and ((MONTH(f.closingDate) = MONTH(:date)) and (YEAR(f.closingDate) = YEAR(:date)))");
 			query.setParameter("idCondominium", idCondominium);
 			query.setParameter("date", date);
 			@SuppressWarnings("unchecked")

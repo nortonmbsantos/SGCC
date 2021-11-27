@@ -27,26 +27,26 @@ public class Fee {
 	private int id;
 	@Column(name = "id_condominium_fee")
 	private int idCondominiumFee;
-	@NotNull(message = "Valor inválido")
+	@NotNull(message = "Valor invÃ¡lido")
 	private double value;
 	@Column(name = "due_date")
-	@NotNull(message = "Data inválida")
+	@NotNull(message = "Data invÃ¡lida")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dueDate;
 	@Column(name = "pay_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date payDate;
-	@NotNull(message = "Parcela inválida")
+	@NotNull(message = "Parcela invÃ¡lida")
 	private int installments;
 	@Column(name = "current_installment")
 	private int currentInstallment;
 	private int father;
 	private boolean monthly;
 	@NotNull
-	@Size(min = 3, message = "Descrição inválida")
+	@Size(min = 3, message = "DescriÃ§Ã£o invÃ¡lida")
 	private String description;
 	@Column(name = "id_fee_type")
-	@NotNull(message="Preencha com tipo de taxa válido")
+	@NotNull(message="Preencha com tipo de taxa vÃ¡lido")
 	private int idFeeType;
 
 	public int getId() {

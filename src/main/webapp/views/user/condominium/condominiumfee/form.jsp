@@ -50,5 +50,6 @@
 			</main>
 		</div>
 	</div>
+		<jsp:include page="../../../result.jsp"></jsp:include>
 </body>
 </html>

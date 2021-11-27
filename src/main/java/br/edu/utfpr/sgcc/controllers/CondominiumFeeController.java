@@ -41,6 +41,41 @@ public class CondominiumFeeController {
 		return modelsAndView;
 	}
 
+	@GetMapping("/resident/condominium/condominiumfees")
+	public ModelAndView returnByCondominiumIdResident(@RequestParam int id_condominium,
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int results) {
+		ModelAndView modelsAndView = new ModelAndView("resident/condominiumfees");
+		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		CondominiumResidentService condominiumResidentService = new CondominiumResidentService();
+		CondominiumResident condominiumResident = condominiumResidentService
+				.returnByResidentAndCondominium(user.getId(), id_condominium);
+
+		if (condominiumResident != null) {
+			CondominiumService condominiumService = new CondominiumService();
+			Condominium condominium = condominiumService.returnById(id_condominium);
+			if (condominium != null) {
+				CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
+				List<CondominiumFee> fees = condominiumFeeService.returnByCondominiumId(id_condominium, page, results);
+				int totalData = condominiumFeeService.returnCount(id_condominium);
+				modelsAndView.addObject("format", new SimpleDateFormat("dd/MM/yyyy"));
+				modelsAndView.addObject("totalPages", ((int) Math.ceil(((double) totalData) / results)));
+				modelsAndView.addObject("currentPage", page);
+				HashMap<String, String> map = new HashMap<>();
+				map.put("id_condominium", String.valueOf(id_condominium));
+				map.put("results", String.valueOf(results));
+				modelsAndView.addObject("map", map);
+				modelsAndView.addObject("condominiumFees", fees);
+				modelsAndView.addObject("condominium", condominium);
+			} else {
+				modelsAndView = new ModelAndView("errors/accessdenied");
+			}
+		} else {
+			modelsAndView = new ModelAndView("errors/accessdenied");
+		}
+		return modelsAndView;
+	}
+
 	@GetMapping("/user/condominium/condominiumfees")
 	public ModelAndView returnByCondominiumId(@RequestParam int id_condominium,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int results) {
@@ -134,9 +169,9 @@ public class CondominiumFeeController {
 						"redirect:/user/condominium/condominiumfees?id_condominium=" + condominium.getId());
 				if (condominiumFeeService.closeCondominiumFee(condominiumFee)) {
 					redirectAttributes.addFlashAttribute("result",
-							new Result("PerÌodo fechado com sucesso", "success"));
+							new Result("Per√≠odo fechado com sucesso", "success"));
 				} else {
-					redirectAttributes.addFlashAttribute("result", new Result("Falha ao fechar perÌodo", "error"));
+					redirectAttributes.addFlashAttribute("result", new Result("Falha ao fechar per√≠odo", "error"));
 				}
 			} else {
 				modelsAndView = new ModelAndView("errors/accessdenied");
@@ -147,28 +182,28 @@ public class CondominiumFeeController {
 		return modelsAndView;
 	}
 
-	@GetMapping("/resident/condominium/condominiumfees")
-	public ModelAndView returnByCondominiumIdByResident(@RequestParam int idCondominium) {
-		ModelAndView modelsAndView = new ModelAndView("resident/condominiumFees");
-
-		CondominiumResidentService condominiumResidentService = new CondominiumResidentService();
-		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		CondominiumResident condominiumResident = condominiumResidentService
-				.returnByResidentAndCondominium(resident.getId(), idCondominium);
-
-		if (condominiumResident != null) {
-			Condominium condominium = new CondominiumService().returnById(idCondominium);
-			CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
-			List<CondominiumFee> fees = condominiumFeeService.returnByCondominiumId(idCondominium);
-			modelsAndView.addObject("format", new SimpleDateFormat("dd/MM/yyyy"));
-			modelsAndView.addObject("condominiumFees", fees);
-			modelsAndView.addObject("condominium", condominium);
-		} else {
-			modelsAndView = new ModelAndView("errors/accessdenied");
-		}
-		return modelsAndView;
-	}
+//	@GetMapping("/resident/condominium/condominiumfees")
+//	public ModelAndView returnByCondominiumIdByResident(@RequestParam int idCondominium) {
+//		ModelAndView modelsAndView = new ModelAndView("resident/condominiumFees");
+//
+//		CondominiumResidentService condominiumResidentService = new CondominiumResidentService();
+//		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//		CondominiumResident condominiumResident = condominiumResidentService
+//				.returnByResidentAndCondominium(resident.getId(), idCondominium);
+//
+//		if (condominiumResident != null) {
+//			Condominium condominium = new CondominiumService().returnById(idCondominium);
+//			CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
+//			List<CondominiumFee> fees = condominiumFeeService.returnByCondominiumId(idCondominium);
+//			modelsAndView.addObject("format", new SimpleDateFormat("dd/MM/yyyy"));
+//			modelsAndView.addObject("condominiumFees", fees);
+//			modelsAndView.addObject("condominium", condominium);
+//		} else {
+//			modelsAndView = new ModelAndView("errors/accessdenied");
+//		}
+//		return modelsAndView;
+//	}
 
 	@GetMapping("/user/condominium/condominiumfee")
 	public ModelAndView returnCondominiumFee(@RequestParam int idCondominiumFee) {
@@ -186,7 +221,8 @@ public class CondominiumFeeController {
 			modelsAndView.addObject("condominiumFee", condominiumFee);
 			modelsAndView.addObject("condominium", condominium);
 			modelsAndView.addObject("reportSumByFeeType", condominiumFeeService.reportSumFeeType(idCondominiumFee));
-			modelsAndView.addObject("reportsCondominiumFeeType", condominiumFeeService.reportsCondominiumFeeType(condominium.getId(), idCondominiumFee));
+			modelsAndView.addObject("reportsCondominiumFeeType",
+					condominiumFeeService.reportsCondominiumFeeType(condominium.getId(), idCondominiumFee));
 
 		} else {
 			modelsAndView = new ModelAndView("errors/accessdenied");
@@ -271,17 +307,20 @@ public class CondominiumFeeController {
 				boolean bolresult = condominiumFeeService.insert(condominiumFee);
 				modelsAndView = new ModelAndView("redirect:/user/dashboard");
 				if (bolresult) {
+					modelsAndView = new ModelAndView(
+							"redirect:/user/condominium/condominiumfees?id_condominium=" + condominium.getId());
 					redirectAttributes.addFlashAttribute("result",
 							new Result("Taxa cadastrada com sucesso", "success"));
 				} else {
 					redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar taxa", "error"));
+					modelsAndView = new ModelAndView("user/condominium/condominiumfee/form");
 				}
 			} else {
-				modelsAndView = new ModelAndView("redirect:/user/dashboard");// TODO n„o deveria voltar ao dashboard
-																			// quando da
+				modelsAndView = new ModelAndView("redirect:/user/condominium/condominiumfee/form?id_condominium="
+						+ condominium.getId() + "&id=0");
 				// errado
 				redirectAttributes.addFlashAttribute("result",
-						new Result("Data de fechamento j· cadastrada no condomÌnio", "error"));
+						new Result("Data de fechamento j√° cadastrada no condom√≠nio", "error"));
 			}
 		} else {
 			modelsAndView = new ModelAndView("errors/accessdenied");

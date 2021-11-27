@@ -73,6 +73,27 @@ public class CondominiumDAOImpl {
 		}
 	}
 
+	public List<Condominium> listForResidents(int idResident) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery("SELECT c FROM condominium c inner join condominium_resident cr on c.id = cr.idCondominium where cr.idResident = :idResident and cr.active = 1");
+			query.setParameter("idResident", idResident);
+			@SuppressWarnings("unchecked")
+			List<Condominium> condominiuns = (List<Condominium>) query.getResultList();
+			
+			return condominiuns;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
 	public List<Condominium> listSidebar(int idUser) {
 		Session session = null;
 		try {

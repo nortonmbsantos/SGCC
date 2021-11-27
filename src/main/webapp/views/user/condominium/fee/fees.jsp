@@ -3,6 +3,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,9 +51,9 @@
 										class="fas fa-eye"></i></a></td>
 								<td>${fee.description }</td>
 								<td>${fee.value }</td>
-								<td>${format.format(fee.dueDate.time)}</td>
+								<td><fmt:formatDate value="${fee.dueDate.time}" /></td>
 								<td><c:choose>
-										<c:when test="${null != fee.payDate}">${format.format(fee.payDate.time)}</c:when>
+										<c:when test="${null != fee.payDate}"><fmt:formatDate value="${fee.payDate.time}" /></c:when>
 										<c:otherwise>Falta pagamento</c:otherwise>
 									</c:choose></td>
 								<td>${fee.currentInstallment}/${fee.installments}</td>

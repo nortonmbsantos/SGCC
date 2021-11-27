@@ -39,7 +39,7 @@ public class FeeController {
 			modelsAndView.addObject("condominium", condominium);
 			return modelsAndView;
 		}
-		return new ModelAndView("user/condominium/fee/fees"); // TODO retornar página de erro
+		return new ModelAndView("user/condominium/fee/fees"); // TODO retornar pï¿½gina de erro
 	}
 
 	@GetMapping("/user/condominium/fee")
@@ -57,7 +57,7 @@ public class FeeController {
 			modelsAndView.addObject("condominium", condominium);
 			return modelsAndView;
 		}
-		return new ModelAndView("user/condominium/fee/fee"); // TODO retornar página de erro
+		return new ModelAndView("user/condominium/fee/fee"); // TODO retornar pï¿½gina de erro
 	}
 
 	@GetMapping("/resident/viewCondominiumFees")
@@ -139,7 +139,7 @@ public class FeeController {
 
 			} else {
 				return new ModelAndView("user/condominium/fee/forminstalment").addObject("result",
-						new Result("Não foi possível realizar ação: Taxa de condomínio fechada", "error"));
+						new Result("NÃ£o foi possÃ­vel realizar aÃ§Ã£o: Taxa de condomÃ­nio fechada", "error"));
 			}
 		} else {
 			return new ModelAndView("errors/accessdenied");
@@ -161,6 +161,7 @@ public class FeeController {
 			if (!condominiumFee.isFinished()) {
 				modelsAndView.addObject("condominium", condominium);
 				modelsAndView.addObject("idCondominiumFee", id_condominium_fee);
+				modelsAndView.addObject("condominiumFee", condominiumFee);
 				Fee fee;
 				FeeService feeService = new FeeService();
 				if (id_fee <= 0) {

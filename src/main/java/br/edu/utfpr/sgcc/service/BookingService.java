@@ -10,6 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import br.edu.utfpr.sgcc.daos.BookingDAOImpl;
 import br.edu.utfpr.sgcc.models.Booking;
+import br.edu.utfpr.sgcc.models.CommomArea;
 import br.edu.utfpr.sgcc.models.Report;
 
 public class BookingService {
@@ -31,14 +32,27 @@ public class BookingService {
 	}
 
 	public List<Booking> pendingBookingsByArea(int id_commom_area) {
-		return daos.pendingBookingsByArea(id_commom_area);
-	}
+		List<Booking> bookings = daos.pendingBookingsByArea(id_commom_area);
+		UserService userService = new UserService();
+		for (Booking b : bookings) {
+			b.setResidentName(userService.returnById(b.getIdResident()).getFirstName());
+		}
 
+		
+		return bookings;
+	}
 
 	public List<Booking> acceptedBookingsByArea(int idCommomArea) {
-		return daos.acceptedBookingsByArea(idCommomArea);
+		List<Booking> bookings = daos.acceptedBookingsByArea(idCommomArea);
+		UserService userService = new UserService();
+		for (Booking b : bookings) {
+			b.setResidentName(userService.returnById(b.getIdResident()).getFirstName());
+		}
+
+		
+		return bookings;
 	}
-	
+
 	public List<Booking> pendingBookingsByResident(int id_resident) {
 		return daos.pendingBookingsByResident(id_resident);
 	}
@@ -47,11 +61,29 @@ public class BookingService {
 		return daos.acceptedBookingsByCondominium(id_condominium);
 	}
 
-
-	public List<Booking> bookingsByResident(int id_resident) {
-		return daos.bookingsByResident(id_resident);
+	public List<Booking> bookingsByResidentAndCondominium(int idResident, int idCondominium) {
+		List<Booking> bookings = daos.bookingsByResidentAndCondominium(idResident, idCondominium);
+		CommomAreaService commomAreaService = new CommomAreaService();
+		for(Booking b : bookings) {
+			CommomArea c = commomAreaService.returnById(b.getIdCommomArea());
+			b.setCommomArea(c);
+		}
+		return bookings;
 	}
-	
+
+	public List<Booking> bookingsByResident(int idResident) {
+		List<Booking> bookings = daos.bookingsByResident(idResident);
+		
+		CommomAreaService commomAreaService = new CommomAreaService();
+		CondominiumService condominiumService = new CondominiumService();
+		for(Booking b : bookings) {
+			CommomArea c = commomAreaService.returnById(b.getIdCommomArea());
+			c.setCondominium(condominiumService.returnById(c.getIdCondominium()));
+			b.setCommomArea(c);
+		}
+		return bookings;
+	}
+
 	public List<Report> countPendingBookings(int id_condominium) {
 		return daos.countPendingBookings(id_condominium);
 	}
@@ -75,8 +107,8 @@ public class BookingService {
 	public static void main(String[] args) {
 		BookingService s = new BookingService();
 
-		for (Report r : s.countPendingBookings(1)) {
-			System.out.println(r.getTitle() + " - " + (int) r.getValue());
+		for (Booking b : s.bookingsByResident(10)) {
+			System.out.println(b.getCommomAreaName() + " - " + b.getBookingDate());
 		}
 	}
 }

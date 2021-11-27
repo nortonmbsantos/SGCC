@@ -27,14 +27,19 @@
 
 					<div class="jumbotron">
 						<h1 class="display-4">Areas comuns de ${condominium.name}</h1>
+
 						<form action="commomareas" method="GET">
-							<input type="text" name="filter" value="${filter}" class="form-control col-6"> 
-							<input type="hidden" name="id_condominium" value="${condominium.id}">
+
+							<input type="text" name="filter" value="${filter}" placeholder="Buscar área comum"
+								class="form-control col-6"> <input type="hidden"
+								name="id_condominium" value="${condominium.id}">
 							<button type="submit" class="btn btn-primary">Filtrar</button>
 						</form>
 						<form action="commomareas" method="GET">
-							<input type="hidden" name="id_condominium" value="${condominium.id}">
-							<button type="submit" class="btn btn-danger">Limpar Filtro</button>
+							<input type="hidden" name="id_condominium"
+								value="${condominium.id}">
+							<button type="submit" class="btn btn-danger">Limpar
+								Filtro</button>
 						</form>
 						<hr class="my-4">
 						<a class="btn"
@@ -55,12 +60,12 @@
 						<c:forEach items="${commomAreas}" var="area">
 							<tr>
 								<td><a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/commomarea/bookings?id_commom_area=${area.id}"><i
-										class="fas fa-eye"></i></a> <a class="btn btn-light"
 									href="${pageContext.request.contextPath}/user/condominium/commomarea?id=${area.id}"><i
 										class="fas fa-eye"></i></a> <a class="btn btn-light"
 									href="${pageContext.request.contextPath}/user/condominium/commomarea/update?id=${area.id}"><i
-										class="fas fa-edit"></i></a></td>
+										class="fas fa-edit"></i></a> <a class="btn btn-light"
+									href="${pageContext.request.contextPath}/user/condominium/commomarea/bookings?id_commom_area=${area.id}"><i
+										class="fas fa-book-open"></i></a></td>
 								<td>${area.name }</td>
 								<td><fmt:formatNumber value="${area.bookingFee }"
 										type="currency" currencyCode="BRL" /></td>

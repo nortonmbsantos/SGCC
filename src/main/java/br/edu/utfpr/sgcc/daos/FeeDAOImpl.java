@@ -49,6 +49,10 @@ public class FeeDAOImpl {
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
 			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
 		}
 	}
 

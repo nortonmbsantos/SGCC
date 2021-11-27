@@ -26,15 +26,15 @@ public class Guest {
 	private int id;
 
 	@NotNull
-	@Size(min = 3, message = "Nome inv·lido")
+	@Size(min = 3, message = "Nome inv√°lido")
 	private String name;
 
 	@NotNull
-	@Size(min = 3, message = "Cpf inv·lido")
+	@Size(min = 3, message = "Cpf inv√°lido")
 	private String cpf;
 
 	@NotNull
-	@Size(min = 3, message = "Telefone inv·lido")
+	@Size(min = 3, message = "Telefone inv√°lido")
 	private String phone;
 
 	public int getId() {

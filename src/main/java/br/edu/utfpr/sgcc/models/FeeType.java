@@ -21,7 +21,7 @@ public class FeeType {
 	@Id
 	private int id;
 	@NotNull
-	@Size(min = 3, message = "DescriÁ„o inv·lida")
+	@Size(min = 3, message = "Descri√ß√£o inv√°lida")
 	private String description;
 
 	public int getId() {

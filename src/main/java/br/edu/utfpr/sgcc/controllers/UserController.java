@@ -42,11 +42,11 @@ public class UserController {
 		}
 		if (result.hasErrors()) {
 			return new ModelAndView("register").addObject("result",
-					new Result("Falha ao se cadastrar, verifique suas informaÁıes", "error"));
+					new Result("Falha ao se cadastrar, verifique suas informa√ß√µes", "error"));
 		}
 		service.insert(user);
 		return new ModelAndView("login").addObject("result",
-				new Result("Usu·rio cadastrado com sucesso, entre com suas credenciais", "success"));
+				new Result("Usu√°rio cadastrado com sucesso, entre com suas credenciais", "success"));
 	}
 
 	@GetMapping("/user/update")
@@ -69,7 +69,7 @@ public class UserController {
 
 		if (result.hasErrors()) {
 			return new ModelAndView("user/update").addObject("result",
-					new Result("Falha ao se atualizar, verifique suas informaÁıes", "error"));
+					new Result("Falha ao se atualizar, verifique suas informa√ß√µes", "error"));
 		}
 //		MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //		User myUser = new UserService().returnById(user.getId());
@@ -81,10 +81,10 @@ public class UserController {
 //		user.setId(myUser.getId());
 		if (service.update(user)) {
 			redirectAttributes.addFlashAttribute("result",
-					new Result("VocÍ atualizou seus dados com sucesso", "success"));
+					new Result("Voc√™ atualizou seus dados com sucesso", "success"));
 			return new ModelAndView("redirect:/user/dashboard");
 		} else {
-			redirectAttributes.addFlashAttribute("result", new Result("Falha ao atualizar usu·rio", "error"));
+			redirectAttributes.addFlashAttribute("result", new Result("Falha ao atualizar usu√°rio", "error"));
 			return new ModelAndView("redirect:/user/dashboard");
 		}
 	}
@@ -114,7 +114,7 @@ public class UserController {
 		User user = service.returnByUserName(myUserDetails.getUsername());
 		
 		if (!new BCryptPasswordEncoder().matches(userUpdatePassword.getPassword(), user.getPassword())) {
-			result.addError(new FieldError("user", "password", "Senha atual inv·lida"));
+			result.addError(new FieldError("user", "password", "Senha atual inv√°lida"));
 		}
 		
 		if(!userUpdatePassword.getNewPassword().equals(userUpdatePassword.getConfirmPassword())) {
@@ -130,10 +130,10 @@ public class UserController {
 //		update password
 		if (service.updatePassword(user)) {
 			redirectAttributes.addFlashAttribute("result",
-					new Result("VocÍ atualizou seus dados com sucesso", "success"));
+					new Result("Voc√™ atualizou seus dados com sucesso", "success"));
 			return new ModelAndView("redirect:/user/dashboard");
 		} else {
-			redirectAttributes.addFlashAttribute("result", new Result("Falha ao atualizar usu·rio", "error"));
+			redirectAttributes.addFlashAttribute("result", new Result("Falha ao atualizar usu√°rio", "error"));
 			return new ModelAndView("redirect:/user/dashboard");
 		}
 	}
@@ -204,17 +204,17 @@ public class UserController {
 //			Enviar email link para resgate de senha
 				ModelAndView modelsAndView = new ModelAndView("redirect:/");
 				redirectAttributes.addFlashAttribute("result",
-						new Result("Email enviado para mudanÁa de senha", "success"));
+						new Result("Email enviado para mudan√ßa de senha", "success"));
 				return modelsAndView;
 			} else {
 				ModelAndView modelsAndView = new ModelAndView("forgot_password");
 				modelsAndView.addObject("result",
-						new Result("Falha ao gerar solicitaÁ„o de recuperaÁ„o de senha", "error"));
+						new Result("Falha ao gerar solicita√ß√£o de recupera√ß√£o de senha", "error"));
 				return modelsAndView;
 			}
 		} else {
 			ModelAndView modelsAndView = new ModelAndView("forgot_password");
-			modelsAndView.addObject("result", new Result("N„o foi possÌvel localizar usu·rio", "error"));
+			modelsAndView.addObject("result", new Result("N√£o foi poss√≠vel localizar usu√°rio", "error"));
 			return modelsAndView;
 		}
 	}
@@ -253,24 +253,24 @@ public class UserController {
 								passwordResetService.updateUsed(passwordReset);
 								modelsAndView = new ModelAndView("login");
 								modelsAndView.addObject("result",
-										new Result("Email enviado para mudanÁa de senha", "success"));
+										new Result("Email enviado para mudan√ßa de senha", "success"));
 								return modelsAndView;
 							}
 							modelsAndView.addObject("result",
-									new Result("Falha ao atualizar senha de usu·rio", "error"));
+									new Result("Falha ao atualizar senha de usu√°rio", "error"));
 							return modelsAndView;
 						}
 					}
-					modelsAndView.addObject("result", new Result("N„o foi possÌvel localizar usu·rio", "error"));
+					modelsAndView.addObject("result", new Result("N√£o foi poss√≠vel localizar usu√°rio", "error"));
 					return modelsAndView;
 				}
-				modelsAndView.addObject("result", new Result("N„o foi possÌvel validar usu·rio", "error"));
+				modelsAndView.addObject("result", new Result("N√£o foi poss√≠vel validar usu√°rio", "error"));
 				return modelsAndView;
 			}
 			modelsAndView.addObject("result", new Result("Senhas devem ser iguais", "error"));
 			return modelsAndView;
 		}
-		modelsAndView.addObject("result", new Result("Senha deve mÌnimo de 8 caracteres", "error"));
+		modelsAndView.addObject("result", new Result("Senha deve m√≠nimo de 8 caracteres", "error"));
 		return modelsAndView;
 	}
 
@@ -289,12 +289,12 @@ public class UserController {
 //			Criar resgate de senha
 //			Enviar email link para resgate de senha
 			ModelAndView modelsAndView = new ModelAndView("forgot_password");
-			modelsAndView.addObject("result", new Result("Email enviado para mudanÁa de senha", "success"));
+			modelsAndView.addObject("result", new Result("Email enviado para mudan√ßa de senha", "success"));
 			return modelsAndView;
 
 		} else {
 			ModelAndView modelsAndView = new ModelAndView("forgot_password");
-			modelsAndView.addObject("result", new Result("N„o foi possÌvel localizar usu·rio", "error"));
+			modelsAndView.addObject("result", new Result("N√£o foi poss√≠vel localizar usu√°rio", "error"));
 			return modelsAndView;
 		}
 	}

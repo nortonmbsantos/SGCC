@@ -174,10 +174,6 @@ public class BookingDAOImpl {
 			query.setParameter("idCommomArea", idCommomArea);
 			@SuppressWarnings("unchecked")
 			List<Booking> bookings = (List<Booking>) query.getResultList();
-			UserService userService = new UserService();
-			for (Booking b : bookings) {
-				b.setResident_name(userService.returnById(b.getIdResident()).getFirstName());
-			}
 			
 			return bookings;
 		} catch (Exception e) {
@@ -201,10 +197,6 @@ public class BookingDAOImpl {
 			query.setParameter("idCommomArea", idCommomArea);
 			@SuppressWarnings("unchecked")
 			List<Booking> bookings = (List<Booking>) query.getResultList();
-			UserService userService = new UserService();
-			for (Booking b : bookings) {
-				b.setResident_name(userService.returnById(b.getIdResident()).getFirstName());
-			}
 
 			return bookings;
 		} catch (Exception e) {
@@ -217,6 +209,14 @@ public class BookingDAOImpl {
 		}
 	}
 
+	public static void main(String[] args) {
+		BookingDAOImpl bs = new BookingDAOImpl();
+		for(Booking b : bs.pendingBookingsByArea(1)) {
+			System.out.println(b.getId());
+		}
+		
+	}
+	
 	public List<Booking> acceptedBookingsByCondominium(int id_condominium) {
 		Session session = null;
 		try {
@@ -233,8 +233,8 @@ public class BookingDAOImpl {
 			for (Object[] o : objects) {
 				Booking b = new Booking();
 				b.setBookingDate((Date) o[0]);
-				b.setCommomarea_name((String) o[1]);
-				b.setResident_name((String) o[2]);
+				b.setCommomAreaName((String) o[1]);
+				b.setResidentName((String) o[2]);
 				bookings.add(b);
 			}
 
@@ -261,7 +261,7 @@ public class BookingDAOImpl {
 			List<Booking> bookings = (List<Booking>) query.getResultList();
 			UserService userService = new UserService();
 			for (Booking b : bookings) {
-				b.setResident_name(userService.returnById(b.getIdResident()).getFirstName());
+				b.setResidentName(userService.returnById(b.getIdResident()).getFirstName());
 			}
 
 			return bookings;
@@ -275,20 +275,16 @@ public class BookingDAOImpl {
 		}
 	}
 
-	public List<Booking> bookingsByResident(int id_resident) {
+	public List<Booking> bookingsByResident(int idResident) {
 		Session session = null;
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
 			Query query = session.createQuery(
-					"FROM booking b WHERE b.id_resident = :idResident order by b.booking_date desc");
-			query.setParameter("idResident", id_resident);
+					"FROM booking b WHERE b.idResident = :idResident order by b.bookingDate desc");
+			query.setParameter("idResident", idResident);
 			@SuppressWarnings("unchecked")
 			List<Booking> bookings = (List<Booking>) query.getResultList();
-			UserService userService = new UserService();
-			for (Booking b : bookings) {
-				b.setResident_name(userService.returnById(b.getIdResident()).getFirstName());
-			}
 			
 			return bookings;
 		} catch (Exception e) {
@@ -301,6 +297,29 @@ public class BookingDAOImpl {
 		}
 	}
 
+	public List<Booking> bookingsByResidentAndCondominium(int idResident, int idCondominium) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery(
+					"SELECT b FROM booking b inner join commom_area ca on ca.id = b.idCommomArea WHERE b.idResident = :idResident  and ca.idCondominium = :idCondominium order by b.bookingDate desc");
+			query.setParameter("idResident", idResident);
+			query.setParameter("idCondominium", idCondominium);
+			@SuppressWarnings("unchecked")
+			List<Booking> bookings = (List<Booking>) query.getResultList();
+			
+			return bookings;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+	
 	public List<Report> countPendingBookings(int id_condominium) {
 		Session session = null;
 		try {

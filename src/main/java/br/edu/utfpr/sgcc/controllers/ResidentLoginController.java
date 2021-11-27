@@ -1,29 +1,39 @@
 package br.edu.utfpr.sgcc.controllers;
 
 import java.util.Date;
+
+import javax.validation.Valid;
+
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.utfpr.sgcc.models.Condominium;
 import br.edu.utfpr.sgcc.models.CondominiumEntryRequest;
 import br.edu.utfpr.sgcc.models.MyUserDetails;
 import br.edu.utfpr.sgcc.models.Resident;
 import br.edu.utfpr.sgcc.models.Result;
+import br.edu.utfpr.sgcc.models.User;
+import br.edu.utfpr.sgcc.models.UserUpdatePassword;
 import br.edu.utfpr.sgcc.service.BookingService;
 import br.edu.utfpr.sgcc.service.CondominiumEntryRequestService;
 import br.edu.utfpr.sgcc.service.CondominiumResidentService;
 import br.edu.utfpr.sgcc.service.CondominiumService;
 import br.edu.utfpr.sgcc.service.ResidentService;
+import br.edu.utfpr.sgcc.service.UserService;
 import br.edu.utfpr.sgcc.service.WarningService;
 
 @Controller
-@SessionAttributes({ "resident" })
+@SessionAttributes({ "user" })
 public class ResidentLoginController {
 
 	@GetMapping("/resident/login")
@@ -38,7 +48,7 @@ public class ResidentLoginController {
 	public ModelAndView getDashboard() {
 		ModelAndView modelsAndView = new ModelAndView("resident/dashboard");
 		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		modelsAndView.addObject("resident", resident);
+		modelsAndView.addObject("user", resident);
 		
 		CondominiumResidentService condominiumResidentService = new CondominiumResidentService();
 		modelsAndView.addObject("condominiuns", condominiumResidentService.returnCondominiunsByResident(resident.getId()));
@@ -61,7 +71,6 @@ public class ResidentLoginController {
 		if (null != residentLogin) {
 			modelsAndView = new ModelAndView("redirect:/resident/dashboard");
 
-			modelsAndView.addObject("resident", residentLogin);
 		} else {
 			modelsAndView = new ModelAndView("resident/login");
 		}
@@ -91,21 +100,118 @@ public class ResidentLoginController {
 			if (cerVal == null || !cerVal.isAccepted()) {
 				if (requestService.insert(cer)) {
 					return new ModelAndView("resident/dashboard").addObject("result", new Result(
-							"SolicitaÁ„o para " + condominium.getName() + " enviada com sucesso", "success"));
+							"Solicita√ß√£o para " + condominium.getName() + " enviada com sucesso", "success"));
 				} else {
 					return new ModelAndView("resident/entryCondominium").addObject("result",
-							new Result("Falha ao enviar solicitaÁ„o ao condomÌnio", "error"));
+							new Result("Falha ao enviar solicita√ß√£o ao condom√≠nio", "error"));
 				}
 			} else if(cerVal.isAccepted()) {
 				return new ModelAndView("resident/dashboard").addObject("result", new Result(
-						"SolicitaÁ„o para " + condominium.getName() + " j· aceita", "success"));
+						"Solicita√ß√£o para " + condominium.getName() + " j√° aceita", "success"));
 			} else {
 				return new ModelAndView("resident/entryCondominium").addObject("result",
-						new Result("Falha ao enviar solicitaÁ„o ao condomÌnio", "error"));
+						new Result("Falha ao enviar solicita√ß√£o ao condom√≠nio", "error"));
 			}
 		} else {
 			return new ModelAndView("resident/entryCondominium").addObject("result",
-					new Result("CondomÌnio n„o encontrado", "error"));
+					new Result("Condom√≠nio n√£o encontrado", "error"));
 		}
 	}
+	
+	@GetMapping("/resident/update")
+	public ModelAndView updateUser() {
+		ModelAndView modelsAndView = new ModelAndView("resident/update");
+		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User myUser = new UserService().returnById(user.getId());
+		modelsAndView.addObject("user", myUser);
+		return modelsAndView;
+	}
+
+	@PostMapping("/resident/update")
+	public ModelAndView update(@ModelAttribute @Valid User user, BindingResult result,
+			final RedirectAttributes redirectAttributes) {
+		UserService service = new UserService();
+
+//		if (!new BCryptPasswordEncoder().matches(user.getConfirmPassword(), user.getPassword())) {
+//			result.addError(new FieldError("user", "password", "Senhas devem ser iguais"));
+//		}
+
+		if (result.hasErrors()) {
+			return new ModelAndView("resident/update").addObject("result",
+					new Result("Falha ao se atualizar, verifique suas informa√ß√µes", "error"));
+		}
+//		MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		User myUser = new UserService().returnById(user.getId());
+//		user.setUserName(myUser.getUserName());
+//		user.setActive(myUser.isActive());
+//		user.setPassword(user.getPassword());
+//		user.setRoles(myUser.getRoles());
+//		user.setEmail(myUser.getEmail());
+//		user.setId(myUser.getId());
+		if (service.update(user)) {
+			redirectAttributes.addFlashAttribute("result",
+					new Result("Voc√™ atualizou seus dados com sucesso", "success"));
+			return new ModelAndView("redirect:/resident/dashboard");
+		} else {
+			redirectAttributes.addFlashAttribute("result", new Result("Falha ao atualizar usu√°rio", "error"));
+			return new ModelAndView("redirect:/resident/dashboard");
+		}
+	}
+	
+	@GetMapping("/resident/updatepassword")
+	public ModelAndView updateUserPassword() {
+		ModelAndView modelsAndView = new ModelAndView("resident/updatepassword");
+
+		modelsAndView.addObject("userUpdatePassword", new UserUpdatePassword());
+		return modelsAndView;
+	}
+
+	@PostMapping("/resident/updatepassword")
+	public ModelAndView updatePassword(@ModelAttribute @Valid UserUpdatePassword userUpdatePassword,
+			BindingResult result, final RedirectAttributes redirectAttributes) {
+		UserService service = new UserService();
+
+		if (result.hasErrors()) {
+			return new ModelAndView("resident/updatepassword").addObject("result",
+					new Result("Falha ao se senha", "error"));
+		}
+
+		MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+
+		
+		User user = service.returnByUserName(myUserDetails.getUsername());
+		
+		if (!new BCryptPasswordEncoder().matches(userUpdatePassword.getPassword(), user.getPassword())) {
+			result.addError(new FieldError("userUpdatePassword", "password", "Senha atual inv√°lida"));
+		}
+		
+		if(!userUpdatePassword.getNewPassword().equals(userUpdatePassword.getConfirmPassword())) {
+			result.addError(new FieldError("userUpdatePassword", "newPassword", "Senhas devem ser iguais"));
+		}
+		
+		if (result.hasErrors()) {
+			return new ModelAndView("resident/updatepassword").addObject("result",
+					new Result("Falha ao alterar senha", "error"));
+		}
+
+		user.setPassword(userUpdatePassword.getNewPassword());
+//		update password
+		if (service.updatePassword(user)) {
+			redirectAttributes.addFlashAttribute("result",
+					new Result("Voc√™ atualizou seus dados com sucesso", "success"));
+			return new ModelAndView("redirect:/resident/dashboard");
+		} else {
+			redirectAttributes.addFlashAttribute("result", new Result("Falha ao atualizar usu√°rio", "error"));
+			return new ModelAndView("redirect:/resident/dashboard");
+		}
+	}
+
+	public static void main(String[] args) {
+		System.out.print(new BCryptPasswordEncoder().encode("norton123"));
+		
+	}
+	
+
+	
 }

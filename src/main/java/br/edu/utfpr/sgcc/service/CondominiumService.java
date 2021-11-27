@@ -35,6 +35,10 @@ public class CondominiumService {
 		return daos.list(idAdmin);
 	}
 	
+	public List<Condominium> listForResidents(int idResident) {
+		return daos.listForResidents(idResident);
+	}
+	
 	
 	public List<Condominium> listSidebar(int idAdmin) {
 		return daos.listSidebar(idAdmin);
@@ -60,4 +64,10 @@ public class CondominiumService {
 		return daos.update(condominium);
 	}
 	
+	public static void main(String[] args) {
+		List<Condominium> cons = new CondominiumService().listForResidents(7);
+		for(Condominium c : cons) {
+			System.out.println(c.getName());
+		}
+	}
 }

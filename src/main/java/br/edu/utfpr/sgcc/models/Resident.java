@@ -30,7 +30,7 @@ public class Resident {
 	@Id
 	private int id;
 	@NotNull
-	@Size(min = 3, message = "Nome inválido")
+	@Size(min = 3, message = "Nome invÃ¡lido")
 	private String name;
 	@Column(name = "id_condominium")
 	private int idCondominium;
@@ -40,23 +40,23 @@ public class Resident {
 	@Column(name = "birth_date")
 	private Date birthDate;
 	@NotNull
-	@Size(min = 3, message = "Documento inválido")
+	@Size(min = 3, message = "Documento invÃ¡lido")
 	private String document;
 	@Column(name = "document_type")
 	private String documentType;
 	@NotNull
-	@Email(message="Email inválido")
-	@Size(min = 3, message = "Email inválido")
+	@Email(message="Email invÃ¡lido")
+	@Size(min = 3, message = "Email invÃ¡lido")
 	private String email;
 	@NotNull
-	@Size(min = 8, message = "Telefone inválido")
+	@Size(min = 8, message = "Telefone invÃ¡lido")
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "entry_date")
 	private Date entryDate;
 	@NotNull
-	@Size(min = 8, message = "Senha inválida, deve possuir no mínimo 8 caracteres")
+	@Size(min = 8, message = "Senha invÃ¡lida, deve possuir no mÃ­nimo 8 caracteres")
 	private String password;
 	private String description;
 

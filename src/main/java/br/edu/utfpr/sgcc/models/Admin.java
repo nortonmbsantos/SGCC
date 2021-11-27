@@ -22,17 +22,17 @@ public class Admin {
 	@Id
 	private int id;
 	@NotNull
-	@Size(min = 3, message = "Nome inválido")
+	@Size(min = 3, message = "Nome invÃ¡lido")
 	private String firstName;
 	@NotNull
-	@Size(min = 1, message = "Sobrenome inválido")
+	@Size(min = 1, message = "Sobrenome invÃ¡lido")
 	private String lastName;
 	private int countryCode;
 	@NotNull
-	@Email(message="Email inválido")
+	@Email(message="Email invÃ¡lido")
 	private String email;
 	@NotNull
-	@Size(min = 1, message = "Documento inválido")
+	@Size(min = 1, message = "Documento invÃ¡lido")
 	private String document;
 	@NotNull
 	@Size(min = 8, message = "Senha deve possuir 8 ou mais caracteres")

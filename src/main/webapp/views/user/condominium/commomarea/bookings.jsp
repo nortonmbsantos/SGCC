@@ -25,10 +25,11 @@
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 
 					<div class="jumbotron">
-						<h1 class="display-4">Reservas pendentes em ${commomArea.name}</h1>
+						<h1 class="display-4">Reservas pendentes em
+							${commomArea.name}</h1>
 						<hr class="my-4">
-						<h6>${condominium.name}</h6>						
-						
+						<h6>${condominium.name}</h6>
+
 					</div>
 				</div>
 				<table class="table">
@@ -46,30 +47,32 @@
 									<div class="row" style="margin-left: 10px;">
 										<form action="booking/accept" method="POST">
 											<input type="hidden" name="id" value="${p.id}">
-										<button class="btn btn-success">
-											<i class="fas fa-check" title="Aceitar"></i>
-										</button>
-									</form>
+											<button class="btn btn-success">
+												<i class="fas fa-check" title="Aceitar"></i>
+											</button>
+										</form>
 
-									<form action="booking/refuse" method="POST">
-										<input type="hidden" name="id" value="${p.id}">
-										<button class="btn btn-danger">
-											<i class="fas fa-times" title="Recusar"></i>
-										</button>
-									</form>
+										<form action="booking/refuse" method="POST">
+											<input type="hidden" name="id" value="${p.id}">
+											<button class="btn btn-danger">
+												<i class="fas fa-times" title="Recusar"></i>
+											</button>
+										</form>
 									</div>
-									</td>
-								<td><fmt:formatDate value="${p.booking_date }" pattern="dd/MM/yyyy"/> </td>
-								<td>${p.resident_name }</td>
+								</td>
+								<td><fmt:formatDate value="${p.bookingDate }"
+										pattern="dd/MM/yyyy" /></td>
+								<td>${p.residentName }</td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
-<br><hr>
+				<br>
+				<hr>
 				<table class="table">
 					<thead class="thead-dark">
 						<tr>
-							<th scope="col">Aceito</th>
+							<th scope="col">Cancelar</th>
 							<th scope="col">Data</th>
 							<th scope="col">Morador</th>
 						</tr>
@@ -79,23 +82,17 @@
 							<tr>
 								<td>
 									<div class="row" style="margin-left: 10px;">
-										<form action="booking/accept" method="POST">
+										<form action="booking/refuse" method="POST">
 											<input type="hidden" name="id" value="${p.id}">
-										<button class="btn btn-success">
-											<i class="fas fa-check" title="Aceitar"></i>
-										</button>
-									</form>
-
-									<form action="booking/refuse" method="POST">
-										<input type="hidden" name="id" value="${p.id}">
-										<button class="btn btn-danger">
-											<i class="fas fa-times" title="Recusar"></i>
-										</button>
-									</form>
+											<button class="btn btn-danger">
+												<i class="fas fa-times" title="Recusar"></i>
+											</button>
+										</form>
 									</div>
-									</td>
-								<td><fmt:formatDate value="${p.booking_date }" pattern="dd/MM/yyyy"/> </td>
-								<td>${p.resident_name }</td>
+								</td>
+								<td><fmt:formatDate value="${p.bookingDate }"
+										pattern="dd/MM/yyyy" /></td>
+								<td>${p.residentName }</td>
 							</tr>
 						</c:forEach>
 					</tbody>

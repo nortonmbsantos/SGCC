@@ -150,10 +150,7 @@ public class CondominiumEntryRequestDAOImpl {
 			query.setParameter("idCondominium", idCondominium);
 			@SuppressWarnings("unchecked")
 			List<CondominiumEntryRequest> requests = (List<CondominiumEntryRequest>) query.getResultList();
-			UserService s = new UserService();
-			for (CondominiumEntryRequest r : requests) {
-				r.setUser(s.returnById(r.getIdResident()));
-			}
+
 			return requests;
 		} catch (Exception e) {
 			e.printStackTrace(System.err);

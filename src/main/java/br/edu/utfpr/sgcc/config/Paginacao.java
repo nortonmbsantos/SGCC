@@ -41,7 +41,7 @@ public class Paginacao {
 			}
 			paginacaoForm += " <input type=\"hidden\" name=\"value\" value=\"" + value + "\">\n"
 					+ " <input type=\"hidden\" name=\"key\" value=\"" + key + "\">\n"
-					+ " <button class=\"page-link\">Primeira página</button>\n" + "</form>\n" + " </li>\n";
+					+ " <button class=\"page-link\">Primeira pÃ¡gina</button>\n" + "</form>\n" + " </li>\n";
 
 			if ((currentPage + 2) >= totalPages && currentPage > 3) {
 				for (int i = totalPages - 4; i <= totalPages; i++) {
@@ -132,7 +132,7 @@ public class Paginacao {
 			}
 			paginacaoForm += " <input type=\"hidden\" name=\"value\" value=\"" + value + "\">\n"
 					+ " <input type=\"hidden\" name=\"key\" value=\"" + key + "\">\n"
-					+ "<button class=\"page-link\">Última página</button>\n" + "</form>\n" + "</li>\n" + "</ul>\n"
+					+ "<button class=\"page-link\">Ãšltima pÃ¡gina</button>\n" + "</form>\n" + "</li>\n" + "</ul>\n"
 					+ "</nav>\n" + "</div>\n" + "</div>";
 		}
 		return paginacaoForm;

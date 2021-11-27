@@ -58,7 +58,15 @@ public class CondominiumEntryRequestService {
 	}
 
 	public List<CondominiumEntryRequest> listAvailableByCondominium(int idCondominium) {
-		return daos.listAvailableByCondominium(idCondominium);
+		List<CondominiumEntryRequest> entries = daos.listAvailableByCondominium(idCondominium);
+		
+		
+		UserService s = new UserService();
+		for (CondominiumEntryRequest r : entries) {
+			r.setUser(s.returnById(r.getIdResident()));
+		}
+		
+		return entries;
 	}
 
 	public boolean insert(CondominiumEntryRequest request) {

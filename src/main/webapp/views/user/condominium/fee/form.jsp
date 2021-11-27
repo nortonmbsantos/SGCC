@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
@@ -12,6 +13,7 @@
 <jsp:include page="../../../header.jsp" />
 </head>
 <body>
+<fmt:setTimeZone value="GMT-0"/>
 	<jsp:include page="../../navbar.jsp" />
 	<div class="container-fluid pt-5">
 		<div class="row">
@@ -21,7 +23,7 @@
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 					<div class="jumbotron">
 						<h1 class="display-4">Formulário de cadastro de taxa para o
-							condomínio ${condominium.name }</h1>
+							condomínio ${condominium.name } de <fmt:formatDate value="${condominiumFee.closingDate }" pattern="dd/MM/yyyy" /></h1>
 						<p class="lead">Preencha o formulário com os dados</p>
 						<a
 							href="${pageContext.request.contextPath}/user/condominium/fee/forminstalment?id_condominium_fee=${fee.idCondominiumFee }&id_fee=${fee.id}"

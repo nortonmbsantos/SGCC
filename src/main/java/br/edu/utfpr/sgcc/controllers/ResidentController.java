@@ -176,7 +176,7 @@ public class ResidentController {
 				} else {
 					modelsAndView = new ModelAndView(
 							"redirect:/user/condominium/residents?id_condominium=" + resident.getIdCondominium());
-					redirectAttributes.addFlashAttribute("result", new Result("Morador j· inativo", "success"));
+					redirectAttributes.addFlashAttribute("result", new Result("Morador j√° inativo", "success"));
 					return modelsAndView;
 				}
 			} else {
@@ -254,7 +254,7 @@ public class ResidentController {
 				} else {
 					modelsAndView = new ModelAndView(
 							"redirect:/user/condominium/residents?id_condominium=" + resident.getIdCondominium());
-					redirectAttributes.addFlashAttribute("result", new Result("Morador j· inativo", "success"));
+					redirectAttributes.addFlashAttribute("result", new Result("Morador j√° inativo", "success"));
 					return modelsAndView;
 				}
 			} else {

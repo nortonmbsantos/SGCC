@@ -129,7 +129,7 @@ public class CommomAreaController {
 		Condominium condominium = condominiumService.returnById(commomArea.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar ·rea comum", "error"));
+			redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar √°rea comum", "error"));
 			return new ModelAndView("user/condominium/commomarea/form");
 		}
 
@@ -138,9 +138,9 @@ public class CommomAreaController {
 				modelsAndView = new ModelAndView(
 						"redirect:/user/condominium/commomareas?id_condominium=" + condominium.getId());
 				redirectAttributes.addFlashAttribute("result",
-						new Result("¡rea comum cadastrada com sucesso", "success"));
+						new Result("√Årea comum cadastrada com sucesso", "success"));
 			} else {
-				redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar ·rea comum", "error"));
+				redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar √°rea comum", "error"));
 			}
 		} else {
 			return new ModelAndView("errors/accessdenied");
