@@ -55,9 +55,13 @@ public class Guest {
 
 	public String getCpf() {
 		try {
-			MaskFormatter mask = new MaskFormatter("###.###.###-##");
-			mask.setValueContainsLiteralCharacters(false);
-			return mask.valueToString(cpf);
+			if (this.cpf.isEmpty()) {
+				return this.cpf;
+			} else {
+				MaskFormatter mask = new MaskFormatter("###.###.###-##");
+				mask.setValueContainsLiteralCharacters(false);
+				return mask.valueToString(cpf);
+			}
 		} catch (Exception e) {
 			return cpf;
 		}

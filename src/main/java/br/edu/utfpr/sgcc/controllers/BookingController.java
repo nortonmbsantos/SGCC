@@ -15,6 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.FlashMapManager;
 import org.springframework.web.servlet.ModelAndView;
@@ -64,14 +65,15 @@ public class BookingController {
 					idCondominium);
 			if (cr != null && cr.isActive()) {
 				CondominiumService condominiumService = new CondominiumService();
-				
+
 				modelsAndView.addObject("condominium", condominiumService.returnById(idCondominium));
-				modelsAndView.addObject("bookings", bookingService.bookingsByResidentAndCondominium(resident.getId(), idCondominium));
+				modelsAndView.addObject("bookings",
+						bookingService.bookingsByResidentAndCondominium(resident.getId(), idCondominium));
 			} else {
 				modelsAndView = new ModelAndView("error/accessdenied");
 			}
 		} else {
-			modelsAndView.addObject("bookings", bookingService.bookingsByResident(resident.getId()));			
+			modelsAndView.addObject("bookings", bookingService.bookingsByResident(resident.getId()));
 		}
 		return modelsAndView;
 
@@ -87,6 +89,7 @@ public class BookingController {
 		BookingRequest bookingRequest = new BookingRequest();
 
 		if (cr != null && cr.isActive()) {
+			modelsAndView.addObject("condominium", new CondominiumService().returnById(idCondominium));
 			modelsAndView.addObject("resident", resident);
 			modelsAndView.addObject("bookingRequest", bookingRequest);
 			CommomAreaService commomAreaService = new CommomAreaService();
@@ -106,32 +109,50 @@ public class BookingController {
 		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		CommomAreaService commomAreaService = new CommomAreaService();
 		CommomArea commomArea = commomAreaService.returnById(bookingRequest.getIdCommomArea());
-
+		boolean validBooking = true;
 		if (commomArea != null) {
-			if(bookingRequest.getGuests() != null && !bookingRequest.getGuests().isEmpty()) {
-			for (Guest g : bookingRequest.getGuests()) {
-				for (Guest g2 : bookingRequest.getGuests()) {
-					if (g != g2) {
-						if (g.getCpf() == g2.getCpf()) {
-							ObjectError oe = new FieldError("bookingRequest",
-									"guests[" + bookingRequest.getGuests().indexOf(g) + "].cpf",
-									"Os cpfs de " + g.getName() + " e " + g2.getName() + " não devem ser iguais");
-							result.addError(oe);
+			if (bookingRequest.getGuests() != null && !bookingRequest.getGuests().isEmpty()) {
+				for (Guest g : bookingRequest.getGuests()) {
+					if(g.getCpf() == null || g.getCpf().isEmpty() || g.getCpf().equals("")) {
+						ObjectError oe = new FieldError("bookingRequest",
+								"guests[" + bookingRequest.getGuests().indexOf(g) + "].cpf",
+								"O cpf não deve ser vazio");
+						result.addError(oe);						
+					}
+					if(g.getName() == null || g.getName().isEmpty() || g.getName().equals("")) {
+						ObjectError oe = new FieldError("bookingRequest",
+								"guests[" + bookingRequest.getGuests().indexOf(g) + "].name",
+								"O nome não deve ser vazio");
+						result.addError(oe);						
+					}
+				}
+//				
+//				if (result.hasErrors()) {
+//					modelsAndView = new ModelAndView("resident/newbooking");
+//					modelsAndView.addObject("result",
+//							new Result("Falha ao solicitar reserva, preencha os campos corretamente", "error"));
+//					modelsAndView.addObject("bookingRequest", bookingRequest);
+//					modelsAndView.addObject("commomareas", commomAreaService.list(commomArea.getIdCondominium()));
+//					modelsAndView.addObject("guestForScript", new GuestService().returnGuestsForScript());
+//					return modelsAndView;
+//				}
+				
+				for (Guest g : bookingRequest.getGuests()) {
+					for (Guest g2 : bookingRequest.getGuests()) {
+						if (g != g2) {
+							if ((g.getCpf().equals(g2.getCpf()) || g.getCpf().equals("000.000.000-00")) && !(g.getCpf() == null || g.getCpf().isEmpty() || g.getCpf().equals(""))) {
+								ObjectError oe = new FieldError("bookingRequest",
+										"guests[" + bookingRequest.getGuests().indexOf(g) + "].cpf",
+										"Os cpfs de " + g.getName() + " e " + g2.getName() + " não devem ser iguais");
+								result.addError(oe);
+								validBooking = false;
+							}
 						}
 					}
 				}
 			}
-		}
 
-			if (result.hasErrors()) {
-				modelsAndView = new ModelAndView("resident/newbooking");
-				modelsAndView.addObject("result",
-						new Result("Falha ao solicitar reserva, preencha os campos corretamente", "error"));
-				modelsAndView.addObject("bookingRequest", bookingRequest);
-				modelsAndView.addObject("commomareas", commomAreaService.list(commomArea.getIdCondominium()));
-				modelsAndView.addObject("guestForScript", new GuestService().returnGuestsForScript());
-				return modelsAndView;
-			}
+
 
 			CondominiumResident cr = new CondominiumResidentService().returnByResidentAndCondominium(resident.getId(),
 					commomArea.getIdCondominium());
@@ -152,9 +173,8 @@ public class BookingController {
 					if (bookingRequest.getGuests() != null && !bookingRequest.getGuests().isEmpty()) {
 
 //						add guests
-//						verificar se possui duplicatas na lista e remover
 
-						List<Guest> guests = new ArrayList<Guest>();
+						List<Guest> guestsAdd = new ArrayList<Guest>();
 
 						for (Guest g : bookingRequest.getGuests()) {
 							if (g.getCpf() == null && g.getName() == null && g.getPhone() == null) {
@@ -168,7 +188,7 @@ public class BookingController {
 										g.setId(0);
 									}
 								}
-								guests.add(g);
+								guestsAdd.add(g);
 							}
 						}
 
@@ -189,20 +209,27 @@ public class BookingController {
 
 					}
 				} else {
-					redirectAttributes.addFlashAttribute("result", new Result("Falha ao solicitar reserva", "error"));
-					modelsAndView = new ModelAndView("resident/newbooking");
+					validBooking = false;
 				}
 			} else {
-				redirectAttributes.addFlashAttribute("result", new Result("Falha ao solicitar reserva", "error"));
-				modelsAndView = new ModelAndView("resident/newbooking");
+				validBooking = false;
 			}
 		} else {
-			redirectAttributes.addFlashAttribute("result", new Result("Falha ao solicitar reserva", "error"));
-			modelsAndView = new ModelAndView("resident/newbooking");
+			validBooking = false;
 		}
-		
-		redirectAttributes.addFlashAttribute("result", new Result("Reserva solicitada com sucesso", "success"));
-		return modelsAndView;
+
+		if (validBooking) {
+			redirectAttributes.addFlashAttribute("result", new Result("Reserva solicitada com sucesso", "success"));
+			return modelsAndView;
+		} else {
+			modelsAndView = new ModelAndView("resident/newbooking");
+			modelsAndView.addObject("result",
+					new Result("Falha ao solicitar reserva, preencha os campos corretamente", "error"));
+			modelsAndView.addObject("bookingRequest", bookingRequest);
+			modelsAndView.addObject("commomareas", commomAreaService.list(commomArea.getIdCondominium()));
+			modelsAndView.addObject("guestForScript", new GuestService().returnGuestsForScript());
+			return modelsAndView;
+		}
 	}
 
 	@PostMapping("/user/condominium/commomarea/booking/accept")

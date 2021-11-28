@@ -15,7 +15,7 @@ function addGuest(data){
     $("#guestlist")
         .append("<div id=\"guest\" data-num=\"" + id + "\" class=\"row\">" +
             "<div class=\"col-12 col-md-1 col-lg-1\"><div class=\"input-group\"><div class=\"col-12\"><label>&nbsp;</label>" +
-            "<input id=\"guests" + id + ".name\" name=\"guests[" + id + "].id\" class=\"form-control\" type=\"text\" value=\""+ data.id +"\">" +
+            "<input id=\"guests" + id + ".id\" name=\"guests[" + id + "].id\" class=\"form-control\" type=\"hidden\" value=\""+ 0 +"\">" +
             "</div>" +
             "<button id=\"removeGuest\" type=\"button\" class=\"btn btn-sm btn-danger\"><i class=\"fa fa-minus\"></i></button>" +
             "</div>" +

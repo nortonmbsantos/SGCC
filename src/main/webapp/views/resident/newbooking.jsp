@@ -37,7 +37,7 @@
 				<div class="mt-5 container">
 		<div class="jumbotron">
 			<h1 class="display-4">Formulário de solicitação de reserva de
-				área comum</h1>
+				área comum em ${condominium.name }</h1>
 			<p class="lead">Preencha o formulário com os dados</p>
 			<hr class="my-4">
 			<p>Campos marcados com * são considerados obrigatórios</p>
@@ -88,7 +88,7 @@
 				</div>
 
 				<div id="guestlist" class="overflow-auto p-3 mb-3"
-					style="max-height: 200px;">
+					style="max-height: 400px;">
 					<c:forEach items="${bookingRequest.guests }" varStatus="s">
 						<div id="guest" data-num="${s.count - 1}" class="row">
 							<div class="col-12 col-md-1 col-lg-1">
@@ -108,7 +108,7 @@
 									<div class="col-12">
 										<label for="firstName">Nome</label>
 									</div>
-									<form:input path="guests[${s.index}].name" class="form-control" />
+									<form:input path="guests[${s.index}].name" class="form-control" cssErrorClass="form-control is-invalid" />
 								</div>
 							</div>
 							<div class="col-12 col-md-4 col-lg-4">
@@ -116,8 +116,7 @@
 									<div class="col-12">
 										<label for="firstName">Cpf</label>
 									</div>
-									<form:input path="guests[${s.index}].cpf" class="form-control" />
-									<form:errors path="guests[${s.index}].cpf" cssStyle="color: #ff0000;" />
+									<form:input path="guests[${s.index}].cpf" class="form-control" cssErrorClass="form-control is-invalid" />
 								</div>
 							</div>
 							<div class="col-12 col-md-3 col-lg-3">
@@ -126,7 +125,27 @@
 										<label for="firstName">Telefone</label>
 									</div>
 									<form:input path="guests[${s.index}].phone"
-										class="form-control" />
+										class="form-control" cssErrorClass="form-control is-invalid" />
+								</div>
+							</div>
+							<div class="col-12 col-md-1 col-lg-1">
+								<div class="input-group">
+									
+								</div>
+							</div>
+							<div class="col-12 col-md-4 col-lg-4">
+								<div class="input-group">
+							<form:errors path="guests[${s.index}].name" cssStyle="color: #ff0000;" />
+								</div>
+							</div>
+							<div class="col-12 col-md-4 col-lg-4">
+								<div class="input-group">
+							<form:errors path="guests[${s.index}].cpf" cssStyle="color: #ff0000;" />
+						
+								</div>
+							</div>
+							<div class="col-12 col-md-3 col-lg-3">
+								<div class="input-group">
 								</div>
 							</div>
 						</div>
