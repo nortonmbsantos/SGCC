@@ -44,7 +44,6 @@ public class User {
 	@Column(name = "street_number")
 	private String streetNumber;
 	private String city;
-
 	private String cep;
 	private String state;
 	@Column(name = "number_complement")
@@ -149,10 +148,14 @@ public class User {
 
 	public String getCep() {
 		try {
-			MaskFormatter mask = new MaskFormatter("##.###-###");
-			mask.setValueContainsLiteralCharacters(false);
-			return mask.valueToString(cep);			
-		}catch (Exception e) {
+			if (this.cep == null || this.cep.isEmpty()) {
+				return this.cep;
+			} else {
+				MaskFormatter mask = new MaskFormatter("##.###-###");
+				mask.setValueContainsLiteralCharacters(false);
+				return mask.valueToString(cep);
+			}
+		} catch (Exception e) {
 			e.printStackTrace(System.err);
 			return cep;
 		}
@@ -187,4 +190,3 @@ public class User {
 	}
 
 }
-

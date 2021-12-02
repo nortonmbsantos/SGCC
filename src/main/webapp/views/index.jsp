@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Login</title>
+<title>Sistema Gerenciador de Custos para Condomínios</title>
 <jsp:include page="header.jsp" />
 </head>
 <body>

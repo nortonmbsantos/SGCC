@@ -14,7 +14,8 @@ public class DBConfig {
 		if (sessionFactory == null) {
 			try {
 				// Creating a registry
-				registry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+//				registry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+				registry = new StandardServiceRegistryBuilder().configure("h2test.cfg.xml").build();
 
 				// Create the MetadataSources
 				MetadataSources sources = new MetadataSources(registry);

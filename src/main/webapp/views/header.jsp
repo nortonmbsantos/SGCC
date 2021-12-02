@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/noty.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jquery-ui.min.css">
-<script src="${pageContext.request.contextPath}/assets/js/jquery-3.5.0.min.js" ></script>
+<script src="${pageContext.request.contextPath}/assets/js/jquery-3.4.1.min.js" ></script>
 <script src="${pageContext.request.contextPath}/assets/js/jquery-ui.min.js" ></script>
 <script src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js" ></script>
 <script src="${pageContext.request.contextPath}/assets/js/all.min.js" ></script>

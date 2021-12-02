@@ -37,16 +37,25 @@ public class UserController {
 	public ModelAndView register(@ModelAttribute @Valid User user, BindingResult result) {
 		UserService service = new UserService();
 
-		if (!new BCryptPasswordEncoder().matches(user.getConfirmPassword(), user.getPassword())) {
-			result.addError(new FieldError("user", "password", "Senhas devem ser iguais"));
+		if (user.getPassword().isEmpty() && user.getConfirmPassword().isEmpty()) {
+			result.addError(new FieldError("user", "password", "Senha não deve ser vazia"));
+		} else {
+			if (!new BCryptPasswordEncoder().matches(user.getConfirmPassword(), user.getPassword())) {
+				result.addError(new FieldError("user", "password", "Senhas devem ser iguais"));
+			}
 		}
 		if (result.hasErrors()) {
-			return new ModelAndView("register").addObject("result",
+			return new ModelAndView("registerview").addObject("result",
 					new Result("Falha ao se cadastrar, verifique suas informações", "error"));
 		}
-		service.insert(user);
-		return new ModelAndView("login").addObject("result",
-				new Result("Usuário cadastrado com sucesso, entre com suas credenciais", "success"));
+		user.setActive(true);
+		if (service.insert(user)) {
+			return new ModelAndView("forward:/login").addObject("result",
+					new Result("Usuário cadastrado com sucesso, entre com suas credenciais", "success"));
+		} else {
+			return new ModelAndView("registerview").addObject("result",
+					new Result("Falha ao se cadastrar, verifique suas informações", "error"));
+		}
 	}
 
 	@GetMapping("/user/update")
@@ -110,17 +119,16 @@ public class UserController {
 		MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 
-		
 		User user = service.returnByUserName(myUserDetails.getUsername());
-		
+
 		if (!new BCryptPasswordEncoder().matches(userUpdatePassword.getPassword(), user.getPassword())) {
 			result.addError(new FieldError("user", "password", "Senha atual inválida"));
 		}
-		
-		if(!userUpdatePassword.getNewPassword().equals(userUpdatePassword.getConfirmPassword())) {
+
+		if (!userUpdatePassword.getNewPassword().equals(userUpdatePassword.getConfirmPassword())) {
 			result.addError(new FieldError("userUpdatePassword", "newPassword", "Senhas devem ser iguais"));
 		}
-		
+
 		if (result.hasErrors()) {
 			return new ModelAndView("user/updatepassword").addObject("result",
 					new Result("Falha ao alterar senha", "error"));
@@ -140,12 +148,12 @@ public class UserController {
 
 	public static void main(String[] args) {
 		System.out.print(new BCryptPasswordEncoder().encode("norton123"));
-		
+
 	}
-	
+
 	@GetMapping("/register")
 	public ModelAndView addCondominium() {
-		ModelAndView modelsAndView = new ModelAndView("register");
+		ModelAndView modelsAndView = new ModelAndView("registerview");
 		modelsAndView.addObject("user", new User());
 		return modelsAndView;
 	}
@@ -153,7 +161,7 @@ public class UserController {
 	@GetMapping("/login")
 	public ModelAndView loginMyUserDetails(@RequestParam(value = "error", required = false) String error,
 			final RedirectAttributes redirectAttributes) {
-		ModelAndView modelsAndView = new ModelAndView("login");
+		ModelAndView modelsAndView = new ModelAndView("loginview");
 		if (error != null) {
 			if (error.equals("true")) {
 //				modelsAndView.addObject("errorMessge", "Erro ao autenticar, verifique suas credenciais");
@@ -251,7 +259,7 @@ public class UserController {
 								passwordReset.setUsed(true);
 								passwordReset.setUsedDate(new Date());
 								passwordResetService.updateUsed(passwordReset);
-								modelsAndView = new ModelAndView("login");
+								modelsAndView = new ModelAndView("loginview");
 								modelsAndView.addObject("result",
 										new Result("Email enviado para mudança de senha", "success"));
 								return modelsAndView;

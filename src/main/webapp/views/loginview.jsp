@@ -30,10 +30,10 @@
 					<div class="col-12 col-md-6 col-lg-6">
 						<div class="input-group">
 							<div class="col-12">
-								<label for="confirmPassword">Usuário</label>
+								<label for="username">Usuário</label>
 							</div>
 
-							<input class="form-control" type='text' name='username'>
+							<input class="form-control" type='text' name='userName'>
 						</div>
 					</div>
 					<div class="col-12 col-md-6 col-lg-6">
