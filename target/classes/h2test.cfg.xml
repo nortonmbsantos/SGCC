@@ -31,7 +31,6 @@
         <property name="hbm2ddl.auto">create</property>
 
 
-		<mapping class="br.edu.utfpr.sgcc.models.Admin" />
 		<mapping class="br.edu.utfpr.sgcc.models.Booking" />
 		<mapping class="br.edu.utfpr.sgcc.models.CommomArea" />
 		<mapping class="br.edu.utfpr.sgcc.models.Condominium" />
@@ -41,7 +40,6 @@
 		<mapping class="br.edu.utfpr.sgcc.models.Fee" />
 		<mapping class="br.edu.utfpr.sgcc.models.FeeType" />
 		<mapping class="br.edu.utfpr.sgcc.models.PasswordReset" />
-		<mapping class="br.edu.utfpr.sgcc.models.Resident" />
 		<mapping class="br.edu.utfpr.sgcc.models.User" />
 		<mapping class="br.edu.utfpr.sgcc.models.Warning" />
 		<mapping class="br.edu.utfpr.sgcc.models.Guest" />

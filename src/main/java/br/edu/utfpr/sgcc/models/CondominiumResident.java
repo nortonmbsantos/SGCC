@@ -2,6 +2,8 @@ package br.edu.utfpr.sgcc.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -12,6 +14,7 @@ import javax.persistence.Transient;
 public class CondominiumResident {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(name = "id_resident")
 	private int idResident;

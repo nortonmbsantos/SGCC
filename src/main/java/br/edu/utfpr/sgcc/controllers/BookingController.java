@@ -105,10 +105,10 @@ public class BookingController {
 	@PostMapping("/resident/condominium/booking/add")
 	public ModelAndView formAddCondominium(@ModelAttribute @Valid BookingRequest bookingRequest, BindingResult result,
 			final RedirectAttributes redirectAttributes) {
-		ModelAndView modelsAndView = new ModelAndView("redirect:/resident/dashboard");
 		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		CommomAreaService commomAreaService = new CommomAreaService();
 		CommomArea commomArea = commomAreaService.returnById(bookingRequest.getIdCommomArea());
+		ModelAndView modelsAndView = new ModelAndView("redirect:/resident/condominium/booking/list?idCondominium=" + commomArea.getIdCondominium());
 		boolean validBooking = true;
 		if (commomArea != null) {
 			if (bookingRequest.getGuests() != null && !bookingRequest.getGuests().isEmpty()) {
@@ -126,16 +126,6 @@ public class BookingController {
 						result.addError(oe);						
 					}
 				}
-//				
-//				if (result.hasErrors()) {
-//					modelsAndView = new ModelAndView("resident/newbooking");
-//					modelsAndView.addObject("result",
-//							new Result("Falha ao solicitar reserva, preencha os campos corretamente", "error"));
-//					modelsAndView.addObject("bookingRequest", bookingRequest);
-//					modelsAndView.addObject("commomareas", commomAreaService.list(commomArea.getIdCondominium()));
-//					modelsAndView.addObject("guestForScript", new GuestService().returnGuestsForScript());
-//					return modelsAndView;
-//				}
 				
 				for (Guest g : bookingRequest.getGuests()) {
 					for (Guest g2 : bookingRequest.getGuests()) {
@@ -234,7 +224,6 @@ public class BookingController {
 
 	@PostMapping("/user/condominium/commomarea/booking/accept")
 	public ModelAndView formBookingAccept(@RequestParam int id, final RedirectAttributes redirectAttributes) {
-		ModelAndView modelsAndView = new ModelAndView("redirect:/user/dashboard");
 		BookingService bookingService = new BookingService();
 		Booking bookingValidation = bookingService.returnById(id);
 		CommomArea commomAreaValidation = new CommomAreaService().returnById(bookingValidation.getIdCommomArea());
@@ -242,6 +231,7 @@ public class BookingController {
 				.returnById(commomAreaValidation.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+		ModelAndView modelsAndView = new ModelAndView("redirect:/user/condominium/commomarea/bookings?id_commom_area=" + bookingValidation.getIdCommomArea());
 		Result result;
 		if (condominiumValidation.getIdUser() == user.getId()) {
 			if (bookingService.accept(id)) {
@@ -258,7 +248,7 @@ public class BookingController {
 
 	@PostMapping("/user/condominium/commomarea/booking/refuse")
 	public ModelAndView formBookingRefuse(@RequestParam int id, final RedirectAttributes redirectAttributes) {
-		ModelAndView modelsAndView = new ModelAndView("redirect:/user/dashboard");
+		ModelAndView modelsAndView = new ModelAndView("redirect:/user/condominium/commomarea/bookings?id_commom_area=");
 		BookingService bookingService = new BookingService();
 		Booking bookingValidation = bookingService.returnById(id);
 		CommomArea commomAreaValidation = new CommomAreaService().returnById(bookingValidation.getIdCommomArea());

@@ -109,42 +109,6 @@ public class CondominiumController {
 		return modelsAndView;
 	}
 
-//	@GetMapping("/user/condominium/resident/new")
-//	public ModelAndView addCondominiumResident(@RequestParam int idCondominium) {
-//		ModelAndView modelsAndView = new ModelAndView("user/condominium/resident/new");
-//		modelsAndView.addObject("condominium", new CondominiumService().returnById(idCondominium));
-//		return modelsAndView;
-//	}
-//
-//	@PostMapping("/user/condominium/resident/add")
-//	public ModelAndView addCondominiumResidentForm(@RequestParam String residentUserName,
-//			@RequestParam int idCondominium) {
-//		UserService service = new UserService();
-//		User resident = service.returnByUserName(residentUserName);
-//		if (resident != null) {
-//			if (resident.getRoles().equals("ROLE_RESIDENT")) {
-//				CondominiumEntryRequest cer = new CondominiumEntryRequest();
-//				cer.setIdCondominium(idCondominium);
-//				cer.setIdResident(resident.getId());
-//				cer.setRequestDate(new Date());
-//				CondominiumEntryRequestService requestService = new CondominiumEntryRequestService();
-//				if (requestService.insert(cer)) {
-//					return new ModelAndView("user/dashboard").addObject("result",
-//							new Result("Solicita��o para " + residentUserName + " enviada com sucesso", "success"));
-//				} else {
-//					return new ModelAndView("user/condominium/resident/new").addObject("result",
-//							new Result("Falha ao enviar solicita��o ao usu�rio", "error"));
-//				}
-//			} else {
-//				return new ModelAndView("user/condominium/resident/new").addObject("result",
-//						new Result("Usu�rio indispon�vel", "error"));
-//			}
-//		} else {
-//			return new ModelAndView("user/condominium/resident/new").addObject("result",
-//					new Result("Usu�rio n�o encontrado", "error"));
-//		}
-//	}
-
 	@PostMapping("user/condominium/accept")
 	public ModelAndView acceptEntry(@ModelAttribute CondominiumEntryRequest cRequest,
 			final RedirectAttributes redirectAttributes) {
@@ -204,12 +168,12 @@ public class CondominiumController {
 	@PostMapping("/user/condominium/add")
 	public ModelAndView addCondominiumForm(@ModelAttribute @Valid Condominium condominium, BindingResult result,
 			final RedirectAttributes redirectAttributes) {
-		ModelAndView modelsAndView = new ModelAndView("user/condominium/new");
+		ModelAndView modelsAndView = new ModelAndView("user/condominium/form");
 		CondominiumService service = new CondominiumService();
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		condominium.setIdUser(user.getId());
 		if (result.hasErrors()) {
-			return new ModelAndView("user/condominium/new");
+			return new ModelAndView("user/condominium/form");
 		}
 		condominium = service.insert(condominium);
 		if (condominium != null) {
@@ -242,22 +206,22 @@ public class CondominiumController {
 		CondominiumService service = new CondominiumService();
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Condominium condominiumVal = service.returnById(condominium.getId());
-		if (condominium.getIdUser() == condominiumVal.getIdUser()) {
-			if (user.getId() == condominiumVal.getIdUser()) {
+			if (condominium.getId() == 0 || user.getId() == condominiumVal.getIdUser()) {
 				if (result.hasErrors()) {
-					return new ModelAndView("user/condominium/update");
+					return new ModelAndView("user/condominium/form");
 				} else {
+					condominium.setIdUser(user.getId());
+					
 					service.update(condominium);
+					modelsAndView = new ModelAndView("redirect:/user/condominium?id=" + condominium.getId());
 					redirectAttributes.addFlashAttribute("result",
-							new Result("Condominio atualizado com sucesso", "success"));
+							new Result("Condominio " + (condominium.getId() > 0 ? "alterado" : "criado") + "com sucesso", "success"));
 				}
 				return modelsAndView;
 			} else {
 				return new ModelAndView("errors/accessdenied");
 			}
-		} else {
-			return new ModelAndView("errors/accessdenied");
-		}
+
 	}
 
 	@GetMapping("/user/condominium/entries")

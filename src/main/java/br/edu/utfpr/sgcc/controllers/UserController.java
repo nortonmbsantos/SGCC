@@ -50,7 +50,7 @@ public class UserController {
 		}
 		user.setActive(true);
 		if (service.insert(user)) {
-			return new ModelAndView("forward:/login").addObject("result",
+			return new ModelAndView("forward:/").addObject("result",
 					new Result("Usuário cadastrado com sucesso, entre com suas credenciais", "success"));
 		} else {
 			return new ModelAndView("registerview").addObject("result",
@@ -161,7 +161,7 @@ public class UserController {
 	@GetMapping("/login")
 	public ModelAndView loginMyUserDetails(@RequestParam(value = "error", required = false) String error,
 			final RedirectAttributes redirectAttributes) {
-		ModelAndView modelsAndView = new ModelAndView("loginview");
+		ModelAndView modelsAndView = new ModelAndView("index");
 		if (error != null) {
 			if (error.equals("true")) {
 //				modelsAndView.addObject("errorMessge", "Erro ao autenticar, verifique suas credenciais");

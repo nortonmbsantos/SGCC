@@ -109,13 +109,13 @@ public class FeeController {
 			return new ModelAndView("user/condominium/fee/forminstalment");
 		}
 
-		ModelAndView modelsAndView = new ModelAndView("redirect:/user/dashboard");
 		FeeService feeService = new FeeService();
 		CondominiumService condominiumService = new CondominiumService();
 
 		CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
 		CondominiumFee condominiumFee = condominiumFeeService.returnById(fee.getIdCondominiumFee());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		ModelAndView modelsAndView = new ModelAndView("redirect:/user/condominium/condominiumfee?idCondominiumFee="+ condominiumFee.getId());
 
 		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 
@@ -126,6 +126,7 @@ public class FeeController {
 				fee.setCurrentInstallment(lastByFather.getCurrentInstallment() + 1);
 				fee.setInstallments(lastByFather.getInstallments());
 				fee.setMonthly(lastByFather.isMonthly());
+				fee.setValue(lastByFather.getValue());
 				fee.setIdFeeType(lastByFather.getIdFeeType());
 
 				boolean bolresult = feeService.save(fee);
@@ -139,7 +140,7 @@ public class FeeController {
 
 			} else {
 				return new ModelAndView("user/condominium/fee/forminstalment").addObject("result",
-						new Result("Não foi possível realizar ação: Taxa de condomínio fechada", "error"));
+						new Result("Não foi possível realizar ação: Período da taxa fechado", "error"));
 			}
 		} else {
 			return new ModelAndView("errors/accessdenied");
@@ -194,7 +195,6 @@ public class FeeController {
 			return new ModelAndView("user/condominium/fee/form");
 		}
 
-		ModelAndView modelsAndView = new ModelAndView("redirect:/user/dashboard");
 		FeeService feeService = new FeeService();
 		CondominiumService condominiumService = new CondominiumService();
 
@@ -204,6 +204,7 @@ public class FeeController {
 
 		Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 
+		ModelAndView modelsAndView = new ModelAndView("redirect:/user/condominium/condominiumfee?idCondominiumFee=" + condominiumFee.getId());
 		if (condominium.getIdUser() == user.getId()) {
 			if (!condominiumFee.isFinished()) {
 

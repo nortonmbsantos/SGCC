@@ -54,6 +54,28 @@ public class WarningDAOImpl implements WarningDAO {
 		}
 	}
 
+	public List<Warning> returnByCondominiumResident(int id_resident, int id_condominium) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery("SELECT w FROM warning w INNER JOIN condominium_fee cf on cf.id = w.idCondominiumFee WHERE w.idResident = :idResident  and cf.idCondominium = :idCondominium");
+			query.setParameter("idResident", id_resident);
+			query.setParameter("idCondominium", id_condominium);
+			@SuppressWarnings("unchecked")
+			List<Warning> warnings = (List<Warning>) query.getResultList();
+			
+			return warnings;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
+
 	public List<Warning> returnByCondominiumFee(int id_resident, int id_condominium_fee) {
 		Session session = null;
 		try {
@@ -93,6 +115,25 @@ public class WarningDAOImpl implements WarningDAO {
 			}
 		}
 
+	}
+
+	public boolean update(Warning warning) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			session.saveOrUpdate(warning);
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return false;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+		
 	}
 
 }

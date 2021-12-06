@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.edu.utfpr.sgcc.models.Condominium;
 import br.edu.utfpr.sgcc.models.CondominiumEntryRequest;
 import br.edu.utfpr.sgcc.models.MyUserDetails;
-import br.edu.utfpr.sgcc.models.Resident;
 import br.edu.utfpr.sgcc.models.Result;
 import br.edu.utfpr.sgcc.models.User;
 import br.edu.utfpr.sgcc.models.UserUpdatePassword;
@@ -28,21 +27,12 @@ import br.edu.utfpr.sgcc.service.BookingService;
 import br.edu.utfpr.sgcc.service.CondominiumEntryRequestService;
 import br.edu.utfpr.sgcc.service.CondominiumResidentService;
 import br.edu.utfpr.sgcc.service.CondominiumService;
-import br.edu.utfpr.sgcc.service.ResidentService;
 import br.edu.utfpr.sgcc.service.UserService;
 import br.edu.utfpr.sgcc.service.WarningService;
 
 @Controller
 @SessionAttributes({ "user" })
 public class ResidentLoginController {
-
-	@GetMapping("/resident/login")
-	public ModelAndView loginAdmin() {
-		ModelAndView modelsAndView = new ModelAndView("resident/login");
-		Resident resident = new Resident();
-		modelsAndView.addObject("resident", resident);
-		return modelsAndView;
-	}
 
 	@GetMapping("/resident/dashboard")
 	public ModelAndView getDashboard() {
@@ -63,19 +53,6 @@ public class ResidentLoginController {
 		return modelsAndView;
 	}
 
-	@PostMapping("/resident/login")
-	public ModelAndView loginAdminForm(@ModelAttribute Resident resident) {
-		ResidentService service = new ResidentService();
-		Resident residentLogin = service.login(resident);
-		ModelAndView modelsAndView;
-		if (null != residentLogin) {
-			modelsAndView = new ModelAndView("redirect:/resident/dashboard");
-
-		} else {
-			modelsAndView = new ModelAndView("resident/login");
-		}
-		return modelsAndView;
-	}
 
 	@GetMapping("/resident/condominium/entry/new")
 	public ModelAndView addCondominiumResident() {

@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 import org.hibernate.Session;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import br.edu.utfpr.sgcc.daos.AdminDAOImpl;
 import br.edu.utfpr.sgcc.daos.CommomAreaDAOImpl;
 import br.edu.utfpr.sgcc.daos.CondominiumDAOImpl;
 import br.edu.utfpr.sgcc.models.CommomArea;

@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.swing.text.MaskFormatter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -22,7 +23,7 @@ public class User {
 	private int id;
 	@NotNull
 	@Size(min = 6, message = "Usuário deve ter no mínimo 6 caracteres")
-	@Column(name = "user_name", unique = true)
+	@Column(name = "user_name", unique = true, nullable = false)
 	private String userName;
 	@Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
 	private String password;

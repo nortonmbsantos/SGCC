@@ -29,8 +29,6 @@ public class IndexControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-
-	private String contextPath = "http://localhost";
 	
 	@Test
 	public void indexLoads() throws Exception {

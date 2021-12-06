@@ -11,7 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultHandler;
 
+import aj.org.objectweb.asm.Attribute;
+import br.edu.utfpr.sgcc.models.Result;
 import br.edu.utfpr.sgcc.models.User;
 import br.edu.utfpr.sgcc.service.UserService;
 
@@ -19,6 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -42,22 +46,22 @@ public class LoginControllerTest {
 
 	@Before
 	public void setup() {
-		User user = new User();
-		user.setActive(true);
-		user.setFirstName("Norton");
-		user.setEmail("norton@teste.com");
-		user.setPassword("norton123");
-		user.setRoles("ROLE_USER");
-		user.setUserName("norton");
-		userServiceTest.insert(user);
-		User user2 = new User();
-		user2.setActive(true);
-		user2.setFirstName("Norton");
-		user2.setEmail("norton@teste.com");
-		user2.setPassword("123456789");
-		user2.setRoles("ROLE_RESIDENT");
-		user2.setUserName("norton@teste.com");
-		userServiceTest.insert(user2);
+//		User user = new User();
+//		user.setActive(true);
+//		user.setFirstName("Norton");
+//		user.setEmail("norton@teste.com");
+//		user.setPassword("norton123");
+//		user.setRoles("ROLE_USER");
+//		user.setUserName("norton");
+//		userServiceTest.insert(user);
+//		User user2 = new User();
+//		user2.setActive(true);
+//		user2.setFirstName("Norton");
+//		user2.setEmail("norton@teste.com");
+//		user2.setPassword("123456789");
+//		user2.setRoles("ROLE_RESIDENT");
+//		user2.setUserName("norton@teste.com");
+//		userServiceTest.insert(user2);
 	}
 	
 	@Test
@@ -115,9 +119,13 @@ public class LoginControllerTest {
 	
 	@Test
 	public void loginShouldWorkWithValidUser() throws Exception {
-		mockMvc.perform(post("/login").param("username", "norton").param("password", "norton123"))
+		User user = userServiceTest.returnByUserName("norton");
+		mockMvc.perform(post("/login").param("username", user.getUserName()).param("password", "norton123"))
+//		.andExpect(model().attribute("result", new Result("Login efetuado com sucesso", "success")))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(redirectedUrl("/user/dashboard"))
+//		.andExpect(content().string("Norton"))
+//		.andExpect(flash().attribute("result", new Result("Login efetuado com sucesso", "success")))
 		;
 	}
 

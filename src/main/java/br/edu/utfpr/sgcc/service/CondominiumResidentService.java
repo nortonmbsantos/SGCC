@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 import org.hibernate.Session;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import br.edu.utfpr.sgcc.daos.AdminDAOImpl;
 import br.edu.utfpr.sgcc.daos.CondominiumDAOImpl;
 import br.edu.utfpr.sgcc.daos.CondominiumEntryRequestDAOImpl;
 import br.edu.utfpr.sgcc.daos.CondominiumResidentDAOImpl;
@@ -29,7 +28,9 @@ public class CondominiumResidentService {
 
 	public CondominiumResident returnByResidentAndCondominium(int idResident, int idCondominium) {
 		CondominiumResident cr = daos.returnByResidentAndCondominium(idResident, idCondominium);
-		cr.setResident(new UserService().returnById(cr.getIdResident()));
+		if (cr != null) {
+			cr.setResident(new UserService().returnById(cr.getIdResident()));
+		}
 		return cr;
 	}
 

@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-0 shadow sticky-top flex-md-nowrap">
-	<a class="navbar-brand" href="#">SGCC</a> 
+	<a class="navbar-brand" href="${pageContext.request.contextPath}/resident/dashboard">SGCC</a> 
 	<a class="navbar-toggler d-none d-sm-block d-md-none"
 		type="button" data-toggle="collapse"
 		data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02"

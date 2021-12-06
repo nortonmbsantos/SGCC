@@ -1,6 +1,8 @@
 package br.edu.utfpr.sgcc.service;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -10,7 +12,6 @@ import org.hibernate.Session;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 
-import br.edu.utfpr.sgcc.daos.AdminDAOImpl;
 import br.edu.utfpr.sgcc.daos.CondominiumDAOImpl;
 import br.edu.utfpr.sgcc.models.Condominium;
 
@@ -61,13 +62,38 @@ public class CondominiumService {
 	}
 	
 	public boolean update(Condominium condominium) {
-		return daos.update(condominium);
+		boolean create = condominium.getId() > 0 ? false : true;
+		boolean valid = daos.update(condominium);
+		
+		if(valid) {
+			if(create) {
+				this.updateCode(condominium);
+			}
+		} 
+		
+		return valid;
+	}
+
+	public Condominium saveOrUpdate(Condominium condominium) {
+		boolean create = condominium.getId() > 0 ? false : true;
+		boolean valid = daos.update(condominium);
+		
+		if(valid) {
+			if(create) {
+				this.updateCode(condominium);
+			}
+			return condominium;
+		} else {
+			return null;
+		}
 	}
 	
 	public static void main(String[] args) {
-		List<Condominium> cons = new CondominiumService().listForResidents(7);
-		for(Condominium c : cons) {
-			System.out.println(c.getName());
-		}
+		Condominium condominium = new CondominiumService().returnById(1);
+		condominium.setId(0);
+		condominium.setName("Novo condominio teste");
+		String descrition = "Criado " + new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss").format(new Date());
+		condominium.setDescription(descrition);
+		new CondominiumService().update(condominium);
 	}
 }

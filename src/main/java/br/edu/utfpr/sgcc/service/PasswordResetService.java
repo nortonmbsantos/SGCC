@@ -8,9 +8,7 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 
-import br.edu.utfpr.sgcc.daos.AdminDAOImpl;
 import br.edu.utfpr.sgcc.daos.PasswordResetDAOImpl;
-import br.edu.utfpr.sgcc.models.Admin;
 import br.edu.utfpr.sgcc.models.Condominium;
 import br.edu.utfpr.sgcc.models.PasswordReset;
 
