@@ -232,7 +232,7 @@ public class CondominiumFeeController {
 
 	@GetMapping("/resident/condominium/condominiumfee")
 	public ModelAndView returnCondominiumFeeForResident(@RequestParam int idCondominiumFee) {
-		ModelAndView modelsAndView = new ModelAndView("resident/viewCondominiumFee");
+		ModelAndView modelsAndView = new ModelAndView("resident/condominiumfee");
 		CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
 		CondominiumFee condominiumFee = condominiumFeeService.returnById(idCondominiumFee);
 
@@ -251,6 +251,9 @@ public class CondominiumFeeController {
 				modelsAndView.addObject("condominium", condominium);
 				modelsAndView.addObject("warnings",
 						new WarningService().returnByCondominiumFee(resident.getId(), idCondominiumFee));
+				modelsAndView.addObject("reportSumByFeeType", condominiumFeeService.reportSumFeeType(idCondominiumFee));
+				modelsAndView.addObject("reportsCondominiumFeeType",
+						condominiumFeeService.reportsCondominiumFeeType(condominium.getId(), idCondominiumFee));
 			} else {
 				modelsAndView = new ModelAndView("errors/accessdenied");
 			}

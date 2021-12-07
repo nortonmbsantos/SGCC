@@ -15,7 +15,7 @@
 </head>
 <body>
 	<jsp:include page="../../navbar.jsp" />
-	<div class="container-fluid pt-5">
+	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="../../sidebar.jsp" />
 
@@ -48,7 +48,7 @@
 									href="${pageContext.request.contextPath}/user/condominium/resident?id_resident=${resident.idResident}&id_condominium=${condominium.id}"
 									title="Visualizar Morador"><i class="fas fa-eye"></i></a> <a
 									class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/warnings?id_resident=${resident.idResident}&id_condominium=${condominium.id}"
+									href="${pageContext.request.contextPath}/user/condominium/resident/warnings?id_resident=${resident.idResident}&id_condominium=${condominium.id}"
 									title="Multas do morador"><i class="fas fa-list"></i></a> <a
 									class="btn btn-light"
 									href="${pageContext.request.contextPath}/user/condominium/warning/new?id_resident=${resident.idResident}&id_condominium=${condominium.id}"

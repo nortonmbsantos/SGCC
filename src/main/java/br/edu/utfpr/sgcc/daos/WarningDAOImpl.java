@@ -117,6 +117,25 @@ public class WarningDAOImpl implements WarningDAO {
 
 	}
 
+	public boolean remove(Warning warning) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			session.remove(warning);
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return false;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+		
+	}
+
 	public boolean update(Warning warning) {
 		Session session = null;
 		try {

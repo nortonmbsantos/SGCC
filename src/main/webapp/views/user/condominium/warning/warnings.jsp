@@ -14,7 +14,7 @@
 </head>
 <body>
 	<jsp:include page="../../navbar.jsp" />
-	<div class="container-fluid pt-5">
+	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="../../sidebar.jsp" />
 
@@ -24,10 +24,11 @@
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 
 					<div class="jumbotron">
-						<h1 class="display-4">Multas do morador ${resident.name}</h1>
+						<h1 class="display-4">Multas do morador
+							${resident.resident.firstName}</h1>
 						<hr class="my-4">
 						<a class="btn btn-primary"
-							href="${pageContext.request.contextPath}/user/condominium/warning/new?id_resident=${resident.id}">Nova
+							href="${pageContext.request.contextPath}/user/condominium/warning/new?id_resident=${resident.idResident}&id_condominium=${resident.idCondominium}">Nova
 							Multa</a>
 					</div>
 				</div>
@@ -43,8 +44,13 @@
 					<tbody>
 						<c:forEach items="${warnings}" var="warning">
 							<tr>
-								<td><a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/resident/block?id_resident=${resident.id}"
+								<td>
+									<form action="warning/remove" method="POST" class="remove-warning" id="remove-warning-${warning.id}">
+										<input type="hidden" name="id" value="${warning.id }">
+									</form>
+									
+									 <a class="btn btn-light remove-warning-button"
+									data-id="${warning.id}" data-desc="${warning.description }"
 									title="Bloquear morador"><i class="fas fa-minus-circle"></i></a>
 								</td>
 								<td>${format.format(warning.warningDate) }</td>
@@ -66,5 +72,6 @@
 			</main>
 		</div>
 	</div>
+		<jsp:include page="../../../result.jsp"></jsp:include>
 </body>
 </html>

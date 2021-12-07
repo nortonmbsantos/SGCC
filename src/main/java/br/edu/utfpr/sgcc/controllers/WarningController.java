@@ -65,31 +65,39 @@ public class WarningController {
 		WarningService service = new WarningService();
 		int idCondominium = 0;
 		CondominiumFee condominiumFee = new CondominiumFeeService().returnById(warning.getIdCondominiumFee());
+		CondominiumResidentService condominiumResidentService = new CondominiumResidentService();
+		CondominiumResident condominiumResident = condominiumResidentService
+				.returnByResidentAndCondominium(warning.getIdResident(), condominiumFee.getIdCondominium());
 
-		if (condominiumFee != null) {
+			if (condominiumFee != null) {
+				Condominium condominium = new CondominiumService().returnById(condominiumFee.getIdCondominium());
+				MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+						.getPrincipal();
 
-			Condominium condominium = new CondominiumService().returnById(condominiumFee.getIdCondominium());
-			MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				if ((condominium != null && condominium.getIdUser() == user.getId()) && condominiumResident != null) {
+					idCondominium = condominium.getId();
+					if (result.hasErrors()) {
+						return new ModelAndView("user/condominium/warning/form");
+					}
 
-			if (condominium != null && condominium.getIdUser() == user.getId()) {
-				idCondominium = condominium.getId();
-				if (result.hasErrors()) {
-					return new ModelAndView("user/condominium/warning/form");
-				}
-
-				if (service.insert(warning)) {
-					redirectAttributes.addFlashAttribute("result",
-							new Result("Multa cadastrada com sucesso", "success"));
+					if (service.insert(warning)) {
+						redirectAttributes.addFlashAttribute("result",
+								new Result("Multa cadastrada com sucesso", "success"));
+					} else {
+						return new ModelAndView("user/condominium/warning/form")
+								.addObject("resident", condominiumResident)
+								.addObject("condominiumFees", new CondominiumFeeService().returnActives(condominium.getId()))
+								.addObject("result", new Result("Falha ao inserir multa", "error"));
+					}
 				} else {
-					redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar multa", "error"));
+					return new ModelAndView("error/accessdenied");					
 				}
-
-			} else {
-				return new ModelAndView("user/condominium/warning/form").addObject("result",
-						new Result("Falha ao localizar periodo selecionado", "error"));
-			}
+	
 		} else {
-			return new ModelAndView("errors/accessdenied");
+			return new ModelAndView("user/condominium/warning/form")
+					.addObject("resident", condominiumResident)
+					.addObject("condominiumFees", new CondominiumFeeService().returnActives(condominiumFee.getIdCondominium()))
+					.addObject("result", new Result("Falha ao localizar periodo selecionado", "error"));
 		}
 
 		return new ModelAndView("redirect:/user/condominium/resident/warnings?id_condominium=" + idCondominium
@@ -106,10 +114,9 @@ public class WarningController {
 
 		if (warning != null) {
 			CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
-			
+
 			CondominiumFee condominiumFee = condominiumFeeService.returnById(warning.getIdCondominiumFee());
-			
-			
+
 			CondominiumService condominiumService = new CondominiumService();
 			Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
 			MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -121,8 +128,8 @@ public class WarningController {
 
 				if (condominiumResident != null && condominiumResident.isActive()) {
 					CondominiumResidentService residentService = new CondominiumResidentService();
-					modelsAndView.addObject("resident",
-							residentService.returnByResidentAndCondominium(warning.getIdResident(), condominiumFee.getIdCondominium()));
+					modelsAndView.addObject("resident", residentService.returnByResidentAndCondominium(
+							warning.getIdResident(), condominiumFee.getIdCondominium()));
 					modelsAndView.addObject("condominiumFees",
 							condominiumFeeService.returnActives(condominiumFee.getIdCondominium()));
 					modelsAndView.addObject("warning", warning);
@@ -206,6 +213,7 @@ public class WarningController {
 			if (condominiumResident != null && condominiumResident.isActive()) {
 
 				modelsAndView.addObject("format", new SimpleDateFormat("dd/MM/yyyy"));
+				modelsAndView.addObject("resident", condominiumResident);
 				WarningService warningService = new WarningService();
 				modelsAndView.addObject("warnings",
 						warningService.returnByCondominiumResident(id_resident, id_condominium));
@@ -219,6 +227,36 @@ public class WarningController {
 					new Result("Morador não existente ou não está ativo", "error"));
 		}
 
+		return modelsAndView;
+	}
+
+	@PostMapping("/user/condominium/resident/warning/remove")
+	public ModelAndView removeWarningForm(@RequestParam int id, final RedirectAttributes redirectAttributes) {
+		ModelAndView modelsAndView = new ModelAndView("user/condominium/warning/warnings");
+		WarningService warningService = new WarningService();
+		Warning warning = warningService.returnById(id);
+		
+		if(warning != null) {
+			CondominiumService condominiumService = new CondominiumService();
+			CondominiumFee condominiumFee = new CondominiumFeeService().returnById(warning.getIdCondominiumFee());
+			Condominium condominium = condominiumService.returnById(condominiumFee.getIdCondominium());
+			MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (condominium != null && condominium.getIdUser() == user.getId()) {
+				
+				if(warningService.remove(warning)) {
+					redirectAttributes.addFlashAttribute("result", new Result("Multa removida com sucesso","success"));
+					return new ModelAndView("redirect:/user/condominium/resident/warnings?id_resident="+warning.getIdResident() + "&id_condominium=" + condominium.getId());					
+				} else {					
+					redirectAttributes.addFlashAttribute("result", new Result("Falha ao remover multa","success"));
+					return new ModelAndView("redirect:/user/condominium/resident/warnings?id_resident="+warning.getIdResident() + "&id_condominium=" + condominium.getId());					
+				}
+			} else {
+				modelsAndView = new ModelAndView("errors/accessdenied");			
+			}
+		} else {			
+			modelsAndView = new ModelAndView("errors/accessdenied").addObject("result",
+					new Result("Multa não existente ou não está ativo", "error"));
+		}		
 		return modelsAndView;
 	}
 

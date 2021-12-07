@@ -248,10 +248,10 @@ public class BookingController {
 
 	@PostMapping("/user/condominium/commomarea/booking/refuse")
 	public ModelAndView formBookingRefuse(@RequestParam int id, final RedirectAttributes redirectAttributes) {
-		ModelAndView modelsAndView = new ModelAndView("redirect:/user/condominium/commomarea/bookings?id_commom_area=");
 		BookingService bookingService = new BookingService();
 		Booking bookingValidation = bookingService.returnById(id);
 		CommomArea commomAreaValidation = new CommomAreaService().returnById(bookingValidation.getIdCommomArea());
+		ModelAndView modelsAndView = new ModelAndView("redirect:/user/condominium/commomarea/bookings?id_commom_area="+ commomAreaValidation.getId());
 		Condominium condominiumValidation = new CondominiumService()
 				.returnById(commomAreaValidation.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

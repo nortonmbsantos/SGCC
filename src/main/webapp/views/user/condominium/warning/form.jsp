@@ -14,7 +14,7 @@
 </head>
 <body>
 	<jsp:include page="../../navbar.jsp" />
-	<div class="container-fluid pt-5">
+	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="../../sidebar.jsp" />
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
@@ -28,7 +28,7 @@
 						<p>Campos marcados com * são considerados obrigatórios</p>
 						<form:form action="new" modelAttribute="warning">
 							<form:hidden path="idResident" cssClass="form-control"
-								value="${resident.id}" />
+								value="${resident.idResident}" />
 							<div class="row">
 								<div class="col-12 col-md-6 col-lg-6">
 									<div class="input-group">
@@ -94,5 +94,6 @@
 			allowZero : true
 		});
 	</script>
+	<jsp:include page="../../../result.jsp"></jsp:include>
 </body>
 </html>

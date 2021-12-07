@@ -17,7 +17,7 @@
 
 
 	<jsp:include page="../../navbar.jsp" />
-	<div class="container-fluid pt-5">
+	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="../../sidebar.jsp" />
 

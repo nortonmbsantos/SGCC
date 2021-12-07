@@ -15,7 +15,7 @@
 <body>
 <fmt:setTimeZone value="GMT-0"/>
 	<jsp:include page="../../navbar.jsp" />
-	<div class="container-fluid pt-5">
+	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="../../sidebar.jsp" />
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">

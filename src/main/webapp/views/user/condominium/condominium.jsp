@@ -17,7 +17,7 @@
 
 
 	<jsp:include page="../navbar.jsp" />
-	<div class="container-fluid pt-5">
+	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="../sidebar.jsp" />
 
@@ -62,8 +62,8 @@
 													<fmt:formatDate value="${booking.bookingDate}"
 														pattern="dd/MM/yyyy" />
 												</h5>
-												<h6 class="card-subtitle mb-2 text-muted">${booking.commomarea_name }</h6>
-												<p class="card-text">${booking.resident_name }</p>
+												<h6 class="card-subtitle mb-2 text-muted">${booking.commomAreaName }</h6>
+												<p class="card-text">${booking.residentName }</p>
 											</div>
 										</div>
 									</div>

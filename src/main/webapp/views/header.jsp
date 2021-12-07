@@ -12,3 +12,5 @@
 <script src="${pageContext.request.contextPath}/assets/js/noty.min.js" ></script>
 <script src="${pageContext.request.contextPath}/assets/js/jquery.mask.min.js" ></script>
 <script src="${pageContext.request.contextPath}/assets/js/mask.js" ></script>
+<script src="${pageContext.request.contextPath}/assets/js/warning.js" ></script>
+<script src="${pageContext.request.contextPath}/assets/js/booking.js" ></script>

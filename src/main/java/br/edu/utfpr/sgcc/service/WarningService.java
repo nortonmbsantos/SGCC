@@ -40,6 +40,10 @@ public class WarningService {
 	public boolean update(Warning warning) {
 		return daos.update(warning);
 	}
+		
+	public boolean remove(Warning warning) {
+		return daos.remove(warning);
+	}
 	
 	public static void main(String[] args) {
 		new WarningService().returnByCondominiumResident(10, 2);

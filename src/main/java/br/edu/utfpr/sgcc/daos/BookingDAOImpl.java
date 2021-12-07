@@ -58,17 +58,38 @@ public class BookingDAOImpl {
 		}
 	}
 
+//	public boolean acceptBooking(int id) {
+//		Session session = null;
+//		try {
+//			session = factory.getCurrentSession();
+//			session.beginTransaction();
+//			Booking booking = this.returnById(id);
+//			booking.setStatus(true);
+//			booking.setStatusDate(new java.util.Date());
+//			session.update(booking);
+//			session.getTransaction().commit();
+//
+//			return true;
+//		} catch (Exception e) {
+//			e.printStackTrace(System.err);
+//			return false;
+//		} finally {
+//			if (null != session) {
+//				session.close();
+//			}
+//		}
+//	}
+//	
 	public boolean acceptBooking(int id) {
 		Session session = null;
 		try {
-			session = factory.getCurrentSession();
-			session.beginTransaction();
 			Booking booking = this.returnById(id);
 			booking.setStatus(true);
 			booking.setStatusDate(new java.util.Date());
+			session = factory.getCurrentSession();
+			session.beginTransaction();
 			session.update(booking);
 			session.getTransaction().commit();
-
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace(System.err);

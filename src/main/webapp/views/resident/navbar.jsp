@@ -7,7 +7,7 @@
 		class="navbar-toggler-icon"></span>
 	</a>
 	<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-			<div class="d-none d-sm-block d-md-none">
+			<div class="d-md-none">
 		<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 			<li class="nav-item"><a class="nav-link active"
 				href="${pageContext.request.contextPath}/resident/dashboard"> <i

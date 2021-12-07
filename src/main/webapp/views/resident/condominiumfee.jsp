@@ -18,7 +18,7 @@
 
 
 	<jsp:include page="navbar.jsp" />
-	<div class="container-fluid pt-5">
+	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="sidebar.jsp" />
 
@@ -34,27 +34,11 @@
 								pattern="dd/MM/yyyy" />
 						</p>
 						<hr class="my-4">
-						<c:choose>
-							<c:when test="${!condominiumFee.finished }">
-								<a class="btn btn-primary"
-									href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${condominiumFee.id}&id_fee=0">Nova
-									taxa</a>
-								<a class="btn btn-primary"
-									href="${pageContext.request.contextPath}/user/condominium/condominiumfee/closing?id_condominium_fee=${condominiumFee.id}">Fechar
-									período</a>
-							</c:when>
-							<c:otherwise>
-								<span class="badge badge-info">Período fechado</span>
-							</c:otherwise>
-						</c:choose>
 					</div>
 				</div>
 				<table class="table">
 					<thead class="thead-dark">
 						<tr>
-							<c:if test="${!condominiumFee.finished }">
-								<th scope="col">Editar</th>
-							</c:if>
 							<th scope="col">Descrição</th>
 							<th scope="col">Valor</th>
 							<th scope="col">Data de vencimento</th>
@@ -65,11 +49,6 @@
 					<tbody>
 						<c:forEach items="${fees}" var="fee">
 							<tr>
-								<c:if test="${!condominiumFee.finished }">
-									<td><a class="btn btn-light"
-										href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${fee.idCondominiumFee}&id_fee=${fee.id}"><i
-											class="fas fa-edit"></i></a></td>
-								</c:if>
 								<td>${fee.description }</td>
 								<td><fmt:formatNumber value="${fee.value }" type="currency" /></td>
 								<td><fmt:formatDate value="${fee.dueDate}"
@@ -81,6 +60,16 @@
 										<c:otherwise>Falta pagamento</c:otherwise>
 									</c:choose></td>
 								<td>${fee.currentInstallment}/${fee.installments}</td>
+							</tr>
+						</c:forEach>
+						<c:forEach items="${warnings}" var="warning">
+							<tr>
+								<td>${warning.description } <c:choose><c:when test="${warning.value > 0 }"><span class="badge badge-danger">Multa</span></c:when><c:otherwise><span class="badge badge-warning">Advertência</span></c:otherwise></c:choose></td>
+								<td><fmt:formatNumber value="${warning.value }" type="currency" /></td>
+								<td><fmt:formatDate value="${fee.dueDate}"
+										pattern="dd/MM/yyyy" /></td>
+								<td></td>
+								<td></td>
 							</tr>
 						</c:forEach>
 					</tbody>

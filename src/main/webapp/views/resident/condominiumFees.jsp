@@ -17,7 +17,7 @@
 <fmt:setLocale value="pt-BR"/>
 <fmt:setTimeZone value="GMT-0"/>
 	<jsp:include page="navbar.jsp" />
-	<div class="container-fluid pt-5">
+	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="sidebar.jsp" />
 
@@ -29,8 +29,6 @@
 					<div class="jumbotron">
 						<h1 class="display-4">Taxas do condomínio ${condominium.name}</h1>
 						<hr class="my-4">
-						<a class="btn btn-primary"
-						href="${pageContext.request.contextPath}/user/condominium/condominiumfee/form?id_condominium=${condominium.id}&id=0">Novo período</a>
 					</div>
 				</div>
 				<table class="table">
@@ -46,7 +44,7 @@
 							<tr>
 								<td>
 								<a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/condominium/condominiumfee?idCondominiumFee=${fee.id}"><i
+									href="${pageContext.request.contextPath}/resident/condominium/condominiumfee?idCondominiumFee=${fee.id}"><i
 										class="fas fa-eye" title="Visualizar período"></i></a>
 										</td>
 								<td><fmt:formatDate value="${fee.closingDate}" pattern="dd/MM/yyyy"/> </td>
@@ -55,8 +53,6 @@
 								<c:when test="${fee.finished }"><span class="badge badge-info">Fechado</span></c:when>
 								<c:otherwise><span class="badge badge-secondary">Aberto</span></c:otherwise>
 								</c:choose>
-								
-								
 								</td>
 								
 							</tr>
