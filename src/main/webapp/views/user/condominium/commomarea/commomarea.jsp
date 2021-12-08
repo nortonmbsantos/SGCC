@@ -26,77 +26,16 @@
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 
 					<div class="jumbotron">
-						<h1 class="display-4">${condominium.name} : ${commomarea.name }</h1>
-						<p class="lead">Taxa de reserva: <fmt:formatNumber value="${commomarea.bookingFee}" type="currency" currencyCode="pt-BR" /> </p>
+						<h1 class="display-4">${condominium.name}: ${commomArea.name }</h1>
+						<p class="lead">Taxa de reserva: <fmt:formatNumber value="${commomArea.bookingFee}" type="currency" /> </p>
 						<hr class="my-4">
 						 
 						  <a class="btn btn-primary btn-sm"
-							href="${pageContext.request.contextPath}/user/condominium/condominiumfees?id_condominium=${condominium.id}"
-							role="button">Reservas passadas</a> 
+							href="${pageContext.request.contextPath}/user/condominium/commomarea/bookings?id_commom_area=${commomArea.id}"
+							role="button">Reservas</a> 
 					</div>
 				</div>
-				<!--
-				Tabela de proximas reservas para aceite/recusas
-				 <table class="table">
-					<thead class="thead-dark">
-						<tr>
-							<th scope="col">Visualizar</th>
-							<th scope="col">Descrição</th>
-							<th scope="col">Valor</th>
-							<th scope="col">Data de vencimento</th>
-							<th scope="col">Data de pagamento</th>
-							<th scope="col">Parcelas</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${fees}" var="fee">
-							<tr>
-								<td><a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/fee/fee?id=${fee.id}"><i
-										class="fas fa-eye"></i></a></td>
-								<td>${fee.description }</td>
-								<td>${fee.value }</td>
-								<td>${format.format(fee.dueDate.time)}</td>
-								<td><c:choose>
-										<c:when test="${null != fee.payDate}">${format.format(fee.payDate.time)}</c:when>
-										<c:otherwise>Falta pagamento</c:otherwise>
-									</c:choose></td>
-								<td>${fee.currentInstallment}/${fee.installments}</td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>-->
-				<!--
-				Tabela de proximas reservas já aceitas
-				 <table class="table">
-					<thead class="thead-dark">
-						<tr>
-							<th scope="col">Visualizar</th>
-							<th scope="col">Descrição</th>
-							<th scope="col">Valor</th>
-							<th scope="col">Data de vencimento</th>
-							<th scope="col">Data de pagamento</th>
-							<th scope="col">Parcelas</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${fees}" var="fee">
-							<tr>
-								<td><a class="btn btn-light"
-									href="${pageContext.request.contextPath}/user/fee/fee?id=${fee.id}"><i
-										class="fas fa-eye"></i></a></td>
-								<td>${fee.description }</td>
-								<td>${fee.value }</td>
-								<td>${format.format(fee.dueDate.time)}</td>
-								<td><c:choose>
-										<c:when test="${null != fee.payDate}">${format.format(fee.payDate.time)}</c:when>
-										<c:otherwise>Falta pagamento</c:otherwise>
-									</c:choose></td>
-								<td>${fee.currentInstallment}/${fee.installments}</td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table> -->
+				
 			</main>
 		</div>
 	</div>

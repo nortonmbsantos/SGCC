@@ -93,8 +93,6 @@ public class CondominiumController {
 				modelsAndView.addObject("reportByClosingDate",
 						condominiumFeeService.reportByClosingDate(condominium.getId()));
 				modelsAndView.addObject("reportByFeeType", condominiumFeeService.reportByFeeType(condominium.getId()));
-				modelsAndView.addObject("acceptedBookings",
-						new BookingService().acceptedBookingsByCondominium(condominium.getId()));
 				modelsAndView.addObject("feesDueDate", new FeeService().dahsboardFeesDueDate(condominium.getId()));
 				modelsAndView.addObject("reportLastFeeValue",
 						condominiumFeeService.reportLastCondominiumFeeTotalValue(condominium.getId()));

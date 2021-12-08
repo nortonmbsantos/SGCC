@@ -35,7 +35,7 @@
 				<table class="table">
 					<thead class="thead-dark">
 						<tr>
-							<th scope="col">Visualizar</th>
+							<th scope="col"></th>
 							<th scope="col">Data</th>
 							<th scope="col">Descrição</th>
 							<th scope="col">Valor</th>
@@ -51,7 +51,7 @@
 									
 									 <a class="btn btn-light remove-warning-button"
 									data-id="${warning.id}" data-desc="${warning.description }"
-									title="Bloquear morador"><i class="fas fa-minus-circle"></i></a>
+									title="Remover multa do morador"><i class="fas fa-times-circle"></i></a>
 								</td>
 								<td>${format.format(warning.warningDate) }</td>
 								<td>${warning.description }</td>

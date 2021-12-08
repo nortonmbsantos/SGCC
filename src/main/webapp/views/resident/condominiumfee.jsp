@@ -16,7 +16,7 @@
 </head>
 <body>
 
-
+<fmt:setLocale value="pt-BR"/>
 	<jsp:include page="navbar.jsp" />
 	<div class="container-fluid">
 		<div class="row">

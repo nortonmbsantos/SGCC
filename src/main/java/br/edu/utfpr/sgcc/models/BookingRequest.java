@@ -14,6 +14,7 @@ public class BookingRequest {
 	private int idResident;
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date bookingDate;
 	private boolean status;
 	private List<Guest> guests;

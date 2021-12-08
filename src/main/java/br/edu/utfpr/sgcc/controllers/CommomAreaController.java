@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -87,21 +88,22 @@ public class CommomAreaController {
 	@GetMapping("/user/condominium/commomarea")
 	public ModelAndView show(@RequestParam int id) {
 		ModelAndView modelsAndView = new ModelAndView("user/condominium/commomarea/commomarea");
-		CondominiumService service = new CondominiumService();
-		Condominium condominium = service.returnById(id);
-		if (condominium != null) {
+		CommomAreaService areaService = new CommomAreaService();
+		CommomArea commomArea = areaService.returnById(id);
+		Condominium condominium = null;
+		
+		if (commomArea != null) {
+			CondominiumService service = new CondominiumService();
+			condominium = service.returnById(commomArea.getIdCondominium());
 			MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			if (condominium.getIdUser() == user.getId()) {
-				modelsAndView.addObject("condominium", condominium);
-				CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
-
-				modelsAndView.addObject("reportByClosingDate",
-						condominiumFeeService.reportByClosingDate(condominium.getId()));
-				modelsAndView.addObject("reportByFeeType", condominiumFeeService.reportByFeeType(condominium.getId()));
-				modelsAndView.addObject("reportLastFeeValue",
-						condominiumFeeService.reportLastCondominiumFeeTotalValue(condominium.getId()));
-			} else {
-				condominium = null;
+			if (condominium != null && condominium.getIdUser() == user.getId()) {
+				if (condominium.getIdUser() == user.getId()) {
+					modelsAndView.addObject("commomArea", commomArea);
+					modelsAndView.addObject("condominium", condominium);
+					CondominiumFeeService condominiumFeeService = new CondominiumFeeService();
+				} else {
+					condominium = null;
+				}
 			}
 		}
 		if (condominium == null) {
@@ -123,15 +125,19 @@ public class CommomAreaController {
 	@PostMapping("/user/condominium/commomarea/add")
 	public ModelAndView addCondominiumForm(@ModelAttribute @Valid CommomArea commomArea, BindingResult result,
 			final RedirectAttributes redirectAttributes) {
-		ModelAndView modelsAndView = new ModelAndView("user/condominium/commomarea/new");
+		if(commomArea.getName() == null || !commomArea.getName().isEmpty() || commomArea.getName().length() < 3)  {
+			result.addError(new FieldError("commomArea", "name", "Nome inválido"));
+		}
+		
+		
+		if (result.hasErrors()) {
+			return new ModelAndView("user/condominium/commomarea/form").addObject("result", new Result("Falha ao cadastrar área comum", "error"));
+		}
+		ModelAndView modelsAndView = new ModelAndView("user/condominium/commomarea/form");
 		CommomAreaService service = new CommomAreaService();
 		CondominiumService condominiumService = new CondominiumService();
 		Condominium condominium = condominiumService.returnById(commomArea.getIdCondominium());
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar área comum", "error"));
-			return new ModelAndView("user/condominium/commomarea/form");
-		}
 
 		if (condominium.getIdUser() == user.getId()) {
 			if (service.insert(commomArea)) {
@@ -140,7 +146,7 @@ public class CommomAreaController {
 				redirectAttributes.addFlashAttribute("result",
 						new Result("Área comum cadastrada com sucesso", "success"));
 			} else {
-				redirectAttributes.addFlashAttribute("result", new Result("Falha ao cadastrar área comum", "error"));
+				modelsAndView.addObject("result", new Result("Falha ao cadastrar área comum", "error"));
 			}
 		} else {
 			return new ModelAndView("errors/accessdenied");

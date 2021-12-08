@@ -36,7 +36,7 @@
 				<table class="table">
 					<thead class="thead-dark">
 						<tr>
-							<th scope="col">Visualizar</th>
+							<th scope="col"></th>
 							<th scope="col">Nome</th>
 							<th scope="col">Descrição</th>
 						</tr>
@@ -47,7 +47,7 @@
 								<td>
 								<a class="btn btn-light" title="Visualizar condomínio" href="${pageContext.request.contextPath}/user/condominium?id=${condominium.id}"><i class="fas fa-eye"></i></a>
 								<a class="btn btn-light" title="Lista de moradores" href="${pageContext.request.contextPath}/user/condominium/residents?id_condominium=${condominium.id}"><i class="fas fa-user"></i></a>
-								<a class="btn btn-light" title="Lista de moradores" href="${pageContext.request.contextPath}/user/condominium/update?id=${condominium.id}"><i class="fas fa-edit"></i></a>
+								<a class="btn btn-light" title="Editar condomínio" href="${pageContext.request.contextPath}/user/condominium/update?id=${condominium.id}"><i class="fas fa-edit"></i></a>
 								</td>
 								<td>${condominium.name }</td>
 								<td>${condominium.description }</td>

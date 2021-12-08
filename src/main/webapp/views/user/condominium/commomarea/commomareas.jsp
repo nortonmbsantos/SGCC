@@ -50,7 +50,7 @@
 				<table class="table">
 					<thead class="thead-dark">
 						<tr>
-							<th scope="col">Visualizar</th>
+							<th scope="col"></th>
 							<th scope="col">Nome</th>
 							<th scope="col">Taxa de reserva</th>
 							<th scope="col">Reservas pendentes</th>
@@ -59,11 +59,11 @@
 					<tbody>
 						<c:forEach items="${commomAreas}" var="area">
 							<tr>
-								<td><a class="btn btn-light"
+								<td><a class="btn btn-light" title="Visualizar"
 									href="${pageContext.request.contextPath}/user/condominium/commomarea?id=${area.id}"><i
-										class="fas fa-eye"></i></a> <a class="btn btn-light"
+										class="fas fa-eye"></i></a> <a class="btn btn-light" title="Editar"
 									href="${pageContext.request.contextPath}/user/condominium/commomarea/update?id=${area.id}"><i
-										class="fas fa-edit"></i></a> <a class="btn btn-light"
+										class="fas fa-edit"></i></a> <a class="btn btn-light" title="Reservas pendentes"
 									href="${pageContext.request.contextPath}/user/condominium/commomarea/bookings?id_commom_area=${area.id}"><i
 										class="fas fa-book-open"></i></a></td>
 								<td>${area.name }</td>
@@ -86,5 +86,6 @@
 			</main>
 		</div>
 	</div>
+	<jsp:include page="../../../result.jsp"></jsp:include>
 </body>
 </html>

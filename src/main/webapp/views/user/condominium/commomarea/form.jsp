@@ -35,7 +35,7 @@
 											<label for="name">Nome*</label>
 										</div>
 										<form:input path="name" cssClass="form-control" id="name" />
-										<form:errors path="name" cssStyle="color: #ff0000;" />
+										
 									</div>
 								</div>
 								<div class="col-12 col-md-6 col-lg-6">
@@ -45,6 +45,24 @@
 										</div>
 										<form:input path="bookingFee" cssClass="form-control"
 											id="bookingFee" />
+										
+									</div>
+								</div>
+								<div class="col-12 col-md-6 col-lg-6">
+									<div class="input-group">
+										<div class="col-12">
+											
+										</div>
+										
+										<form:errors path="name" cssStyle="color: #ff0000;" />
+									</div>
+								</div>
+								<div class="col-12 col-md-6 col-lg-6">
+									<div class="input-group">
+										<div class="col-12">
+											
+										</div>
+										
 										<form:errors path="bookingFee" cssStyle="color: #ff0000;" />
 									</div>
 								</div>

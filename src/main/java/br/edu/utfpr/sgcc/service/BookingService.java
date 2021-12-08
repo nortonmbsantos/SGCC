@@ -10,6 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import br.edu.utfpr.sgcc.daos.BookingDAOImpl;
 import br.edu.utfpr.sgcc.models.Booking;
+import br.edu.utfpr.sgcc.models.BookingRequest;
 import br.edu.utfpr.sgcc.models.CommomArea;
 import br.edu.utfpr.sgcc.models.Report;
 
@@ -29,6 +30,19 @@ public class BookingService {
 
 	public List<Booking> pendingBookings(int id_condominium) {
 		return daos.pendingBookings(id_condominium);
+	}
+	
+	public BookingRequest returnBookingRequest(int idBooking) {
+		Booking booking = this.returnById(idBooking);
+		BookingRequest br = new BookingRequest();
+		br.setBookingDate(booking.getBookingDate());
+		br.setIdBooking(booking.getId());
+		br.setIdCommomArea(booking.getIdCommomArea());
+		br.setIdResident(booking.getIdResident());
+		br.setStatus(booking.isStatus());
+		GuestService guestService = new GuestService();
+		br.setGuests(guestService.returnGuests(idBooking));
+		return br;
 	}
 
 	public List<Booking> pendingBookingsByArea(int id_commom_area) {
@@ -65,7 +79,7 @@ public class BookingService {
 		List<Booking> bookings = daos.bookingsByResidentAndCondominium(idResident, idCondominium);
 		CommomAreaService commomAreaService = new CommomAreaService();
 		for(Booking b : bookings) {
-			CommomArea c = commomAreaService.returnById(b.getIdCommomArea());
+			CommomArea c = commomAreaService.returnByIdWithCondominium(b.getIdCommomArea());
 			b.setCommomArea(c);
 		}
 		return bookings;

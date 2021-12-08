@@ -34,7 +34,7 @@ public class Guest {
 	private String cpf;
 
 	@NotNull
-	@Size(min = 3, message = "Telefone inválido")
+	@Size(min = 3, max = 11, message = "Telefone inválido")
 	private String phone;
 
 	public int getId() {
@@ -87,7 +87,7 @@ public class Guest {
 	}
 
 	public void setPhone(String phone) {
-		this.phone = phone.replace("-", "").replace(".", "").replace(" ", "");
+		this.phone = phone.replace("-", "").replace(".", "").replace(" ", "").replace("(", "").replace(")", "");
 	}
 
 }

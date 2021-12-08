@@ -35,9 +35,8 @@
 				<table class="table">
 					<thead class="thead-dark">
 						<tr>
-							<th scope="col">Visualizar</th>
+							<th scope="col"></th>
 							<th scope="col">Nome</th>
-
 							<th scope="col">Ativo</th>
 						</tr>
 					</thead>

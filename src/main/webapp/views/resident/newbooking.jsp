@@ -42,6 +42,7 @@
 			<hr class="my-4">
 			<p>Campos marcados com * são considerados obrigatórios</p>
 			<form:form action="add" modelAttribute="bookingRequest">
+			<form:hidden path="idBooking" />
 				<div class="row">
 					<div class="col-12 col-md-6 col-lg-6">
 						<div class="input-group">

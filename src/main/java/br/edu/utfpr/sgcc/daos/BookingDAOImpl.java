@@ -148,8 +148,7 @@ public class BookingDAOImpl {
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			int id = (Integer) session.save(booking);
-			booking.setId(id);
+			session.saveOrUpdate(booking);
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {

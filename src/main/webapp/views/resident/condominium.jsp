@@ -15,7 +15,7 @@
 </head>
 <body>
 
-
+<fmt:setLocale value="pt-BR"/>
 	<jsp:include page="navbar.jsp" />
 	<div class="container-fluid">
 		<div class="row">
@@ -32,7 +32,7 @@
 							Código de acesso: <b>${condominium.code}</b>
 						</p>
 						<hr class="my-4">
-						<p>Último condomínio: R$ ${reportLastFeeValue.value} -
+						<p>Último condomínio: <fmt:formatNumber type="currency" value="${reportLastFeeValue.value}"/>  -
 							(Fechamento: ${reportLastFeeValue.title})</p>
 						<a class="btn btn-primary btn-sm"
 							href="${pageContext.request.contextPath}/resident/condominium/condominiumfees?id_condominium=${condominium.id}"
@@ -47,31 +47,6 @@
 							
 					</div>
 				</div>
-				<c:if test="${acceptedBookings.size() > 0 }">
-					<div class="row mt-3">
-						<div class="col-12">
-							Próxima(s) ${acceptedBookings.size() } reserva(s) de área comum
-							<div class="row mt-3">
-								<c:forEach items="${acceptedBookings }" var="booking">
-									<div class="col-3">
-										<div class="card" style="width: 18rem;">
-											<div class="card-body">
-												<h5 class="card-title">
-													<fmt:formatDate value="${booking.bookingDate}"
-														pattern="dd/MM/yyyy" />
-												</h5>
-												<h6 class="card-subtitle mb-2 text-muted">${booking.commomAreaName }</h6>
-												<p class="card-text">${booking.residentName }</p>
-											</div>
-										</div>
-									</div>
-								</c:forEach>
-							</div>
-						</div>
-						<hr class="my-4">
-						<div class="col-12"></div>
-					</div>
-				</c:if>
 				<c:if test="${feesDueDate.size() > 0 }">
 					<div class="row mt-3">
 						<div class="col-12">

@@ -22,4 +22,14 @@ public class BookingGuestService {
 		return daos.insert(guests);
 	}
 
+
+	public boolean removeAllFromBooking(int idBooking) {
+		// TODO Auto-generated method stub
+		return daos.removeAllFromBooking(idBooking);
+	}
+
+	
+	public static void main(String[] args) {
+		new BookingGuestService().removeAllFromBooking(10);
+	}
 }

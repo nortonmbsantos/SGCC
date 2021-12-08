@@ -34,24 +34,24 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class UserController {
 
 	@PostMapping("/register")
-	public ModelAndView register(@ModelAttribute @Valid User user, BindingResult result) {
+	public ModelAndView register(@ModelAttribute @Valid User user, BindingResult result,
+			final RedirectAttributes redirectAttributes) {
 		UserService service = new UserService();
 
 		if (user.getPassword().isEmpty() && user.getConfirmPassword().isEmpty()) {
 			result.addError(new FieldError("user", "password", "Senha não deve ser vazia"));
-		} else {
-			if (!new BCryptPasswordEncoder().matches(user.getConfirmPassword(), user.getPassword())) {
-				result.addError(new FieldError("user", "password", "Senhas devem ser iguais"));
-			}
+		} else if (!new BCryptPasswordEncoder().matches(user.getConfirmPassword(), user.getPassword())) {
+			result.addError(new FieldError("user", "password", "Senhas devem ser iguais"));
 		}
+
 		if (result.hasErrors()) {
 			return new ModelAndView("registerview").addObject("result",
 					new Result("Falha ao se cadastrar, verifique suas informações", "error"));
 		}
 		user.setActive(true);
 		if (service.insert(user)) {
-			return new ModelAndView("forward:/").addObject("result",
-					new Result("Usuário cadastrado com sucesso, entre com suas credenciais", "success"));
+			redirectAttributes.addFlashAttribute("result",new Result("Usuário cadastrado com sucesso, entre com suas credenciais", "success"));
+			return new ModelAndView("redirect:/login");
 		} else {
 			return new ModelAndView("registerview").addObject("result",
 					new Result("Falha ao se cadastrar, verifique suas informações", "error"));

@@ -12,5 +12,6 @@
 <script src="${pageContext.request.contextPath}/assets/js/noty.min.js" ></script>
 <script src="${pageContext.request.contextPath}/assets/js/jquery.mask.min.js" ></script>
 <script src="${pageContext.request.contextPath}/assets/js/mask.js" ></script>
-<script src="${pageContext.request.contextPath}/assets/js/warning.js" ></script>
-<script src="${pageContext.request.contextPath}/assets/js/booking.js" ></script>
+<script src="${pageContext.request.contextPath}/assets/js/warning.js" charset="UTF-8"></script>
+<script src="${pageContext.request.contextPath}/assets/js/booking.js" charset="UTF-8"></script>
+<script src="${pageContext.request.contextPath}/assets/js/entry.js" charset="UTF-8"></script>

@@ -27,6 +27,10 @@ public class GuestService {
 		return daos.returnGuests();
 	}
 
+	public List<Guest> returnGuests(int idBooking) {
+		return daos.returnGuests(idBooking);
+	}
+
 	public List<Guest> pendingGuests(int id_condominium) {
 		return daos.pendingGuests(id_condominium);
 	}

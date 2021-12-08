@@ -25,6 +25,12 @@ public class CommomAreaService {
 		return daos.returnById(id);
 	}
 
+	public CommomArea returnByIdWithCondominium(int id) {
+		CommomArea commomArea = daos.returnById(id);
+		commomArea.setCondominium(new CondominiumService().returnById(commomArea.getIdCondominium()));
+		return commomArea;
+	}
+
 	public List<CommomArea> list(int idCondominium) {
 		return this.list(idCondominium, "", 1, 10);
 	}

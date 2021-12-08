@@ -39,6 +39,7 @@ import br.edu.utfpr.sgcc.service.UserService;
 
 @Controller
 public class BookingController {
+	
 	@GetMapping("/user/condominium/commomarea/bookings")
 	public ModelAndView list(@RequestParam int id_commom_area) {
 		ModelAndView modelsAndView = new ModelAndView("user/condominium/commomarea/bookings");
@@ -80,15 +81,16 @@ public class BookingController {
 	}
 
 	@GetMapping("/resident/condominium/booking/new")
-	public ModelAndView addCondominium(@RequestParam int idCondominium, final RedirectAttributes redirectAttributes) {
+	public ModelAndView addBookingForm(@RequestParam int idCondominium, @RequestParam(defaultValue = "0") int idBooking, final RedirectAttributes redirectAttributes) {
 		ModelAndView modelsAndView = new ModelAndView("resident/newbooking");
 		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		CondominiumResidentService condominiumResidentService = new CondominiumResidentService();
 		CondominiumResident cr = condominiumResidentService.returnByResidentAndCondominium(resident.getId(),
 				idCondominium);
-		BookingRequest bookingRequest = new BookingRequest();
 
 		if (cr != null && cr.isActive()) {
+			BookingService bookingService = new BookingService();
+			BookingRequest bookingRequest = idBooking > 0 ? bookingService.returnBookingRequest(idBooking) : new BookingRequest();
 			modelsAndView.addObject("condominium", new CondominiumService().returnById(idCondominium));
 			modelsAndView.addObject("resident", resident);
 			modelsAndView.addObject("bookingRequest", bookingRequest);
@@ -157,9 +159,13 @@ public class BookingController {
 				booking.setBookingDate(bookingRequest.getBookingDate());
 				booking.setIdCommomArea(bookingRequest.getIdCommomArea());
 				booking.setIdResident(bookingRequest.getIdResident());
-
+				booking.setId(bookingRequest.getIdBooking());
+				int previousId = booking.getId();
 				if (bookingService.insert(booking)) {
-
+					if(previousId > 0) {
+//						remover guests para readicionar
+						bookingGuestService.removeAllFromBooking(booking.getId());
+					}
 					if (bookingRequest.getGuests() != null && !bookingRequest.getGuests().isEmpty()) {
 
 //						add guests
@@ -190,8 +196,8 @@ public class BookingController {
 
 						for (Guest g : bookingRequest.getGuests()) {
 							BookingGuest bguest = new BookingGuest();
-							bguest.setIdBooking(booking.getId());
-							bguest.setIdGuest(guestService.returnByCpf(g.getCpf()).getId());
+							bguest.setIdBooking(booking.getId()); 
+							bguest.setIdGuest(g.getId() > 0 ? g.getId() : guestService.returnByCpf(g.getCpf()).getId());
 							bGuests.add(bguest);
 						}
 

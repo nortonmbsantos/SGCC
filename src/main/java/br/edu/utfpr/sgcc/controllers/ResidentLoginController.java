@@ -39,20 +39,19 @@ public class ResidentLoginController {
 		ModelAndView modelsAndView = new ModelAndView("resident/dashboard");
 		MyUserDetails resident = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		modelsAndView.addObject("user", resident);
-		
+
 		CondominiumResidentService condominiumResidentService = new CondominiumResidentService();
-		modelsAndView.addObject("condominiuns", condominiumResidentService.returnCondominiunsByResident(resident.getId()));
-		
+		modelsAndView.addObject("condominiuns",
+				condominiumResidentService.returnCondominiunsByResident(resident.getId()));
+
 		BookingService bookingService = new BookingService();
 		modelsAndView.addObject("bookings", bookingService.pendingBookingsByResident(resident.getId()));
-		
-		
+
 		WarningService warningService = new WarningService();
 		modelsAndView.addObject("warnings", warningService.returnByResident(resident.getId()));
 
 		return modelsAndView;
 	}
-
 
 	@GetMapping("/resident/condominium/entry/new")
 	public ModelAndView addCondominiumResident() {
@@ -61,7 +60,8 @@ public class ResidentLoginController {
 	}
 
 	@PostMapping("/resident/condominium/entry/add")
-	public ModelAndView addCondominiumResidentForm(@RequestParam String code) {
+	public ModelAndView addCondominiumResidentForm(@RequestParam String code,
+			final RedirectAttributes redirectAttributes) {
 		CondominiumService service = new CondominiumService();
 		Condominium condominium = service.returnByCode(code);
 		if (condominium != null) {
@@ -73,28 +73,70 @@ public class ResidentLoginController {
 			cer.setIdResident(resident.getId());
 			cer.setRequestDate(new Date());
 			CondominiumEntryRequestService requestService = new CondominiumEntryRequestService();
-			CondominiumEntryRequest cerVal = requestService.returnByCondominiumAndResident(cer.getIdCondominium(), cer.getIdResident());
-			if (cerVal == null || !cerVal.isAccepted()) {
+			CondominiumEntryRequest cerVal = requestService.returnByCondominiumAndResident(cer.getIdCondominium(),
+					cer.getIdResident());
+
+			if (cerVal != null) {
+				if (cerVal.getResponseDate() != null) {
+					if (cerVal.isAccepted()) {
+						redirectAttributes.addFlashAttribute("result", new Result(
+								"O usuário já faz parte do condomínio: " + condominium.getName(), "success"));
+						return new ModelAndView("redirect:/resident/dashboard");
+					} else {
+						if (requestService.insert(cer)) {
+							redirectAttributes.addFlashAttribute("result", new Result(
+									"Solicitação para " + condominium.getName() + " enviada com sucesso", "success"));
+							return new ModelAndView("redirect:/resident/dashboard");
+						} else {
+							return new ModelAndView("resident/entryCondominium").addObject("result",
+									new Result("Falha ao enviar solicitação ao condomínio", "error"));
+						}
+					}
+				} else {
+					redirectAttributes.addFlashAttribute("result", new Result(
+							"O usuário já possui uma solicitação pendente para " + condominium.getName(), "success"));
+					return new ModelAndView("redirect:/resident/dashboard");
+				}
+			} else {
 				if (requestService.insert(cer)) {
-					return new ModelAndView("resident/dashboard").addObject("result", new Result(
+					redirectAttributes.addFlashAttribute("result", new Result(
 							"Solicitação para " + condominium.getName() + " enviada com sucesso", "success"));
+					return new ModelAndView("redirect:/resident/dashboard");
 				} else {
 					return new ModelAndView("resident/entryCondominium").addObject("result",
 							new Result("Falha ao enviar solicitação ao condomínio", "error"));
 				}
-			} else if(cerVal.isAccepted()) {
-				return new ModelAndView("resident/dashboard").addObject("result", new Result(
-						"Solicitação para " + condominium.getName() + " já aceita", "success"));
-			} else {
-				return new ModelAndView("resident/entryCondominium").addObject("result",
-						new Result("Falha ao enviar solicitação ao condomínio", "error"));
 			}
+//			if (cerVal == null || (!cerVal.isAccepted() && cerVal.getResponseDate() != null)) {
+//				if (requestService.insert(cer)) {
+//					redirectAttributes.addFlashAttribute("result", new Result(
+//							"Solicitação para " + condominium.getName() + " enviada com sucesso", "success"));
+//					return new ModelAndView("redirect:/resident/dashboard");
+//				} else {
+//					return new ModelAndView("resident/entryCondominium").addObject("result",
+//							new Result("Falha ao enviar solicitação ao condomínio", "error"));
+//				}
+//			} else if (cerVal != null && cerVal.getResponseDate() == null) {
+//				if (cerVal.isAccepted()) {
+//					redirectAttributes.addFlashAttribute("result",
+//							new Result("Você já participa de " + condominium.getName(), "success"));
+//					return new ModelAndView("redirect:/resident/dashboard");
+//				} else {
+//					redirectAttributes.addFlashAttribute("result", new Result(
+//							"Solicitação para " + condominium.getName() + " enviada com sucesso", "success"));
+//							return new ModelAndView("redirect:/resident/dashboard");
+//				}
+//			} else {
+//				return new ModelAndView("resident/entryCondominium").addObject("result",
+//						new Result("Falha ao enviar solicitação ao condomínio", "error"));
+//			}
 		} else {
 			return new ModelAndView("resident/entryCondominium").addObject("result",
 					new Result("Condomínio não encontrado", "error"));
 		}
+
 	}
-	
+
 	@GetMapping("/resident/update")
 	public ModelAndView updateUser() {
 		ModelAndView modelsAndView = new ModelAndView("resident/update");
@@ -134,7 +176,7 @@ public class ResidentLoginController {
 			return new ModelAndView("redirect:/resident/dashboard");
 		}
 	}
-	
+
 	@GetMapping("/resident/updatepassword")
 	public ModelAndView updateUserPassword() {
 		ModelAndView modelsAndView = new ModelAndView("resident/updatepassword");
@@ -156,17 +198,16 @@ public class ResidentLoginController {
 		MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 
-		
 		User user = service.returnByUserName(myUserDetails.getUsername());
-		
+
 		if (!new BCryptPasswordEncoder().matches(userUpdatePassword.getPassword(), user.getPassword())) {
 			result.addError(new FieldError("userUpdatePassword", "password", "Senha atual inválida"));
 		}
-		
-		if(!userUpdatePassword.getNewPassword().equals(userUpdatePassword.getConfirmPassword())) {
+
+		if (!userUpdatePassword.getNewPassword().equals(userUpdatePassword.getConfirmPassword())) {
 			result.addError(new FieldError("userUpdatePassword", "newPassword", "Senhas devem ser iguais"));
 		}
-		
+
 		if (result.hasErrors()) {
 			return new ModelAndView("resident/updatepassword").addObject("result",
 					new Result("Falha ao alterar senha", "error"));
@@ -186,9 +227,7 @@ public class ResidentLoginController {
 
 	public static void main(String[] args) {
 		System.out.print(new BCryptPasswordEncoder().encode("norton123"));
-		
-	}
-	
 
-	
+	}
+
 }

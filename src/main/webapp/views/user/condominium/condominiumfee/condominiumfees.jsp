@@ -36,7 +36,7 @@
 				<table class="table">
 					<thead class="thead-dark">
 						<tr>
-							<th scope="col">Visualizar</th>
+							<th scope="col"></th>
 							<th scope="col">Data fechamento</th>
 							<th scope="col">Status</th>
 						</tr>
@@ -45,12 +45,12 @@
 						<c:forEach items="${condominiumFees}" var="fee">
 							<tr>
 								<td>
-								<a class="btn btn-light"
+								<a class="btn btn-light" title="Visualizar período"
 									href="${pageContext.request.contextPath}/user/condominium/condominiumfee?idCondominiumFee=${fee.id}"><i
-										class="fas fa-eye" title="Visualizar período"></i></a>
-										<c:if test="${!fee.finished }"><a class="btn btn-light"
+										class="fas fa-eye" ></i></a>
+										<c:if test="${!fee.finished }"><a class="btn btn-light" title="Adicionar taxa neste período"
 									href="${pageContext.request.contextPath}/user/condominium/fee/form?id_condominium_fee=${fee.id}&id_fee=0"><i
-										class="fas fa-folder-plus" title="Adicionar taxa neste período"></i></a></c:if>
+										class="fas fa-folder-plus" ></i></a></c:if>
 										</td>
 								<td><fmt:formatDate value="${fee.closingDate}" pattern="dd/MM/yyyy"/> </td>
 								<td>

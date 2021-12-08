@@ -181,6 +181,27 @@ public class GuestDAOImpl {
 			}
 		}
 	}
+	
+	public List<Guest> returnGuests(int idBooking) {
+		Session session = null;
+		try {
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+			Query query = session.createQuery("SELECT g FROM guest g inner join booking_guest bg ON bg.idGuest = g.id where bg.idBooking = :idBooking  ");
+			query.setParameter("idBooking", idBooking);
+			@SuppressWarnings("unchecked")
+			List<Guest> guests = (List<Guest>) query.getResultList();
+			
+			return guests;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		} finally {
+			if (null != session) {
+				session.close();
+			}
+		}
+	}
 
 	public static void main(String[] args) {
 		for(Guest g : new GuestDAOImpl().returnGuests()) {

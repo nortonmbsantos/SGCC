@@ -39,9 +39,10 @@ public class CondominiumEntryRequestDAOImpl {
 		try {
 			session = factory.getCurrentSession();
 			session.beginTransaction();
-			Query query = session.createQuery("from condominium_entry_request a where idResident = :idResident and idCondominium = :idCondominium  ORDER by id desc limit 1");
+			Query query = session.createQuery("from condominium_entry_request a where idResident = :idResident and idCondominium = :idCondominium ORDER by id desc");
 			query.setParameter("idResident", idResident);
 			query.setParameter("idCondominium", idCondominium);
+			query.setMaxResults(1);
 			CondominiumEntryRequest request = (CondominiumEntryRequest) query.getSingleResult();
 
 			return request;

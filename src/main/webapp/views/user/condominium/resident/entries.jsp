@@ -42,19 +42,15 @@
 							<tr>
 								<td>
 									<div class="row" style="margin-left: 10px;">
-									<form action="accept" method="POST">
+									<form action="accept" id="accept-entry-${e.id}"  method="POST">
 										<input type="hidden" name="id" value="${e.id}">
-										<button class="btn btn-success">
-											<i class="fas fa-check" title="Aceitar"></i>
-										</button>
 									</form>
 
-									<form action="refuse" method="POST">
+									<form action="refuse" id="refuse-entry-${e.id}" method="POST">
 										<input type="hidden" name="id" value="${e.id}">
-										<button class="btn btn-danger">
-											<i class="fas fa-times" title="Recusar"></i>
-										</button>
 									</form>
+									<a class="btn btn-success text-light accept-entry-button" data-id="${e.id}" data-name="${e.user.firstName}"><i class="fas fa-check" title="Aceitar"></i></a>
+									<a class="btn btn-danger text-light refuse-entry-button" data-id="${e.id}" data-name="${e.user.firstName}"><i class="fas fa-times" title="Recusar"></i></a>
 									</div>
 								</td>
 								<td>${e.user.firstName }</td>
