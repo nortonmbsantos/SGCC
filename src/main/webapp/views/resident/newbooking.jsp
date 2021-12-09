@@ -176,6 +176,9 @@
 		</div>
 
 	</div>
+	<script type="text/javascript">
+		
+	</script>
 	<jsp:include page="../result.jsp"></jsp:include>
 </body>
 </html>

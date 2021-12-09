@@ -33,7 +33,7 @@ function addGuest(data){
             "<div class=\"col-12\">" +
             "<label for=\"firstName\">Cpf</label>" +
             "</div>" +
-            "<input id=\"guests" + id + ".cpf\" name=\"guests[" + id + "].cpf\" class=\"form-control\" type=\"text\" value=\""+ data.cpf +"\">" +
+            "<input id=\"guests" + id + ".cpf\" name=\"guests[" + id + "].cpf\" class=\"form-control cpfmask\" type=\"text\" value=\""+ data.cpf +"\">" +
             "</div>" +
             "</div>" +
             "<div class=\"col-12 col-md-3 col-lg-3\">" +
@@ -41,9 +41,10 @@ function addGuest(data){
             "<div class=\"col-12\">" +
             "<label for=\"firstName\">Telefone</label>" +
             "</div>" +
-            "<input id=\"guests" + id + ".phone\" name=\"guests[" + id + "].phone\" class=\"form-control\" type=\"text\" value=\""+ data.phone +"\">" +
+            "<input id=\"guests" + id + ".phone\" name=\"guests[" + id + "].phone\" class=\"form-control phonemask\" type=\"text\" value=\""+ data.phone +"\">" +
             "</div>" + "</div>" + "</div>");
-	
+    $('.cpfmask').mask('000.000.000-00');
+    $('.phonemask').mask('(00) 0000-0000');
 }
 
 $(document).on("click", "#removeGuest", function(e) {
