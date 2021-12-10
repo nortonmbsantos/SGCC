@@ -27,7 +27,7 @@
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 					
 					<div class="jumbotron">
-						<h1 class="display-4">Taxas do condomínio ${condominium.name}</h1>
+						<h1 class="display-4">Taxas do condomÃ­nio ${condominium.name}</h1>
 						<hr class="my-4">
 					</div>
 				</div>
@@ -45,7 +45,7 @@
 								<td>
 								<a class="btn btn-light"
 									href="${pageContext.request.contextPath}/resident/condominium/condominiumfee?idCondominiumFee=${fee.id}"><i
-										class="fas fa-eye" title="Visualizar período"></i></a>
+										class="fas fa-eye" title="Visualizar perÃ­odo"></i></a>
 										</td>
 								<td><fmt:formatDate value="${fee.closingDate}" pattern="dd/MM/yyyy"/> </td>
 								<td>
